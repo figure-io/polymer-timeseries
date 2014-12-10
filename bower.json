@@ -8,7 +8,7 @@
   		"email": "kgryte@gmail.com"
   	}
   ],
-  "main": "./src/chart-timeseries.html",
+  "main": "./chart-timeseries.html",
   "repository": {
   	"type": "git",
   	"url": "git://github.com/figure-io/polymer-chart-timeseries"
@@ -35,7 +35,8 @@
   	"node_modules",
   	"bower",
   	"Makefile",
-  	"karma.conf.js"
+  	"karma.conf.js",
+  	"package.json"
   ],
   "license": "MIT"
 }

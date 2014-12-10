@@ -47,9 +47,9 @@
 	stroke-opacity: 90%;
 }
 
-	.graph .hidden {
-		opacity: 0;
-	}
+.graph .hidden {
+	opacity: 0;
+}
 
 .meta .title {
 	display: block;

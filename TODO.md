@@ -1,7 +1,7 @@
 TODO
 ====
 
-1. 	
+1. 	Move bower components to sibling directory via `.bowerrc` to mock a live environment and ensure correct paths
 2. 	Annotations
 3. 	
 4. 	

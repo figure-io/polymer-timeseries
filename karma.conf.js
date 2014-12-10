@@ -48,12 +48,12 @@ var settings = {
 		'bower/webcomponentsjs/webcomponents.js',
 		'node_modules/sinon/pkg/sinon.js',
 		{
-			'pattern': 'src/*.html',
+			'pattern': '*.html',
 			'included': false,
 			'served': true
 		},
 		{
-			'pattern': 'src/css/*.css',
+			'pattern': 'css/*.css',
 			'included': false,
 			'served': true
 		},
@@ -67,7 +67,7 @@ var settings = {
 	// Preprocessors (see [Karma docs]{@link https://npmjs.org/browse/keyword/karma-preprocessor}):
 	'preprocessors': {
 		// NOTE: comment the following line when debugging tests. Karma-coverage has a bug which interferes with stack traces.
-		'src/js/*.js': [
+		'js/*.js': [
 			'coverage'
 		]
 	},

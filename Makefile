@@ -19,7 +19,7 @@ BOWER ?= ./node_modules/.bin/bower
 # VULCANIZE #
 
 VULCANIZE ?= ./node_modules/.bin/vulcanize
-VULCANIZE_IN ?= ./src/chart-timeseries.html
+VULCANIZE_IN ?= ./chart-timeseries.html
 VULCANIZE_OUT ?= ./dist/chart-timeseries.html
 
 
@@ -63,7 +63,7 @@ JSHINT_REPORTER ?= ./node_modules/jshint-stylish/stylish.js
 # FILES #
 
 # Source files:
-SOURCES ?= src/*.js src/**/*.js
+SOURCES ?= js/*.js
 
 # Test files:
 TESTS ?= test/*.js
