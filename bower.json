@@ -34,6 +34,7 @@
   	"test",
   	"node_modules",
   	"bower",
+  	"src",
   	"Makefile",
   	"karma.conf.js",
   	"package.json"

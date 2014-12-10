@@ -19,8 +19,9 @@ BOWER ?= ./node_modules/.bin/bower
 # VULCANIZE #
 
 VULCANIZE ?= ./node_modules/.bin/vulcanize
-VULCANIZE_IN ?= ./chart-timeseries.html
-VULCANIZE_OUT ?= ./dist/chart-timeseries.html
+VULCANIZE_CONF ?= ./vulcanize.conf.json
+VULCANIZE_IN ?= ./src/chart-timeseries.html
+VULCANIZE_OUT ?= ./chart-timeseries.html
 
 
 # MOCHA #
@@ -63,7 +64,7 @@ JSHINT_REPORTER ?= ./node_modules/jshint-stylish/stylish.js
 # FILES #
 
 # Source files:
-SOURCES ?= js/*.js
+SOURCES ?= src/*.js src/**/*.js
 
 # Test files:
 TESTS ?= test/*.js
@@ -174,8 +175,10 @@ install-bower:
 install-vulcanize:
 	$(VULCANIZE) \
 		$(VULCANIZE_IN) \
+		--config $(VULCANIZE_CONF) \
 		-o $(VULCANIZE_OUT) \
-		--inline
+		--inline \
+		--no-strip-excludes
 
 
 

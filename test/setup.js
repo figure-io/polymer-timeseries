@@ -33,7 +33,7 @@
 
 	// VARIABLES //
 
-	var path = '/base/chart-timeseries.html',
+	var path = '/base/src/chart-timeseries.html',
 		head,
 		link;
 
