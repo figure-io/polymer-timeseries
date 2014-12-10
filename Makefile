@@ -11,6 +11,18 @@ NODE_ENV ?= test
 NOTES ?= 'TODO|FIXME|WARNING|HACK|NOTE'
 
 
+# BOWER #
+
+BOWER ?= ./node_modules/.bin/bower
+
+
+# VULCANIZE #
+
+VULCANIZE ?= ./node_modules/.bin/vulcanize
+VULCANIZE_IN ?= ./src/chart-timeseries.html
+VULCANIZE_OUT ?= ./dist/chart-timeseries.html
+
+
 # MOCHA #
 
 MOCHA ?= ./node_modules/.bin/mocha
@@ -20,11 +32,25 @@ MOCHA_REPORTER ?= spec
 
 # ISTANBUL #
 
-ISTANBUL ?= ./node_modules/.bin/istanbul
-ISTANBUL_OUT ?= ./reports/coverage
-ISTANBUL_REPORT ?= lcov
-ISTANBUL_LCOV_INFO_PATH ?= $(ISTANBUL_OUT)/lcov.info
-ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
+REPORT_ROOT ?= ./reports
+
+# KARMA #
+KARMA ?= ./node_modules/karma/bin/karma
+KARMA_OUT ?= $(REPORT_ROOT)/coverage/
+KARMA_PORT ?= 9876
+KARMA_REPORTERS ?= mocha,coverage
+KARMA_BROWSERS ?= Chrome
+KARMA_LOG_LEVEL ?= info
+
+# Chrome:
+KARMA_CHROME_PATH ?= $(KARMA_OUT)/chrome
+KARMA_CHROME_LCOV_INFO_PATH ?= $(KARMA_CHROME_PATH)/lcov.info
+KARMA_CHROME_HTML_REPORT_PATH ?= $(KARMA_CHROME_PATH)/lcov-report/index.html
+
+# Firefox:
+KARMA_FIREFOX_PATH ?= $(KARMA_OUT)/firefox
+KARMA_FIREFOX_LCOV_INFO_PATH ?= $(KARMA_FIREFOX_PATH)/lcov.info
+KARMA_FIREFOX_HTML_REPORT_PATH ?= $(KARMA_FIREFOX_PATH)/lcov-report/index.html
 
 
 # JSHINT #
@@ -37,7 +63,7 @@ JSHINT_REPORTER ?= ./node_modules/jshint-stylish/stylish.js
 # FILES #
 
 # Source files:
-SOURCES ?= lib/*.js
+SOURCES ?= src/*.js src/**/*.js
 
 # Test files:
 TESTS ?= test/*.js
@@ -60,46 +86,62 @@ notes:
 
 # UNIT TESTS #
 
-.PHONY: test test-mocha
+.PHONY: test test-watch
+.PHONY: test-karma-mocha
+.PHONY: test-karma-mocha-watch
 
-test: test-mocha
+test: test-karma-mocha
 
-test-mocha: node_modules
-	NODE_ENV=$(NODE_ENV) \
-	NODE_PATH=$(NODE_PATH_TEST) \
-	$(MOCHA) \
-		--reporter $(MOCHA_REPORTER) \
-		$(TESTS)
+test-watch: test-karma-mocha-watch
+
+test-karma-mocha: node_modules
+	$(KARMA) start \
+		--single-run \
+		--colors \
+		--port $(KARMA_PORT) \
+		--browsers $(KARMA_BROWSERS) \
+		--reporters $(KARMA_REPORTERS) \
+		--log-level $(KARMA_LOG_LEVEL) \
+		--no-auto-watch
+
+test-karma-mocha-watch: node_modules
+	$(KARMA) start \
+		--colors \
+		--port $(KARMA_PORT) \
+		--browsers $(KARMA_BROWSERS) \
+		--reporters $(KARMA_REPORTERS) \
+		--log-level $(KARMA_LOG_LEVEL) \
+		--auto-watch
 
 
 
 # CODE COVERAGE #
 
-.PHONY: test-cov test-istanbul-mocha
+.PHONY: test-cov
 
-test-cov: test-istanbul-mocha
-
-test-istanbul-mocha: node_modules
-	NODE_ENV=$(NODE_ENV) \
-	NODE_PATH=$(NODE_PATH_TEST) \
-	$(ISTANBUL) cover \
-		--dir $(ISTANBUL_OUT) \
-		--report $(ISTANBUL_REPORT) \
-	$(_MOCHA) -- \
-		--reporter $(MOCHA_REPORTER) \
-		$(TESTS)
+test-cov: test-karma-mocha
 
 
 
 # COVERAGE REPORT #
 
-.PHONY: view-cov view-istanbul-report
+.PHONY: view-cov
+.PHONY: view-chrome-cov view-firefox-cov
+.PHONY: view-karma-chrome-report
 
-view-cov: view-istanbul-report
+view-cov: view-chrome-cov view-firefox-cov
 
-view-istanbul-report:
-	open $(ISTANBUL_HTML_REPORT_PATH)
+# Chrome:
+view-chrome-cov: view-karma-chrome-report
 
+view-karma-chrome-report:
+	open $(KARMA_CHROME_HTML_REPORT_PATH)
+
+# Firefox:
+view-firefox-cov: view-karma-firefox-report
+
+view-karma-firefox-report:
+	open $(KARMA_FIREFOX_HTML_REPORT_PATH)
 
 
 # LINT #
@@ -115,25 +157,40 @@ lint-jshint: node_modules
 
 
 
-# NODE #
+# INSTALL #
 
-# Installing node_modules:
 .PHONY: install
+.PHONY: install-node install-bower install-vulcanize
 
-install:
+install: install-node install-bower install-vulcanize
+
+install-node:
 	npm install
 
-# Clean node:
-.PHONY: clean-node
+install-bower:
+	$(BOWER) install
 
-clean-node:
-	rm -rf node_modules
+# Vulcanize:
+install-vulcanize:
+	$(VULCANIZE) \
+		$(VULCANIZE_IN) \
+		-o $(VULCANIZE_OUT) \
+		--inline
 
 
 
 # CLEAN #
 
 .PHONY: clean
+.PHONY: clean-build clean-node clean-bower
 
-clean:
+clean: clean-build clean-node clean-bower
+
+clean-build:
 	rm -rf build
+
+clean-node:
+	rm -rf node_modules
+
+clean-bower:
+	rm -rf bower
