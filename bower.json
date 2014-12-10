@@ -1,0 +1,40 @@
+{
+  "name": "chart-timeseries",
+  "version": "0.0.0",
+  "description": "UI element for displaying timeseries graphs in a chart.",
+  "authors": [
+  	{
+  		"name": "Athan Reines",
+  		"email": "kgryte@gmail.com"
+  	}
+  ],
+  "main": "./src/chart-timeseries.html",
+  "repository": {
+  	"type": "git",
+  	"url": "git://github.com/figure-io/polymer-chart-timeseries"
+  },
+  "keywords": [
+  	"data",
+  	"visualization",
+  	"viz",
+  	"metrics",
+  	"figure",
+  	"chart",
+  	"graph",
+  	"timeseries",
+  	"ui"
+  ],
+  "dependencies": {
+  	"polymer": "Polymer/polymer#~0.5.1"
+  },
+  "devDependencies": {},
+  "ignore": [
+  	"TODO.md",
+  	".*",
+  	"./test",
+  	"./node_modules",
+  	"./bower",
+  	"Makefile"
+  ],
+  "license": "MIT"
+}

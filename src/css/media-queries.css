@@ -1,0 +1,10 @@
+
+/* MEDIA QUERIES */
+
+/* 960 px */
+@media screen and (max-width: 960px) {
+	.meta .title {
+		font-size: 1.6em;
+		line-height: 2.25em;
+	}
+}

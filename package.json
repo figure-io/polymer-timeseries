@@ -1,0 +1,66 @@
+{
+	"name": "polymer-chart-timeseries",
+	"version": "0.0.0",
+	"description": "UI element for displaying timeseries graphs in a chart.",
+	"author": {
+		"name": "Athan Reines",
+		"email": "kgryte@gmail.com"
+	},
+	"contributors": [
+		{
+			"name": "Athan Reines",
+			"email": "kgryte@gmail.com"
+		}
+	],
+	"scripts": {
+		"test": "./node_modules/.bin/mocha",
+		"test-cov": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --dir ./reports/coverage -- -R spec",
+		"coveralls": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --dir ./reports/coveralls/coverage --report lcovonly -- -R spec && cat ./reports/coveralls/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./reports/coveralls"
+	},
+	"main": "",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/figure-io/polymer-chart-timeseries.git"
+	},
+	"keywords": [
+		"visualization",
+  	"viz",
+  	"metrics",
+  	"chart",
+  	"timeseries",
+  	"figure",
+  	"data",
+  	"ui"
+	],
+	"bugs": {
+		"url": "https://github.com/figure-io/polymer-chart-timeseries/issues"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"bower": "^1.3.12",
+    "browserify": "^6.2.0",
+    "chai": "1.x.x",
+		"mocha": "1.x.x",
+		"coveralls": "^2.11.1",
+		"istanbul": "^0.3.0",
+		"jshint": "2.x.x",
+		"jshint-stylish": "^1.0.0",
+    "karma": "^0.12.24",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.1.5",
+    "karma-coverage": "^0.2.6",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-mocha": "^0.1.9",
+    "karma-mocha-reporter": "^0.3.1",
+    "karma-sinon": "^1.0.3",
+    "karma-webdriver-launcher": "^0.2.0",
+    "sinon": "^1.10.3",
+    "vulcanize": "^0.5.0"
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://www.opensource.org/licenses/MIT"
+		}
+	]
+}

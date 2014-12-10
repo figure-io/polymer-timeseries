@@ -1,0 +1,39 @@
+<!--
+	POLYMER-CHART-TIMESERIES
+
+	DESCRIPTION:
+		- `polymer-chart-timeseries` is a UI element for displaying timeseries graphs in a chart.
+
+	EXAMPLE:
+		<polymer-chart-=timeseries uid="1234"></polymer-chart-timeseries>
+
+	@element polymer-chart-timeseries
+	@status unstable
+-->
+
+<!-- POLYMER -->
+<link rel="import" href="../bower/polymer/polymer.html">
+
+<!-- SUBCOMPONENTS -->
+<link rel="import" href="../bower/uuid/uuid.html">
+<link rel="import" href="../bower/d3/d3.html">
+
+<!-- ELEMENT -->
+<polymer-element name="polymer-chart-timeseries" attributes="uid config width height labels chartTitle xLabel yLabel xMin xMax yMin yMax xNumTicks yNumTicks xAxisOrient yAxisOrient xTickFormat interpolation tension paddingLeft paddingRight paddingBottom paddingTop xValue yValue isDefined">
+
+	<template>
+
+		<!-- STYLESHEETS -->
+		<link rel="stylesheet" href="./css/colors.css">
+		<link rel="stylesheet" href="./css/styles.css">
+		<link rel="stylesheet" href="./css/media-queries.css">
+
+		<!-- PRESENTATION CONTENT -->
+		<div class="chart" id="chart"></div>
+
+	</template>
+
+	<!-- REGISTRATION -->
+	<script src="./js/script.js"></script>
+
+</polymer-element>
