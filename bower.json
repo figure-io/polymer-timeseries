@@ -34,7 +34,8 @@
   	"./test",
   	"./node_modules",
   	"./bower",
-  	"Makefile"
+  	"Makefile",
+  	"karma.conf.js"
   ],
   "license": "MIT"
 }

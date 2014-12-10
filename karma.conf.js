@@ -35,9 +35,7 @@ var settings = {
 	'basePath': '',
 
 	// Proxy routes:
-	'proxies': {
-		'/': '/base/'
-	},
+	'proxies': {},
 
 	// Test frameworks (see [Karma docs]{@link https://npmjs.org/browse/keyword/karma-adapter}):
 	'frameworks': [
