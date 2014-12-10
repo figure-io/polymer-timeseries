@@ -31,9 +31,9 @@
   "ignore": [
   	"TODO.md",
   	".*",
-  	"./test",
-  	"./node_modules",
-  	"./bower",
+  	"test",
+  	"node_modules",
+  	"bower",
   	"Makefile",
   	"karma.conf.js"
   ],
