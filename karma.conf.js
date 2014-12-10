@@ -45,7 +45,7 @@ var settings = {
 
 	// List of files/patterns to load into the browser:
 	'files': [
-		'bower/webcomponentsjs/webcomponents.js',
+		'../webcomponentsjs/webcomponents.js',
 		'node_modules/sinon/pkg/sinon.js',
 		{
 			'pattern': '*.html',
