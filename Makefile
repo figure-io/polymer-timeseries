@@ -11,6 +11,11 @@ NODE_ENV ?= test
 NOTES ?= 'TODO|FIXME|WARNING|HACK|NOTE'
 
 
+# DOCS #
+
+# DOCS ?= ./docs/index.html
+
+
 # BOWER #
 
 BOWER ?= ./node_modules/.bin/bower
@@ -83,6 +88,13 @@ TESTS ?= test/*.js
 notes:
 	grep -Ern $(NOTES) $(SOURCES) $(TESTS)
 
+
+# DOCS #
+
+# .PHONY: view-docs
+
+# view-docs:
+# 	open $(DOCS)
 
 
 # UNIT TESTS #
