@@ -56,6 +56,6 @@
 	// SCRIPT //
 
 	// Get the template for a figure configuration:
-	getResource( './../demo/data/timeseries.json', onData );
+	getResource( './../examples/data/timeseries.json', onData );
 
 })();

@@ -2,6 +2,9 @@
 #############
 # VARIABLES #
 
+# Component Name:
+NAME ?= chart-timeseries
+
 # Set the node.js environment to test:
 NODE_ENV ?= test
 
@@ -21,12 +24,19 @@ NOTES ?= 'TODO|FIXME|WARNING|HACK|NOTE'
 BOWER ?= ./node_modules/.bin/bower
 
 
+# BROWSERIFY #
+
+BROWSERIFY ?= ./node_modules/.bin/browserify
+BROWSERIFY_IN ?= ./build/js/polymer.js
+BROWSERIFY_OUT ?= ./build/js/script.js
+
+
 # VULCANIZE #
 
 VULCANIZE ?= ./node_modules/.bin/vulcanize
 VULCANIZE_CONF ?= ./vulcanize.conf.json
-VULCANIZE_IN ?= ./src/chart-timeseries.html
-VULCANIZE_OUT ?= ./chart-timeseries.html
+VULCANIZE_IN ?= ./build/$(NAME).html
+VULCANIZE_OUT ?= ./$(NAME).html
 
 
 # MOCHA #
@@ -58,6 +68,11 @@ KARMA_CHROME_HTML_REPORT_PATH ?= $(KARMA_CHROME_PATH)/lcov-report/index.html
 KARMA_FIREFOX_PATH ?= $(KARMA_OUT)/firefox
 KARMA_FIREFOX_LCOV_INFO_PATH ?= $(KARMA_FIREFOX_PATH)/lcov.info
 KARMA_FIREFOX_HTML_REPORT_PATH ?= $(KARMA_FIREFOX_PATH)/lcov-report/index.html
+
+
+# BUILD #
+
+BUILD_OUT ?= $(NAME).html
 
 
 # JSHINT #
@@ -174,9 +189,9 @@ lint-jshint: node_modules
 # INSTALL #
 
 .PHONY: install
-.PHONY: install-node install-bower install-vulcanize
+.PHONY: install-node install-bower
 
-install: install-node install-bower install-vulcanize
+install: install-node install-bower
 
 install-node:
 	npm install
@@ -184,15 +199,37 @@ install-node:
 install-bower: node_modules
 	$(BOWER) install
 
-# Vulcanize:
-install-vulcanize: node_modules
+
+
+# BUILD #
+
+.PHONY: build
+.PHONY: build-tmp build-cleanup
+
+build: node_modules clean-build browserify vulcanize
+
+
+# BROWSERIFY #
+
+.PHONY: browserify
+
+browserify: node_modules
+	$(BROWSERIFY) \
+		$(BROWSERIFY_IN) \
+		-o $(BROWSERIFY_OUT)
+
+
+# VULCANIZE #
+
+.PHONY: vulcanize
+
+vulcanize: node_modules
 	$(VULCANIZE) \
 		$(VULCANIZE_IN) \
 		--config $(VULCANIZE_CONF) \
 		-o $(VULCANIZE_OUT) \
 		--inline \
 		--no-strip-excludes
-
 
 
 # CLEAN #
@@ -204,6 +241,7 @@ clean: clean-build clean-node clean-bower
 
 clean-build:
 	rm -rf build
+	rm -f $(BUILD_OUT)
 
 clean-node:
 	rm -rf node_modules
