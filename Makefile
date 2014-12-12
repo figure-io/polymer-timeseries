@@ -36,11 +36,12 @@ _MOCHA ?= ./node_modules/.bin/_mocha
 MOCHA_REPORTER ?= spec
 
 
-# ISTANBUL #
+# COVERAGE #
 
 REPORT_ROOT ?= ./reports
 
 # KARMA #
+
 KARMA ?= ./node_modules/karma/bin/karma
 KARMA_OUT ?= $(REPORT_ROOT)/coverage/
 KARMA_PORT ?= 9876
@@ -180,11 +181,11 @@ install: install-node install-bower install-vulcanize
 install-node:
 	npm install
 
-install-bower:
+install-bower: node_modules
 	$(BOWER) install
 
 # Vulcanize:
-install-vulcanize:
+install-vulcanize: node_modules
 	$(VULCANIZE) \
 		$(VULCANIZE_IN) \
 		--config $(VULCANIZE_CONF) \

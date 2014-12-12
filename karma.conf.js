@@ -32,7 +32,7 @@
 
 var settings = {
 	// Base path (used to resolve file patterns):
-	'basePath': '',
+	'basePath': './',
 
 	// Proxy routes:
 	'proxies': {},
@@ -53,12 +53,12 @@ var settings = {
 			'served': true
 		},
 		{
-			'pattern': 'src/*/*.css',
+			'pattern': 'src/**/*.css',
 			'included': false,
 			'served': true
 		},
 		{
-			'pattern': 'src/*/*.js',
+			'pattern': 'src/**/*.js',
 			'included': false,
 			'served': true
 		},
@@ -72,7 +72,7 @@ var settings = {
 	// Preprocessors (see [Karma docs]{@link https://npmjs.org/browse/keyword/karma-preprocessor}):
 	'preprocessors': {
 		// NOTE: comment the following line when debugging tests. Karma-coverage has a bug which interferes with stack traces.
-		'src/js/*.js': [
+		'src/**/*.js': [
 			'coverage'
 		]
 	},

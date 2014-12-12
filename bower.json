@@ -25,7 +25,9 @@
   	"ui"
   ],
   "dependencies": {
-  	"polymer": "Polymer/polymer#~0.5.1"
+  	"polymer": "Polymer/polymer#~0.5.1",
+  	"polymer-d3": "figure-io/polymer-d3#~0.0.1",
+  	"polymer-uuid": "kgryte/polymer-uuid#~0.0.0"
   },
   "devDependencies": {},
   "ignore": [
