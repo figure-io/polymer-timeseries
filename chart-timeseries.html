@@ -1,3 +1,412 @@
+<!--
+	POLYMER-CHART-TIMESERIES
+
+	DESCRIPTION:
+		- `polymer-chart-timeseries` is a UI element for displaying timeseries graphs in a chart.
+
+	EXAMPLE:
+		<polymer-chart-timeseries uid="1234"></polymer-chart-timeseries>
+
+	@element polymer-chart-timeseries
+	@status unstable
+--><!-- POLYMER --><html><head><link rel="import" href="../polymer/polymer.html">
+
+<!-- DEPENDENCIES -->
+<link rel="import" href="../polymer-uuid/polymer-uuid.html">
+<link rel="import" href="../polymer-d3/polymer-d3.html">
+
+<!-- ELEMENT -->
+</head><body><polymer-element name="polymer-chart-timeseries" attributes="uid config width height labels chartTitle xLabel yLabel xMin xMax yMin yMax xNumTicks yNumTicks xAxisOrient yAxisOrient xTickFormat interpolation tension paddingLeft paddingRight paddingBottom paddingTop xValue yValue isDefined" assetpath="build/">
+
+	<template>
+
+		<!-- STYLESHEETS -->
+		<style>/* COLORS */
+
+/* D3: Category10 */
+.category10-1,
+[color="category10-1"] {
+	stroke: #1f77b4;
+}
+.category10-2,
+[color="category10-2"] {
+	stroke: #ff7f0e;
+}
+.category10-3,
+[color="category10-3"] {
+	stroke: #2ca02c;
+}
+.category10-4,
+[color="category10-4"] {
+	stroke: #d62728;
+}
+.category10-5,
+[color="category10-5"] {
+	stroke: #9467bd;
+}
+.category10-6,
+[color="category10-6"] {
+	stroke: #8c564b;
+}
+.category10-7,
+[color="category10-7"] {
+	stroke: #e377c2;
+}
+.category10-8,
+[color="category10-8"] {
+	stroke: #7f7f7f;
+}
+.category10-9,
+[color="category10-9"] {
+	stroke: #bcdb22;
+}
+.category10-10,
+[color="category10-10"] {
+	stroke: #17becf;
+}
+
+/* D3: category20 */
+.category20-1,
+[color="category20-1"] {
+	stroke: #1f77b4;
+}
+.category20-2,
+[color="category20-2"] {
+	stroke: #aec7e8;
+}
+.category20-3,
+[color="category20-3"] {
+	stroke: #ff7f0e;
+}
+.category20-4,
+[color="category20-4"] {
+	stroke: #ffbb78;
+}
+.category20-5,
+[color="category20-5"] {
+	stroke: #2ca02c;
+}
+.category20-6,
+[color="category20-6"] {
+	stroke: #98df8a;
+}
+.category20-7,
+[color="category20-7"] {
+	stroke: #d62728;
+}
+.category20-8,
+[color="category20-8"] {
+	stroke: #ff9896;
+}
+.category20-9,
+[color="category20-9"] {
+	stroke: #9467bd;
+}
+.category20-10,
+[color="category20-10"] {
+	stroke: #c5b0d5;
+}
+.category20-11,
+[color="category20-11"] {
+	stroke: #8c564b;
+}
+.category20-12,
+[color="category20-12"] {
+	stroke: #c49c94;
+}
+.category20-13,
+[color="category20-13"] {
+	stroke: #e377c2;
+}
+.category20-14,
+[color="category20-14"] {
+	stroke: #f7b6d2;
+}
+.category20-15,
+[color="category20-15"] {
+	stroke: #7f7f7f;
+}
+.category20-16,
+[color="category20-16"] {
+	stroke: #c7c7c7;
+}
+.category20-17,
+[color="category20-17"] {
+	stroke: #bcbd22;
+}
+.category20-18,
+[color="category20-18"] {
+	stroke: #dbdb8d;
+}
+.category20-19,
+[color="category20-19"] {
+	stroke: #17becf;
+}
+.category20-20,
+[color="category20-20"] {
+	stroke: #9edae5;
+}
+
+/* D3: category20b */
+.category20b-1,
+[color="category20b-1"] {
+	stroke: #393b79;
+}
+.category20b-2,
+[color="category20b-2"] {
+	stroke: #5254a3;
+}
+.category20b-3,
+[color="category20b-3"] {
+	stroke: #6b6ecf;
+}
+.category20b-4,
+[color="category20b-4"] {
+	stroke: #9c9ede;
+}
+.category20b-5,
+[color="category20b-5"] {
+	stroke: #637939;
+}
+.category20b-6,
+[color="category20b-6"] {
+	stroke: #8ca252;
+}
+.category20b-7,
+[color="category20b-7"] {
+	stroke: #b5cf6b;
+}
+.category20b-8,
+[color="category20b-8"] {
+	stroke: #cedb9c;
+}
+.category20b-9,
+[color="category20b-9"] {
+	stroke: #8c6d31;
+}
+.category20b-10,
+[color="category20b-10"] {
+	stroke: #bd9e39;
+}
+.category20b-11,
+[color="category20b-11"] {
+	stroke: #e7ba52;
+}
+.category20b-12,
+[color="category20b-12"] {
+	stroke: #e7cb94;
+}
+.category20b-13,
+[color="category20b-13"] {
+	stroke: #843c39;
+}
+.category20b-14,
+[color="category20b-14"] {
+	stroke: #ad494a;
+}
+.category20b-15,
+[color="category20b-15"] {
+	stroke: #d6616b;
+}
+.category20b-16,
+[color="category20b-16"] {
+	stroke: #e7969c;
+}
+.category20b-17,
+[color="category20b-17"] {
+	stroke: #7b4173;
+}
+.category20b-18,
+[color="category20b-18"] {
+	stroke: #a55194;
+}
+.category20b-19,
+[color="category20b-19"] {
+	stroke: #ce6dbd;
+}
+.category20b-20,
+[color="category20b-20"] {
+	stroke: #de9ed6;
+}
+
+/* D3: category20c */
+.category20c-1,
+[color="category20c-1"] {
+	stroke: #3182bd;
+}
+.category20c-2,
+[color="category20c-2"] {
+	stroke: #6baed6;
+}
+.category20c-3,
+[color="category20c-3"] {
+	stroke: #9ecae1;
+}
+.category20c-4,
+[color="category20c-4"] {
+	stroke: #c6dbef;
+}
+.category20c-5,
+[color="category20c-5"] {
+	stroke: #e6550d;
+}
+.category20c-6,
+[color="category20c-6"] {
+	stroke: #fd8d3c;
+}
+.category20c-7,
+[color="category20c-7"] {
+	stroke: #fdae6b;
+}
+.category20c-8,
+[color="category20c-8"] {
+	stroke: #fdd0a2;
+}
+.category20c-9,
+[color="category20c-9"] {
+	stroke: #31a354;
+}
+.category20c-10,
+[color="category20c-10"] {
+	stroke: #74c476;
+}
+.category20c-11,
+[color="category20c-11"] {
+	stroke: #a1d99b;
+}
+.category20c-12,
+[color="category20c-12"] {
+	stroke: #c7e9c0;
+}
+.category20c-13,
+[color="category20c-13"] {
+	stroke: #756bb1;
+}
+.category20c-14,
+[color="category20c-14"] {
+	stroke: #9e9ac8;
+}
+.category20c-15,
+[color="category20c-15"] {
+	stroke: #bcbddc;
+}
+.category20c-16,
+[color="category20c-16"] {
+	stroke: #dadaeb;
+}
+.category20c-17,
+[color="category20c-17"] {
+	stroke: #636363;
+}
+.category20c-18,
+[color="category20c-18"] {
+	stroke: #969696;
+}
+.category20c-19,
+[color="category20c-19"] {
+	stroke: #bdbdbd;
+}
+.category20c-20,
+[color="category20c-20"] {
+	stroke: #d9d9d9;
+}
+</style>
+		<style>:host {
+	display: block;
+	font-family: 'Open-Sans', sans-serif;
+}
+
+.noselect {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.canvas {
+	display: block;
+	margin: 0 auto;
+}
+
+.graph .axis path {
+	fill: none;
+}
+
+.graph .y.axis path {
+	stroke: none;
+}
+
+.graph .x.axis path {
+	stroke: #aaa;
+	stroke-width: 1;
+}
+
+.graph .axis line {
+	stroke: #aaa;
+	stroke-width: 1;
+}
+
+.graph .background {
+	fill: none;
+	stroke: none;
+}
+
+.graph .line {
+	fill: none;
+	/*stroke: #474747;*/
+	stroke-width: 2;
+	stroke-opacity: 90%;
+}
+
+.graph .hidden {
+	opacity: 0;
+}
+
+.meta .title {
+	display: block;
+	/*font-size: 2em;*/
+	line-height: 2em;
+	padding: 0 10px;
+	/*background-color: #474747;*/
+	/*color: #ffffff;*/
+	font-size: 1.5em;
+	color: #474747;
+}
+
+.legend .entry {
+	cursor: pointer;
+}
+
+.legend .symbol {
+	stroke-width: 3;
+}
+
+.legend .hidden {
+	opacity: 0.25;
+}
+
+</style>
+		<style>
+/* MEDIA QUERIES */
+
+/* 960 px */
+@media screen and (max-width: 960px) {
+	.meta .title {
+		font-size: 1.6em;
+		line-height: 2.25em;
+	}
+}
+</style>
+
+		<!-- PRESENTATION CONTENT -->
+		<div class="chart" id="chart"></div>
+
+	</template>
+
+	<!-- REGISTRATION -->
+	<script>(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
 *
 *	CHART
@@ -27,6 +436,12 @@
 */
 
 'use strict';
+
+// MODULES //
+
+var // Event-emitter class:
+	EventEmitter = require( 'events' );
+
 
 // VARIABLES //
 
@@ -186,6 +601,16 @@ function Chart() {
 	}
 	return this;
 } // end FUNCTION Chart()
+
+/**
+* Create a prototype which inherits from the parent prototype.
+*/
+Chart.prototype = Object.create( EventEmitter.prototype );
+
+/**
+* Set the constructor.
+*/
+Chart.prototype.constructor = Chart;
 
 /**
 * ATTRIBUTE: config
@@ -468,6 +893,13 @@ Chart.prototype.events = [
 *	Polymer hook that is called when an element is created.
 */
 Chart.prototype.created = function() {
+	EventEmitter.call( this );
+	// TODO: remove me
+	debugger;
+	this.emit( 'beep', 'boop' );
+	this.on( 'beep', function( d ) {
+		console.log( d );
+	});
 	this.init();
 }; // end METHOD created()
 
@@ -2063,3 +2495,353 @@ Chart.prototype.onResize = function() {
 // EXPORTS //
 
 module.exports = Chart;
+
+},{"events":3}],2:[function(require,module,exports){
+/**
+*
+*	POLYMER: chart-timeseries
+*
+*
+*	DESCRIPTION:
+*		- Registers the chart-timeseries web-component.
+*
+*
+*	NOTES:
+*		[1]
+*
+*
+*	TODO:
+*		[1]
+*
+*
+*	LICENSE:
+*		MIT
+*
+*	Copyright (c) 2014. Athan Reines.
+*
+*
+*	AUTHOR:
+*		Athan Reines. kgryte@gmail.com. 2014.
+*
+*/
+
+/* global Polymer */
+'use strict';
+
+// MODULES //
+
+var Chart = require( './chart.js' );
+
+
+// POLYMER //
+
+Polymer( 'polymer-chart-timeseries', Chart.prototype );
+
+},{"./chart.js":1}],3:[function(require,module,exports){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+function EventEmitter() {
+  this._events = this._events || {};
+  this._maxListeners = this._maxListeners || undefined;
+}
+module.exports = EventEmitter;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._maxListeners = undefined;
+
+// By default EventEmitters will print a warning if more than 10 listeners are
+// added to it. This is a useful default which helps finding memory leaks.
+EventEmitter.defaultMaxListeners = 10;
+
+// Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+EventEmitter.prototype.setMaxListeners = function(n) {
+  if (!isNumber(n) || n < 0 || isNaN(n))
+    throw TypeError('n must be a positive number');
+  this._maxListeners = n;
+  return this;
+};
+
+EventEmitter.prototype.emit = function(type) {
+  var er, handler, len, args, i, listeners;
+
+  if (!this._events)
+    this._events = {};
+
+  // If there is no 'error' event listener then throw.
+  if (type === 'error') {
+    if (!this._events.error ||
+        (isObject(this._events.error) && !this._events.error.length)) {
+      er = arguments[1];
+      if (er instanceof Error) {
+        throw er; // Unhandled 'error' event
+      }
+      throw TypeError('Uncaught, unspecified "error" event.');
+    }
+  }
+
+  handler = this._events[type];
+
+  if (isUndefined(handler))
+    return false;
+
+  if (isFunction(handler)) {
+    switch (arguments.length) {
+      // fast cases
+      case 1:
+        handler.call(this);
+        break;
+      case 2:
+        handler.call(this, arguments[1]);
+        break;
+      case 3:
+        handler.call(this, arguments[1], arguments[2]);
+        break;
+      // slower
+      default:
+        len = arguments.length;
+        args = new Array(len - 1);
+        for (i = 1; i < len; i++)
+          args[i - 1] = arguments[i];
+        handler.apply(this, args);
+    }
+  } else if (isObject(handler)) {
+    len = arguments.length;
+    args = new Array(len - 1);
+    for (i = 1; i < len; i++)
+      args[i - 1] = arguments[i];
+
+    listeners = handler.slice();
+    len = listeners.length;
+    for (i = 0; i < len; i++)
+      listeners[i].apply(this, args);
+  }
+
+  return true;
+};
+
+EventEmitter.prototype.addListener = function(type, listener) {
+  var m;
+
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  if (!this._events)
+    this._events = {};
+
+  // To avoid recursion in the case that type === "newListener"! Before
+  // adding it to the listeners, first emit "newListener".
+  if (this._events.newListener)
+    this.emit('newListener', type,
+              isFunction(listener.listener) ?
+              listener.listener : listener);
+
+  if (!this._events[type])
+    // Optimize the case of one listener. Don't need the extra array object.
+    this._events[type] = listener;
+  else if (isObject(this._events[type]))
+    // If we've already got an array, just append.
+    this._events[type].push(listener);
+  else
+    // Adding the second element, need to change to array.
+    this._events[type] = [this._events[type], listener];
+
+  // Check for listener leak
+  if (isObject(this._events[type]) && !this._events[type].warned) {
+    var m;
+    if (!isUndefined(this._maxListeners)) {
+      m = this._maxListeners;
+    } else {
+      m = EventEmitter.defaultMaxListeners;
+    }
+
+    if (m && m > 0 && this._events[type].length > m) {
+      this._events[type].warned = true;
+      console.error('(node) warning: possible EventEmitter memory ' +
+                    'leak detected. %d listeners added. ' +
+                    'Use emitter.setMaxListeners() to increase limit.',
+                    this._events[type].length);
+      if (typeof console.trace === 'function') {
+        // not supported in IE 10
+        console.trace();
+      }
+    }
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.once = function(type, listener) {
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  var fired = false;
+
+  function g() {
+    this.removeListener(type, g);
+
+    if (!fired) {
+      fired = true;
+      listener.apply(this, arguments);
+    }
+  }
+
+  g.listener = listener;
+  this.on(type, g);
+
+  return this;
+};
+
+// emits a 'removeListener' event iff the listener was removed
+EventEmitter.prototype.removeListener = function(type, listener) {
+  var list, position, length, i;
+
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  if (!this._events || !this._events[type])
+    return this;
+
+  list = this._events[type];
+  length = list.length;
+  position = -1;
+
+  if (list === listener ||
+      (isFunction(list.listener) && list.listener === listener)) {
+    delete this._events[type];
+    if (this._events.removeListener)
+      this.emit('removeListener', type, listener);
+
+  } else if (isObject(list)) {
+    for (i = length; i-- > 0;) {
+      if (list[i] === listener ||
+          (list[i].listener && list[i].listener === listener)) {
+        position = i;
+        break;
+      }
+    }
+
+    if (position < 0)
+      return this;
+
+    if (list.length === 1) {
+      list.length = 0;
+      delete this._events[type];
+    } else {
+      list.splice(position, 1);
+    }
+
+    if (this._events.removeListener)
+      this.emit('removeListener', type, listener);
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.removeAllListeners = function(type) {
+  var key, listeners;
+
+  if (!this._events)
+    return this;
+
+  // not listening for removeListener, no need to emit
+  if (!this._events.removeListener) {
+    if (arguments.length === 0)
+      this._events = {};
+    else if (this._events[type])
+      delete this._events[type];
+    return this;
+  }
+
+  // emit removeListener for all listeners on all events
+  if (arguments.length === 0) {
+    for (key in this._events) {
+      if (key === 'removeListener') continue;
+      this.removeAllListeners(key);
+    }
+    this.removeAllListeners('removeListener');
+    this._events = {};
+    return this;
+  }
+
+  listeners = this._events[type];
+
+  if (isFunction(listeners)) {
+    this.removeListener(type, listeners);
+  } else {
+    // LIFO order
+    while (listeners.length)
+      this.removeListener(type, listeners[listeners.length - 1]);
+  }
+  delete this._events[type];
+
+  return this;
+};
+
+EventEmitter.prototype.listeners = function(type) {
+  var ret;
+  if (!this._events || !this._events[type])
+    ret = [];
+  else if (isFunction(this._events[type]))
+    ret = [this._events[type]];
+  else
+    ret = this._events[type].slice();
+  return ret;
+};
+
+EventEmitter.listenerCount = function(emitter, type) {
+  var ret;
+  if (!emitter._events || !emitter._events[type])
+    ret = 0;
+  else if (isFunction(emitter._events[type]))
+    ret = 1;
+  else
+    ret = emitter._events[type].length;
+  return ret;
+};
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+
+},{}]},{},[2]);
+</script>
+
+</polymer-element>
+</body></html>
