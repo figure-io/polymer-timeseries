@@ -146,24 +146,19 @@ Canvas.prototype.constructor = Canvas;
 Canvas.prototype.create = function( type ) {
 	var opt = 'svg',
 		key = '_',
-		fcn,
-		err;
+		fcn;
 	if ( arguments.length ) {
 		if ( typeof type !== 'string' ) {
-			err = new TypeError( 'create()::invalid input argument. Must provide a string.' );
-			this.emit( 'error', err );
-			return this;
+			throw new TypeError( 'create()::invalid input argument. Must provide a string.' );
 		}
 		opt = type;
 	}
 	key += opt;
 	fcn = this[ key ];
 	if ( !fcn ) {
-		err = new Error( 'create()::unrecognized canvas type: ' + opt + '.' );
-		this.emit( 'error', err );
-	} else {
-		fcn();
+		throw new Error( 'create()::unrecognized canvas type: ' + opt + '.' );
 	}
+	fcn();
 	return this;
 }; // end METHOD create()
 
@@ -175,15 +170,12 @@ Canvas.prototype.create = function( type ) {
 * @returns {Canvas|Number} Canvas instance or canvas width
 */
 Canvas.prototype.width = function( width ) {
-	var height = this._config.height,
-		err;
+	var height = this._config.height;
 	if ( !arguments.length ) {
 		return this._config.width;
 	}
 	if ( typeof width !== 'number' || width !== width || width <= 0 ) {
-		err = new TypeError( 'width()::invalid input argument. Must provide a number greater than 0. Value: `' + width + '`.' );
-		this.emit( 'error', err );
-		return this;
+		throw new TypeError( 'width()::invalid input argument. Must provide a number greater than 0. Value: `' + width + '`.' );
 	}
 	this._config.width = width;
 
@@ -207,15 +199,12 @@ Canvas.prototype.width = function( width ) {
 * @returns {Canvas|Number} Canvas instance or canvas height
 */
 Canvas.prototype.height = function( height ) {
-	var width = this._config.width,
-		err;
+	var width = this._config.width;
 	if ( !arguments.length ) {
 		return this._config.height;
 	}
 	if ( typeof height !== 'number' || height !== height || height <= 0 ) {
-		err = new TypeError( 'height()::invalid input argument. Must provide a number greater than 0. Value: `' + height + '`.' );
-		this.emit( 'error', err );
-		return this;
+		throw new TypeError( 'height()::invalid input argument. Must provide a number greater than 0. Value: `' + height + '`.' );
 	}
 	this._config.height = height;
 

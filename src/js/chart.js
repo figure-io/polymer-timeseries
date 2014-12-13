@@ -30,9 +30,16 @@
 
 // MODULES //
 
-var d3 = require( 'd3' ),
+var // D3 (data visualization) library:
+	d3 = require( 'd3' ),
+
+	// Module for creating UUIDs:
 	uuid = require( 'node-uuid' ),
+
+	// Validate if a value is a plain object:
 	isObject = require( 'validate.io-object' ),
+
+	// Writable stream constructor:
 	Stream = require( './stream' );
 
 

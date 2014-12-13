@@ -91,11 +91,8 @@ describe( 'canvas', function tests() {
 			expect( canvas.create ).to.be.a( 'function' );
 		});
 
-		it( 'should emit an error if not provided a string', function test( done ) {
-			var counter = 0,
-				values;
-
-			values = [
+		it( 'should throw an error if not provided a string', function test() {
+			var values = [
 				5,
 				NaN,
 				null,
@@ -106,26 +103,22 @@ describe( 'canvas', function tests() {
 				{}
 			];
 
-			canvas.on( 'error', onError );
-
 			for ( var i = 0; i < values.length; i++ ) {
-				canvas.create( values[ i ] );
+				expect( badValue( values[i] ) ).to.throw( TypeError );
 			}
 
-			function onError( err ) {
-				assert.instanceOf( err, TypeError );
-				if ( ++counter === values.length ) {
-					done();
-				}
+			function badValue( value ) {
+				return function() {
+					canvas.create( value );
+				};
 			}
 		});
 
-		it( 'should emit an error if provided an unrecognized canvas type', function test() {
-			canvas.on( 'error', onError );
-			canvas.create( 'unrecognized_type' );
-			function onError( err ) {
-				assert.instanceOf( err, Error );
-				assert.ok( true );
+		it( 'should throw an error if provided an unrecognized canvas type', function test() {
+			expect( foo ).to.throw( Error );
+
+			function foo() {
+				canvas.create( 'unrecognized_type' );
 			}
 		});
 
@@ -151,11 +144,8 @@ describe( 'canvas', function tests() {
 			expect( canvas.width ).to.be.a( 'function' );
 		});
 
-		it( 'should emit an error if not provided a number greater than 0', function test( done ) {
-			var counter = 0,
-				values;
-
-			values = [
+		it( 'should throw an error if not provided a number greater than 0', function test() {
+			var values = [
 				'5',
 				-5,
 				0,
@@ -168,17 +158,14 @@ describe( 'canvas', function tests() {
 				{}
 			];
 
-			canvas.on( 'error', onError );
-
 			for ( var i = 0; i < values.length; i++ ) {
-				canvas.width( values[ i ] );
+				expect( badValue( values[i] ) ).to.throw( TypeError );
 			}
 
-			function onError( err ) {
-				assert.instanceOf( err, TypeError );
-				if ( ++counter === values.length ) {
-					done();
-				}
+			function badValue( value ) {
+				return function() {
+					canvas.width( value );
+				};
 			}
 		});
 
@@ -205,11 +192,8 @@ describe( 'canvas', function tests() {
 			expect( canvas.height ).to.be.a( 'function' );
 		});
 
-		it( 'should emit an error if not provided a number greater than 0', function test( done ) {
-			var counter = 0,
-				values;
-
-			values = [
+		it( 'should throw an error if not provided a number greater than 0', function test() {
+			var values = [
 				'5',
 				-5,
 				0,
@@ -222,17 +206,14 @@ describe( 'canvas', function tests() {
 				{}
 			];
 
-			canvas.on( 'error', onError );
-
 			for ( var i = 0; i < values.length; i++ ) {
-				canvas.height( values[ i ] );
+				expect( badValue( values[i] ) ).to.throw( TypeError );
 			}
 
-			function onError( err ) {
-				assert.instanceOf( err, TypeError );
-				if ( ++counter === values.length ) {
-					done();
-				}
+			function badValue( value ) {
+				return function() {
+					canvas.height( value );
+				};
 			}
 		});
 
