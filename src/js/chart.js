@@ -28,6 +28,14 @@
 
 'use strict';
 
+// MODULES //
+
+var d3 = require( 'd3' ),
+	uuid = require( 'node-uuid' ),
+	isObject = require( 'validate.io-object' ),
+	Stream = require( './stream' );
+
+
 // VARIABLES //
 
 var OPTS = {},
@@ -476,19 +484,7 @@ Chart.prototype.created = function() {
 *	Initialization.
 */
 Chart.prototype.init = function() {
-	var create = document.createElement.bind( document ),
-		self = this,
-		d3,
-		el;
-
-	// Create a new D3 element to access the library dependency:
-	el = create( 'polymer-d3' );
-	d3 = el.d3;
-	this._d3 = d3;
-
-	// Create a new uuid element to access the library dependency for creating uuids:
-	el = create( 'polymer-uuid' );
-	this._uuid = el.uuid;
+	var self = this;
 
 	// Private methods...
 
@@ -529,6 +525,9 @@ Chart.prototype.init = function() {
 		.interpolate( this.interpolation )
 		.tension( this.tension );
 
+	// Stream...
+	this._stream = null;
+
 	// Encoding...
 	this._colors = setColors.bind( this );
 
@@ -558,7 +557,7 @@ Chart.prototype.init = function() {
 		'paths': null,
 		'annotations': null
 	};
-	this._clipPathID = this._uuid.v4();
+	this._clipPathID = uuid.v4();
 
 	return;
 
@@ -634,7 +633,7 @@ Chart.prototype.createBase = function() {
 		canvas;
 
 	// Create the SVG element:
-	canvas = this._d3.select( this.$.chart ).append( 'svg:svg' )
+	canvas = d3.select( this.$.chart ).append( 'svg:svg' )
 		.attr( 'property', 'canvas' )
 		.attr( 'class', 'canvas' )
 		.attr( 'width', width )
@@ -820,7 +819,7 @@ Chart.prototype.createLegend = function() {
 
 	// Determine how many legend labels to create...
 	len = ( numLabels > numData ) ? numData : numLabels;
-	range = this._d3.range( len );
+	range = d3.range( len );
 
 	legend = this.$.meta.append( 'svg:g' )
 		.attr( 'property', 'legend' )
@@ -926,7 +925,7 @@ Chart.prototype.resetLegend = function() {
 
 	// Determine how many legend labels to create...
 	len = ( numLabels > numData ) ? numData : numLabels;
-	range = this._d3.range( len );
+	range = d3.range( len );
 
 	// Bind a set of labels:
 	entries = this.$.legend.selectAll( '.entry' )
@@ -1084,8 +1083,7 @@ Chart.prototype.formatData = function( data ) {
 * @returns {Array} domain
 */
 Chart.prototype.xDomain = function( min, max ) {
-	var d3 = this._d3,
-		data = this._data,
+	var data = this._data,
 		err;
 
 	if ( min !== null && !( min instanceof Date ) ) {
@@ -1124,8 +1122,7 @@ Chart.prototype.xDomain = function( min, max ) {
 * @returns {Array} domain
 */
 Chart.prototype.yDomain = function( min, max ) {
-	var d3 = this._d3,
-		data = this._data,
+	var data = this._data,
 		err;
 
 	if ( min !== null && ( typeof min !== 'number' || min !== min ) ) {
@@ -1751,7 +1748,7 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this._xTickFormat = this._d3.time.format( newVal );
+	this._xTickFormat = d3.time.format( newVal );
 	xAxis.tickFormat( this._xTickFormat );
 	selection.call( xAxis );
 }; // end METHOD xTickFormatChanged()
@@ -2058,6 +2055,38 @@ Chart.prototype.onResize = function() {
 	canvas.setAttribute( 'width', width );
 	canvas.setAttribute( 'height', Math.floor( width / aspect ) );
 }; // end METHOD onResize()
+
+/**
+* METHOD: stream( [options])
+*	Returns a writable stream.
+*
+* @param {Object} [options] - Writable stream options
+* @returns {Stream} Stream instance
+*/
+Chart.prototype.stream = function( options ) {
+	var opts = {},
+		err;
+	if ( arguments.length ) {
+		if ( !isObject( options ) ) {
+			err = new TypeError( 'stream()::invalid input argument. Options must be an object.' );
+			this.fire( 'error', err );
+			return;
+		}
+		opts = options;
+	}
+	var clbk = onData.bind( this );
+	this._stream = new Stream( clbk, opts );
+	return this._stream;
+
+	function onData( error, arr ) {
+		/* jshint validthis: true */
+		if ( error ) {
+			this.fire( 'error', error );
+			return;
+		}
+		// TODO: call update function
+	}
+}; // end METHOD stream()
 
 
 // EXPORTS //

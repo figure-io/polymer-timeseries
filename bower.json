@@ -38,7 +38,6 @@
   	"bower",
   	"src",
   	"Makefile",
-  	"karma.conf.js",
   	"vulcanize.conf.js",
   	"package.json"
   ],

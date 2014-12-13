@@ -46,28 +46,13 @@ _MOCHA ?= ./node_modules/.bin/_mocha
 MOCHA_REPORTER ?= spec
 
 
-# COVERAGE #
+# ISTANBUL #
 
-REPORT_ROOT ?= ./reports
-
-# KARMA #
-
-KARMA ?= ./node_modules/karma/bin/karma
-KARMA_OUT ?= $(REPORT_ROOT)/coverage/
-KARMA_PORT ?= 9876
-KARMA_REPORTERS ?= mocha,coverage
-KARMA_BROWSERS ?= Chrome
-KARMA_LOG_LEVEL ?= info
-
-# Chrome:
-KARMA_CHROME_PATH ?= $(KARMA_OUT)/chrome
-KARMA_CHROME_LCOV_INFO_PATH ?= $(KARMA_CHROME_PATH)/lcov.info
-KARMA_CHROME_HTML_REPORT_PATH ?= $(KARMA_CHROME_PATH)/lcov-report/index.html
-
-# Firefox:
-KARMA_FIREFOX_PATH ?= $(KARMA_OUT)/firefox
-KARMA_FIREFOX_LCOV_INFO_PATH ?= $(KARMA_FIREFOX_PATH)/lcov.info
-KARMA_FIREFOX_HTML_REPORT_PATH ?= $(KARMA_FIREFOX_PATH)/lcov-report/index.html
+ISTANBUL ?= ./node_modules/.bin/istanbul
+ISTANBUL_OUT ?= ./reports/coverage
+ISTANBUL_REPORT ?= lcov
+ISTANBUL_LCOV_INFO_PATH ?= $(ISTANBUL_OUT)/lcov.info
+ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
 
 
 # BUILD #
@@ -115,62 +100,47 @@ notes:
 
 # UNIT TESTS #
 
-.PHONY: test test-watch
-.PHONY: test-karma-mocha
-.PHONY: test-karma-mocha-watch
+.PHONY: test test-mocha
 
-test: test-karma-mocha
+test: test-mocha
 
-test-watch: test-karma-mocha-watch
-
-test-karma-mocha: node_modules
-	$(KARMA) start \
-		--single-run \
-		--colors \
-		--port $(KARMA_PORT) \
-		--browsers $(KARMA_BROWSERS) \
-		--reporters $(KARMA_REPORTERS) \
-		--log-level $(KARMA_LOG_LEVEL) \
-		--no-auto-watch
-
-test-karma-mocha-watch: node_modules
-	$(KARMA) start \
-		--colors \
-		--port $(KARMA_PORT) \
-		--browsers $(KARMA_BROWSERS) \
-		--reporters $(KARMA_REPORTERS) \
-		--log-level $(KARMA_LOG_LEVEL) \
-		--auto-watch
+test-mocha: node_modules
+	NODE_ENV=$(NODE_ENV) \
+	NODE_PATH=$(NODE_PATH_TEST) \
+	$(MOCHA) \
+		--reporter $(MOCHA_REPORTER) \
+		--globals Polymer \
+		$(TESTS)
 
 
 
 # CODE COVERAGE #
 
-.PHONY: test-cov
+.PHONY: test-cov test-istanbul-mocha
 
-test-cov: test-karma-mocha
+test-cov: test-istanbul-mocha
+
+test-istanbul-mocha: node_modules
+	NODE_ENV=$(NODE_ENV) \
+	NODE_PATH=$(NODE_PATH_TEST) \
+	$(ISTANBUL) cover \
+		--dir $(ISTANBUL_OUT) \
+		--report $(ISTANBUL_REPORT) \
+	$(_MOCHA) -- \
+		--reporter $(MOCHA_REPORTER) \
+		$(TESTS)
 
 
 
 # COVERAGE REPORT #
 
-.PHONY: view-cov
-.PHONY: view-chrome-cov view-firefox-cov
-.PHONY: view-karma-chrome-report
+.PHONY: view-cov view-istanbul-report
 
-view-cov: view-chrome-cov view-firefox-cov
+view-cov: view-istanbul-report
 
-# Chrome:
-view-chrome-cov: view-karma-chrome-report
+view-istanbul-report:
+	open $(ISTANBUL_HTML_REPORT_PATH)
 
-view-karma-chrome-report:
-	open $(KARMA_CHROME_HTML_REPORT_PATH)
-
-# Firefox:
-view-firefox-cov: view-karma-firefox-report
-
-view-karma-firefox-report:
-	open $(KARMA_FIREFOX_HTML_REPORT_PATH)
 
 
 # LINT #

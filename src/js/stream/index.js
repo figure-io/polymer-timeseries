@@ -38,7 +38,8 @@ var Writable = require( 'readable-stream' ).Writable,
 // VARIABLES //
 
 var isUnix = /^\d{10}$/,
-	isTimestamp = /^\d{13}$/;
+	isTimestamp = /^\d{13}$/,
+	isArray = /^\[{3}.+\]{3}$/;
 
 
 // FUNCTIONS //
@@ -92,7 +93,7 @@ function setOptions( options ) {
 
 /**
 * FUNCTION: isBuffer( chunk )
-*	Checks if a chunk is a buffer via duck-typing. (NOTE: chunks emitted from a readable stream are not considered `buffers` by the browserify-buffer module due to `instanceof chunk !== Buffer`, despite a chunk being a Buffer. To address this, duck-type based on known `buffer` methods.)
+*	Checks if a chunk is a buffer via duck-typing. (NOTE: chunks emitted from a readable stream are not considered `buffers` by the browserify-buffer module due to `instanceof chunk !== Buffer`, despite a chunk being a Buffer. To address this, duck type based on known `buffer` methods.)
 *
 * @private
 * @returns {Boolean} boolean indicating if a chunk is a Buffer instance
@@ -181,65 +182,79 @@ Stream.prototype._write = function( chunk, encoding, clbk ) {
 	if ( isBuffer( chunk ) ) {
 		chunk = chunk.toString();
 	}
-	// Object mode...
+	// [0] Object mode...
 	if ( this._mode ) {
 		if ( !Array.isArray( chunk ) ) {
-			err = new TypeError( 'cannot stream non-arrays in objectMode.' );
+			err = new TypeError( 'cannot stream non-arrays in objectMode. Chunk: `' + chunk + '`.' );
 			this._clbk( err );
-			clbk();
-			return;
+		} else {
+			this._clbk( null, chunk );
 		}
-		arr = chunk;
-	} else {
-		// Split based on timestamps...
-		chunk = chunk.split( this._newline );
-		len = chunk.length;
-
-		// Split into separate timeseries...
-		sep = this._delimiter;
-
-		val = chunk[ 0 ].split( sep );
-		N = val.length - 1;
-
-		if ( !N ) {
-			err = new Error( 'invalid stream data. Chunk: `' + chunk + '`.' );
+		clbk();
+		return;
+	}
+	// [1] Stringified array...
+	if ( isArray.test( chunk ) ) {
+		try {
+			chunk = JSON.parse( chunk );
+			this._clbk( null, chunk );
+		} catch ( e ) {
+			err = new Error( 'unable to parse stream data as JSON array. Chunk: `' + chunk + '`.' );
 			this._clbk( err );
-			clbk();
-			return;
 		}
-		arr = new Array( N );
+		clbk();
+		return;
+	}
+	// [2] Parse string and convert to an array of array of arrays (i.e., multiple timeseries)...
 
-		// Initialize the timeseries arrays...
-		for ( i = 0; i < N; i++ ) {
-			arr[ i ] = new Array( len );
-		}
+	// Split based on timestamps:
+	chunk = chunk.split( this._newline );
+	len = chunk.length;
 
-		// Handle the first value for each time series since we have already split into separate values...
+	// Split into separate timeseries:
+	sep = this._delimiter;
+
+	val = chunk[ 0 ].split( sep );
+	N = val.length - 1;
+
+	if ( !N ) {
+		err = new Error( 'invalid stream data. Chunk: `' + chunk + '`.' );
+		this._clbk( err );
+		clbk();
+		return;
+	}
+	arr = new Array( N );
+
+	// Initialize the timeseries arrays...
+	for ( i = 0; i < N; i++ ) {
+		arr[ i ] = new Array( len );
+	}
+
+	// Handle the first value for each time series since we have already split into separate values...
+	ts = val[ 0 ];
+	if ( isUnix.test( ts ) ) {
+		// Convert to milliseconds:
+		ts = parseInt( ts, 10 ) * 1000;
+	} else if ( isTimestamp.test( ts ) ) {
+		ts = parseInt( ts, 10 );
+	}
+	for ( i = 0; i < N; i++ ) {
+		// Force type conversion via `+` operator:
+		arr[ i ][ 0 ] = [ ts, +val[i+1] ];
+	}
+	for ( j = 1; j < len; j++ ) {
+		val = chunk[ j ].split( sep );
 		ts = val[ 0 ];
 		if ( isUnix.test( ts ) ) {
-			// Convert to milliseconds:
 			ts = parseInt( ts, 10 ) * 1000;
 		} else if ( isTimestamp.test( ts ) ) {
 			ts = parseInt( ts, 10 );
 		}
 		for ( i = 0; i < N; i++ ) {
-			// Force type conversion via `+` operator:
-			arr[ i ][ 0 ] = [ ts, +val[i+1] ];
-		}
-		for ( j = 1; j < len; j++ ) {
-			val = chunk[ j ].split( sep );
-			ts = val[ 0 ];
-			if ( isUnix.test( ts ) ) {
-				ts = parseInt( ts, 10 ) * 1000;
-			} else if ( isTimestamp.test( ts ) ) {
-				ts = parseInt( ts, 10 );
-			}
-			for ( i = 0; i < N; i++ ) {
-				arr[ i ][ j ] = [ ts, +val[i+1] ];
-			}
+			arr[ i ][ j ] = [ ts, +val[i+1] ];
 		}
 	}
-	this._clbk( err, arr );
+	this._clbk( null, arr );
 	clbk();
 }; // end METHOD _write()
 
@@ -247,7 +262,7 @@ Stream.prototype._write = function( chunk, encoding, clbk ) {
 * METHOD: destroy( [error] )
 *	Gracefully destroys a stream, providing backwards compatibility.
 *
-* @param {Object} [error] - optional error message
+* @param {Object} [error] - error message
 * @returns {Stream} Stream instance
 */
 Stream.prototype.destroy = function( error ) {

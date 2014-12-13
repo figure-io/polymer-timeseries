@@ -43,5 +43,6 @@ TODO
 	- 	I opt for choosing. In which case, `getConfig.marks = [{}]` is a single element `array`.
 15. See how plottable does their time x-axis to improve formatting 
 16. timeseries stream as separate module (see stream.js and string parsing)
-
-
+17. move stream to flow
+18. ensure jsdom not browserified w D3
+19. replace d3 min/max with compute-min/max
