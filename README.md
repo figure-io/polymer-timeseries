@@ -48,7 +48,7 @@ $ cd ..
 $ python -m SimpleHTTPServer 9090
 ```
 
-and open the following URL in your browser
+Once the server is running, open the following URL in your browser
 
 ```
 http://127.0.0.1:9090/chart-timeseries/examples
