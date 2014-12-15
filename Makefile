@@ -5,6 +5,9 @@
 # Component Name:
 NAME ?= chart-timeseries
 
+# Distributable filename:
+OUT ?= $(NAME).html
+
 # Set the node.js environment to test:
 NODE_ENV ?= test
 
@@ -27,23 +30,18 @@ BOWER ?= ./node_modules/.bin/bower
 # BROWSERIFY #
 
 BROWSERIFY ?= ./node_modules/.bin/browserify
-BROWSERIFY_IN ?= ./build/js/polymer.js
-BROWSERIFY_OUT ?= ./build/js/script.js
+BROWSERIFY_BUILD_IN ?= ./build/js/polymer.js
+BROWSERIFY_BUILD_OUT ?= ./build/js/script.js
+BROWSERIFY_TEST_IN ?= ./build/js/polymer.js
+BROWSERIFY_TEST_OUT ?= ./build/js/script.js
 
 
 # VULCANIZE #
 
 VULCANIZE ?= ./node_modules/.bin/vulcanize
 VULCANIZE_CONF ?= ./vulcanize.conf.json
-VULCANIZE_IN ?= ./build/$(NAME).html
-VULCANIZE_OUT ?= ./$(NAME).html
-
-
-# MOCHA #
-
-MOCHA ?= ./node_modules/.bin/mocha
-_MOCHA ?= ./node_modules/.bin/_mocha
-MOCHA_REPORTER ?= spec
+VULCANIZE_BUILD_IN ?= ./build/$(NAME).html
+VULCANIZE_BUILD_OUT ?= $(OUT)
 
 
 # ISTANBUL #
@@ -55,9 +53,12 @@ ISTANBUL_LCOV_INFO_PATH ?= $(ISTANBUL_OUT)/lcov.info
 ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
 
 
-# BUILD #
+# WEB COMPONENT TESTER #
 
-BUILD_OUT ?= $(NAME).html
+WCT ?= ./node_modules/.bin/wct
+WCT_SRC ?= ./src/
+WCT_TMP ?= ./build
+WCT_VAR ?= 'window.parent.WCT.share.__coverage__'
 
 
 # JSHINT #
@@ -100,35 +101,43 @@ notes:
 
 # UNIT TESTS #
 
-.PHONY: test test-mocha
+.PHONY: test
+.PHONY: test-wct test-browserify test-tmp
 
-test: test-mocha
+test: test-wct
 
-test-mocha: node_modules
-	NODE_ENV=$(NODE_ENV) \
-	NODE_PATH=$(NODE_PATH_TEST) \
-	$(MOCHA) \
-		--reporter $(MOCHA_REPORTER) \
-		--globals Polymer \
-		$(TESTS)
+test-tmp: clean-test
+	mkdir $(WCT_TMP)
+	cp -r $(WCT_SRC) $(WCT_TMP)
+
+test-browserify: node_modules
+	$(BROWSERIFY) \
+		$(BROWSERIFY_TEST_IN) \
+		-o $(BROWSERIFY_TEST_OUT)
+
+test-wct: node_modules test-tmp test-browserify
+	$(WCT)
 
 
 
 # CODE COVERAGE #
 
-.PHONY: test-cov test-istanbul-mocha
+.PHONY: test-cov test-instrument
+.PHONY: test-istanbul-wct
+.PHONY: test-istanbul-instrument
 
-test-cov: test-istanbul-mocha
+test-cov: test-istanbul-wct
 
-test-istanbul-mocha: node_modules
-	NODE_ENV=$(NODE_ENV) \
-	NODE_PATH=$(NODE_PATH_TEST) \
-	$(ISTANBUL) cover \
-		--dir $(ISTANBUL_OUT) \
-		--report $(ISTANBUL_REPORT) \
-	$(_MOCHA) -- \
-		--reporter $(MOCHA_REPORTER) \
-		$(TESTS)
+test-instrument: test-istanbul-instrument
+
+test-istanbul-instrument: node_modules
+	$(ISTANBUL) instrument \
+		$(WCT_SRC) \
+		-o $(WCT_TMP) \
+		--variable $(WCT_VAR)
+
+test-istanbul-wct: node_modules test-tmp test-instrument test-browserify
+	$(WCT)
 
 
 
@@ -174,13 +183,13 @@ install-bower: node_modules
 # BUILD #
 
 .PHONY: build
-.PHONY: build-tmp build-cleanup
+.PHONY: build-tmp
 
-build: node_modules clean-build build-tmp browserify vulcanize
+build: node_modules build-tmp browserify vulcanize
 
-build-tmp:
+build-tmp: clean-build
 	mkdir build
-	cp -r ./src/ ./build
+	cp -r $(WCT_SRC) build
 
 
 # BROWSERIFY #
@@ -189,8 +198,8 @@ build-tmp:
 
 browserify: node_modules
 	$(BROWSERIFY) \
-		$(BROWSERIFY_IN) \
-		-o $(BROWSERIFY_OUT)
+		$(BROWSERIFY_BUILD_IN) \
+		-o $(BROWSERIFY_BUILD_OUT)
 
 
 # VULCANIZE #
@@ -199,9 +208,9 @@ browserify: node_modules
 
 vulcanize: node_modules
 	$(VULCANIZE) \
-		$(VULCANIZE_IN) \
+		$(VULCANIZE_BUILD_IN) \
 		--config $(VULCANIZE_CONF) \
-		-o $(VULCANIZE_OUT) \
+		-o $(VULCANIZE_BUILD_OUT) \
 		--inline \
 		--no-strip-excludes
 
@@ -209,13 +218,16 @@ vulcanize: node_modules
 # CLEAN #
 
 .PHONY: clean
-.PHONY: clean-build clean-node clean-bower
+.PHONY: clean-build clean-node clean-bower clean-test
 
-clean: clean-build clean-node clean-bower
+clean: clean-build clean-node clean-bower clean-test
 
 clean-build:
 	rm -rf build
-	rm -f $(BUILD_OUT)
+	rm -f $(OUT)
+
+clean-test:
+	rm -rf $(WCT_TMP)
 
 clean-node:
 	rm -rf node_modules

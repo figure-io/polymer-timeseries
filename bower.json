@@ -3,43 +3,45 @@
   "version": "0.0.0",
   "description": "UI element for displaying timeseries graphs in a chart.",
   "authors": [
-  	{
-  		"name": "Athan Reines",
-  		"email": "kgryte@gmail.com"
-  	}
+    {
+      "name": "Athan Reines",
+      "email": "kgryte@gmail.com"
+    }
   ],
-  "main": "./chart-timeseries.html",
+  "main": "./polymer-chart-timeseries.html",
   "repository": {
-  	"type": "git",
-  	"url": "git://github.com/figure-io/polymer-chart-timeseries"
+    "type": "git",
+    "url": "git://github.com/figure-io/polymer-chart-timeseries"
   },
   "keywords": [
-  	"data",
-  	"visualization",
-  	"viz",
-  	"metrics",
-  	"figure",
-  	"chart",
-  	"graph",
-  	"timeseries",
-  	"ui"
+    "data",
+    "visualization",
+    "viz",
+    "metrics",
+    "figure",
+    "chart",
+    "graph",
+    "timeseries",
+    "ui"
   ],
   "dependencies": {
-  	"polymer": "Polymer/polymer#~0.5.1",
-  	"polymer-d3": "figure-io/polymer-d3#~0.0.1",
-  	"polymer-uuid": "kgryte/polymer-uuid#~0.0.0"
+    "polymer": "Polymer/polymer#~0.5.1",
+    "polymer-d3": "figure-io/polymer-d3#~0.0.1",
+    "polymer-uuid": "kgryte/polymer-uuid#~0.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "web-component-tester": "~2.0.5"
+  },
   "ignore": [
-  	"TODO.md",
-  	".*",
-  	"test",
-  	"node_modules",
-  	"bower",
-  	"src",
-  	"Makefile",
-  	"vulcanize.conf.js",
-  	"package.json"
+    "TODO.md",
+    ".*",
+    "test",
+    "node_modules",
+    "bower",
+    "src",
+    "Makefile",
+    "vulcanize.conf.js",
+    "package.json"
   ],
   "license": "MIT"
 }

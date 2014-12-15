@@ -36,11 +36,8 @@
     "url": "https://github.com/figure-io/polymer-chart-timeseries/issues"
   },
   "dependencies": {
-    "d3": "^3.5.2",
     "next-tick": "^0.2.2",
-    "node-uuid": "^1.4.2",
-    "readable-stream": "^1.0.33",
-    "validate.io-object": "^1.0.0"
+    "readable-stream": "^1.0.33"
   },
   "devDependencies": {
     "bower": "^1.3.12",
@@ -51,8 +48,9 @@
     "jshint": "2.x.x",
     "jshint-stylish": "^1.0.0",
     "mocha": "1.x.x",
-    "proxyquire": "^1.3.0",
-    "vulcanize": "^0.7.1"
+    "vulcanize": "^0.7.2",
+    "web-component-tester": "^2.0.5",
+    "web-component-tester-istanbul": "^0.7.0"
   },
   "licenses": [
     {

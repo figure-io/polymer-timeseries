@@ -10,8 +10,8 @@ TODO
 7. 	stream api
 	- 	stream()
 	-	should you be able to specify the particular path you want to update? Makes updating rather hard, as updates which should be batched/grouped together arrive sequentially
-	- 	re-emit data event --> use a sink stream!!
-8. 	d3-chart, chartist
+	- 	re-emit data event
+8. 	
 9. 	To view example,
 
 	``` bash
@@ -44,5 +44,6 @@ TODO
 15. See how plottable does their time x-axis to improve formatting 
 16. timeseries stream as separate module (see stream.js and string parsing)
 17. move stream to flow
-18. ensure jsdom not browserified w D3
+18. 
 19. replace d3 min/max with compute-min/max
+	- 	Not so simple, as would require extracting desired values into separate array, etc. D3 has advantage of using accessors.

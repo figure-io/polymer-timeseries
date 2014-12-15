@@ -26,20 +26,12 @@
 *
 */
 
+/* global document */
 'use strict';
 
 // MODULES //
 
-var // D3 (data visualization) library:
-	d3 = require( 'd3' ),
-
-	// Module for creating UUIDs:
-	uuid = require( 'node-uuid' ),
-
-	// Validate if a value is a plain object:
-	isObject = require( 'validate.io-object' ),
-
-	// Writable stream constructor:
+var // Writable stream constructor:
 	Stream = require( './stream' );
 
 
@@ -357,6 +349,15 @@ Chart.prototype.yMax = null;
 Chart.prototype.xTickFormat = '%M';
 
 /**
+* ATTRIBUTE: yTickFormat
+*	y-axis tick format. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/Formatting}.
+*
+* @type {String}
+* @default null
+*/
+Chart.prototype.yTickFormat = null;
+
+/**
 * ATTRIBUTE: xNumTicks
 *	Number of tick marks on the x-axis. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Axes#ticks}.
 *
@@ -491,7 +492,19 @@ Chart.prototype.created = function() {
 *	Initialization.
 */
 Chart.prototype.init = function() {
-	var self = this;
+	var create = document.createElement.bind( document ),
+		self = this,
+		d3,
+		el;
+
+	// Create a new D3 element to access the library dependency:
+	el = create( 'polymer-d3' );
+	d3 = el.d3;
+	this._d3 = d3;
+
+	// Create a new uuid element to access the library dependency for creating uuids:
+	el = create( 'polymer-uuid' );
+	this._uuid = el.uuid;
 
 	// Private methods...
 
@@ -512,6 +525,7 @@ Chart.prototype.init = function() {
 
 	// Axes...
 	this._xTickFormat = d3.time.format( this.xTickFormat );
+	this._yTickFormat = null;
 
 	this._xAxis = d3.svg.axis()
 		.scale( this._xScale )
@@ -522,6 +536,7 @@ Chart.prototype.init = function() {
 	this._yAxis = d3.svg.axis()
 		.scale( this._yScale )
 		.orient( this.yAxisOrient )
+		.tickFormat( this._yTickFormat )
 		.ticks( this.yNumTicks );
 
 	// Paths...
@@ -564,7 +579,7 @@ Chart.prototype.init = function() {
 		'paths': null,
 		'annotations': null
 	};
-	this._clipPathID = uuid.v4();
+	this._clipPathID = this._uuid.v4();
 
 	return;
 
@@ -640,7 +655,7 @@ Chart.prototype.createBase = function() {
 		canvas;
 
 	// Create the SVG element:
-	canvas = d3.select( this.$.chart ).append( 'svg:svg' )
+	canvas = this._d3.select( this.$.chart ).append( 'svg:svg' )
 		.attr( 'property', 'canvas' )
 		.attr( 'class', 'canvas' )
 		.attr( 'width', width )
@@ -664,6 +679,7 @@ Chart.prototype.createBase = function() {
 		.attr( 'property', 'graph' )
 		.attr( 'class', 'graph' )
 		.attr( 'data-graph-type', 'timeseries' )
+		.attr( 'data-clipPath', this._clipPathID )
 		.attr( 'transform', 'translate(' + pLeft + ',' + pTop + ')' );
 
 	// Create the meta element:
@@ -801,6 +817,7 @@ Chart.prototype.createTitle = function() {
 */
 Chart.prototype.createAnnotations = function() {
 	// TODO
+	// TODO: create an annotation factory (see figure.io)
 	return this;
 }; // end METHOD createAnnotations()
 
@@ -826,7 +843,7 @@ Chart.prototype.createLegend = function() {
 
 	// Determine how many legend labels to create...
 	len = ( numLabels > numData ) ? numData : numLabels;
-	range = d3.range( len );
+	range = this._d3.range( len );
 
 	legend = this.$.meta.append( 'svg:g' )
 		.attr( 'property', 'legend' )
@@ -932,7 +949,7 @@ Chart.prototype.resetLegend = function() {
 
 	// Determine how many legend labels to create...
 	len = ( numLabels > numData ) ? numData : numLabels;
-	range = d3.range( len );
+	range = this._d3.range( len );
 
 	// Bind a set of labels:
 	entries = this.$.legend.selectAll( '.entry' )
@@ -1090,7 +1107,8 @@ Chart.prototype.formatData = function( data ) {
 * @returns {Array} domain
 */
 Chart.prototype.xDomain = function( min, max ) {
-	var data = this._data,
+	var d3 = this._d3,
+		data = this._data,
 		err;
 
 	if ( min !== null && !( min instanceof Date ) ) {
@@ -1129,7 +1147,8 @@ Chart.prototype.xDomain = function( min, max ) {
 * @returns {Array} domain
 */
 Chart.prototype.yDomain = function( min, max ) {
-	var data = this._data,
+	var d3 = this._d3,
+		data = this._data,
 		err;
 
 	if ( min !== null && ( typeof min !== 'number' || min !== min ) ) {
@@ -1189,10 +1208,10 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 	this.title = newConfig.annotations.title;
 	this.xLabel = newConfig.axes[ 0 ].label;
 	this.yLabel = newConfig.axes[ 1 ].label;
-	this.xMin = newConfig.scales[ 0 ].domain.min;
-	this.xMax = newConfig.scales[ 0 ].domain.max;
-	this.yMin = newConfig.scales[ 1 ].domain.min;
-	this.yMax = newConfig.scales[ 1 ].domain.max;
+	this.xMin = newConfig.scales[ 0 ].domain[ 0 ];
+	this.xMax = newConfig.scales[ 0 ].domain[ 1 ];
+	this.yMin = newConfig.scales[ 1 ].domain[ 0 ];
+	this.yMax = newConfig.scales[ 1 ].domain[ 1 ];
 	this.xNumTicks = newConfig.axes[ 0 ].ticks;
 	this.yNumTicks = newConfig.axes[ 1 ].ticks;
 	this.xTickFormat = newConfig.axes[ 0 ].format;
@@ -1736,8 +1755,8 @@ Chart.prototype.yAxisOrientChanged = function( oldVal, newVal ) {
 * METHOD: xTickFormatChanged( oldVal, newVal )
 *	Event handler invoked when the `xTickFormat` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {String} oldVal - old value
+* @param {String} newVal - new value
 */
 Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 	var selection = this.$.xAxis,
@@ -1755,10 +1774,42 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this._xTickFormat = d3.time.format( newVal );
+	this._xTickFormat = this._d3.time.format( newVal );
 	xAxis.tickFormat( this._xTickFormat );
 	selection.call( xAxis );
 }; // end METHOD xTickFormatChanged()
+
+/**
+* METHOD: yTickFormatChanged( oldVal, newVal )
+*	Event handler invoked when the `yTickFormat` attribute changes.
+*
+* @param {String|Null} oldVal - old value
+* @param {String|Null} newVal - new value
+*/
+Chart.prototype.yTickFormatChanged = function( oldVal, newVal ) {
+	var selection = this.$.yAxis,
+		yAxis = this._yAxis,
+		err;
+
+	if ( typeof newVal !== 'string' && newVal !== null ) {
+		this.yTickFormat = oldVal;
+		err = new TypeError( 'yTickFormat::invalid assignment. Must be either a string specifier or null. Value: `' + newVal + '`.' );
+		this.fire( 'error', err );
+		return;
+	}
+	this.fire( 'changed', {
+		'attr': 'yTickFormat',
+		'prev': oldVal,
+		'curr': newVal
+	});
+	if ( newVal !== null ) {
+		this._yTickFormat = this._d3.format( newVal );
+	} else {
+		this._yTickFormat = null;
+	}
+	yAxis.tickFormat( this._yTickFormat );
+	selection.call( yAxis );
+}; // end METHOD yTickFormatChanged()
 
 /**
 * METHOD: interpolationChanged( oldVal, newVal )
@@ -2074,7 +2125,7 @@ Chart.prototype.stream = function( options ) {
 	var opts = {},
 		err;
 	if ( arguments.length ) {
-		if ( !isObject( options ) ) {
+		if ( typeof options !== 'object' || options === null || Array.isArray( options ) ) {
 			err = new TypeError( 'stream()::invalid input argument. Options must be an object.' );
 			this.fire( 'error', err );
 			return;
@@ -2092,6 +2143,8 @@ Chart.prototype.stream = function( options ) {
 			return;
 		}
 		// TODO: call update function
+
+		this.fire( 'data', arr );
 	}
 }; // end METHOD stream()
 

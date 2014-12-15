@@ -28,11 +28,6 @@
 
 'use strict';
 
-// MODULES //
-
-var isObject = require( 'validate.io-object' );
-
-
 // VARIABLES //
 
 var validators = {
@@ -60,7 +55,7 @@ function validate( options ) {
 		key,
 		err;
 
-	if ( !isObject( options ) ) {
+	if ( typeof options !== 'object' || options === null || Array.isArray( options ) ) {
 		return new TypeError( 'Stream()::invalid input argument. Options must be an object.' );
 	}
 	keys = Object.keys( options );
