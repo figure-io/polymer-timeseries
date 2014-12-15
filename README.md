@@ -20,7 +20,7 @@ To use the component,
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="../../webcomponentsjs/webcomponents.min.js"></script>
+		<script src="path/to/webcomponentsjs/webcomponents.min.js"></script>
 		<link rel="import" href="path/to/chart-timeseries">
 	</head>
 	<body>
