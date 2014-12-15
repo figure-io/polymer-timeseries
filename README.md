@@ -17,17 +17,40 @@ $ bower install figure-io/polymer-chart-timeseries
 To use the component,
 
 ``` html
-<link rel="import" href="path/to/chart-timeseries">
-...
-<polymer-chart-timeseries></polymer-chart-timeseries>
+<html>
+	<head>
+		<link rel="import" href="path/to/chart-timeseries">
+	</head>
+	<body>
+		<polymer-chart-timeseries id="chart"></polymer-chart-timeseries>
+	</body>
+</html>
+```
+
+and
+
+``` javascript
+var el = document.querySelector( '#chart' );
 ```
 
 The component has the following public attributes and methods...
 
 
+
 ## Examples
 
+To run the example code, navigate to the parent directory and start a [simple python server](https://docs.python.org/2/library/simplehttpserver.html),
 
+``` bash
+$ cd ..
+$ python -m SimpleHTTPServer 9090
+```
+
+and open the following URL in your browser
+
+```
+http://127.0.0.1:9090/chart-timeseries/examples
+```
 
 
 ## Development
@@ -55,9 +78,7 @@ The `src` directory contains the component source files. Source files must be [b
 $ make build
 ```
 
-which generates a `build` directory containing [browserified](https://github.com/substack/node-browserify) scripts and a [vulcanized](https://github.com/polymer/vulcanize) in the top-level directory.
-
-To 
+which generates a `build` directory containing [browserified](https://github.com/substack/node-browserify) scripts and a [vulcanized](https://github.com/polymer/vulcanize) distributable in the top-level directory.
 
 
 ## Tests
