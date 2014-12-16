@@ -1,0 +1,28 @@
+
+.legend {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 60px;
+}
+
+.legend .entry {
+	cursor: pointer;
+	margin-bottom: 10px;
+}
+
+.legend .symbol {
+	display: inline-block;
+	height: 4px;
+	width: 10px;
+	line-height: 0.3em;
+}
+
+.legend .label {
+	margin-left: 10px;
+}
+
+.legend .hidden {
+	opacity: 0.25;
+}

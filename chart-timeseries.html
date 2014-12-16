@@ -595,6 +595,56 @@ table {
 	user-select: none;
 }
 
+.multicolumn-1 {
+	-webkit-column-count: 1;
+	   -moz-column-count: 1;
+		-ms-column-count: 1;
+			column-count: 1;
+
+	-webkit-column-width: 150px;
+	   -moz-column-width: 150px;
+		-ms-column-width: 150px;
+			column-width: 150px;
+}
+
+.multicolumn-2 {
+	-webkit-column-count: 2;
+	   -moz-column-count: 2;
+		-ms-column-count: 2;
+			column-count: 2;
+
+	-webkit-column-width: 150px;
+	   -moz-column-width: 150px;
+		-ms-column-width: 150px;
+			column-width: 150px;
+}
+
+.multicolumn-3 {
+	-webkit-column-count: 3;
+	   -moz-column-count: 3;
+		-ms-column-count: 3;
+			column-count: 3;
+
+	-webkit-column-width: 150px;
+	   -moz-column-width: 150px;
+		-ms-column-width: 150px;
+			column-width: 150px;
+}
+
+.multicolumn-4 {
+	-webkit-column-count: 4;
+	   -moz-column-count: 4;
+		-ms-column-count: 4;
+			column-count: 4;
+
+	-webkit-column-width: 150px;
+	   -moz-column-width: 150px;
+		-ms-column-width: 150px;
+			column-width: 150px;
+}
+
+</style>
+		<style>
 .canvas {
 	display: block;
 	margin: 0 auto;
@@ -644,23 +694,14 @@ table {
 	font-size: 1.5em;
 	color: #474747;
 }
-
+</style>
+		<style>
 .legend {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 60px;
-
-	-webkit-column-count: 3;
-	   -moz-column-count: 3;
-		-ms-column-count: 3;
-			column-count: 3;
-
-	-webkit-column-width: 150px;
-	   -moz-column-width: 150px;
-		-ms-column-width: 150px;
-			column-width: 150px;
 }
 
 .legend .entry {
@@ -682,7 +723,6 @@ table {
 .legend .hidden {
 	opacity: 0.25;
 }
-
 </style>
 		<style>
 /* MEDIA QUERIES */
@@ -919,7 +959,7 @@ Chart.prototype.paddingLeft = 90;
 * @type {Number}
 * @default 0px
 */
-Chart.prototype.paddingRight = 0;
+Chart.prototype.paddingRight = 20;
 
 /**
 * ATTRIBUTE: paddingBottom
@@ -1453,7 +1493,7 @@ Chart.prototype.createAxes = function() {
 		.attr( 'x', ( this._graphWidth() ) / 2 )
 		.attr( 'text-anchor', 'middle' )
 		.attr( 'property', 'axis_label' )
-		.attr( 'class', 'label' )
+		.attr( 'class', 'label noselect' )
 		.text( this.xLabel );
 
 	axis.selectAll( '.tick' )
@@ -1474,7 +1514,7 @@ Chart.prototype.createAxes = function() {
 		.attr( 'x', -height / 2 )
 		.attr( 'text-anchor', 'middle' )
 		.attr( 'property', 'axis_label' )
-		.attr( 'class', 'label' )
+		.attr( 'class', 'label noselect' )
 		.text( this.yLabel );
 
 	axis.selectAll( '.tick' )
@@ -1495,7 +1535,7 @@ Chart.prototype.createAxes = function() {
 Chart.prototype.createTitle = function() {
 	this.$.title = this.$.meta.append( 'svg:text' )
 		.attr( 'property', 'chart.title' )
-		.attr( 'class', 'title' )
+		.attr( 'class', 'title noselect' )
 		.attr( 'x', 0 )
 		.attr( 'y', 0 )
 		.text( this.chartTitle );
@@ -1538,7 +1578,7 @@ Chart.prototype.createLegend = function() {
 	// Main legend container:
 	legend = this.$.root.append( 'xhtml:div' )
 		.attr( 'property', 'legend' )
-		.attr( 'class', 'legend' );
+		.attr( 'class', 'legend multicolumn-3' );
 	this.$.legend = legend;
 
 	// Create a legend entry for each label:

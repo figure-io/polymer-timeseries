@@ -214,7 +214,7 @@ Chart.prototype.paddingLeft = 90;
 * @type {Number}
 * @default 0px
 */
-Chart.prototype.paddingRight = 0;
+Chart.prototype.paddingRight = 20;
 
 /**
 * ATTRIBUTE: paddingBottom
@@ -748,7 +748,7 @@ Chart.prototype.createAxes = function() {
 		.attr( 'x', ( this._graphWidth() ) / 2 )
 		.attr( 'text-anchor', 'middle' )
 		.attr( 'property', 'axis_label' )
-		.attr( 'class', 'label' )
+		.attr( 'class', 'label noselect' )
 		.text( this.xLabel );
 
 	axis.selectAll( '.tick' )
@@ -769,7 +769,7 @@ Chart.prototype.createAxes = function() {
 		.attr( 'x', -height / 2 )
 		.attr( 'text-anchor', 'middle' )
 		.attr( 'property', 'axis_label' )
-		.attr( 'class', 'label' )
+		.attr( 'class', 'label noselect' )
 		.text( this.yLabel );
 
 	axis.selectAll( '.tick' )
@@ -790,7 +790,7 @@ Chart.prototype.createAxes = function() {
 Chart.prototype.createTitle = function() {
 	this.$.title = this.$.meta.append( 'svg:text' )
 		.attr( 'property', 'chart.title' )
-		.attr( 'class', 'title' )
+		.attr( 'class', 'title noselect' )
 		.attr( 'x', 0 )
 		.attr( 'y', 0 )
 		.text( this.chartTitle );
@@ -833,7 +833,7 @@ Chart.prototype.createLegend = function() {
 	// Main legend container:
 	legend = this.$.root.append( 'xhtml:div' )
 		.attr( 'property', 'legend' )
-		.attr( 'class', 'legend' );
+		.attr( 'class', 'legend multicolumn-3' );
 	this.$.legend = legend;
 
 	// Create a legend entry for each label:

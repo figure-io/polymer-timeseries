@@ -1,0 +1,50 @@
+
+.canvas {
+	display: block;
+	margin: 0 auto;
+}
+
+.graph .axis path {
+	fill: none;
+}
+
+.graph .y.axis path {
+	stroke: none;
+}
+
+.graph .x.axis path {
+	stroke: #aaa;
+	stroke-width: 1;
+}
+
+.graph .axis line {
+	stroke: #aaa;
+	stroke-width: 1;
+}
+
+.graph .background {
+	fill: none;
+	stroke: none;
+}
+
+.graph .line {
+	fill: none;
+	/*stroke: #474747;*/
+	stroke-width: 2;
+	stroke-opacity: 90%;
+}
+
+.graph .hidden {
+	opacity: 0;
+}
+
+.meta .title {
+	display: block;
+	/*font-size: 2em;*/
+	line-height: 2em;
+	padding: 0 10px;
+	/*background-color: #474747;*/
+	/*color: #ffffff;*/
+	font-size: 1.5em;
+	color: #474747;
+}

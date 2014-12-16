@@ -63,3 +63,9 @@ TODO
 25. allow chart to be drag-droppable
 	- 	attribute: `dragdrop`
 	-	if `true`, will accept data transfer objects with `data` (and `label`) fields
+26. noselect for ticklabels
+	-	could be relatively expensive, as need to set the class every time an axis is updated
+27. update `package.json` scripts
+	- 	place coveralls command in Makefile
+28. for Travis, fire up firefox browser as before script and call it a day
+	- 	integrate saucelabs at later time
