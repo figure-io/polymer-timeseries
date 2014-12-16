@@ -162,21 +162,6 @@ function graphHeight() {
 	return this.height - this.paddingTop - this.paddingBottom;
 }
 
-/**
-* FUNCTION: legendTransform( d, i )
-*	Sets a legend item position.
-*
-* @private
-* @param {String} d - legend label
-* @param {Number} i - index
-*/
-function legendTransform( d, i ) {
-	var xPos = Math.floor( i / 2 ) * 210,
-		yPos = (i%2) * 25;
-
-	return 'translate(' + xPos + ',' + yPos + ')';
-}
-
 
 // CHART //
 
@@ -554,7 +539,6 @@ Chart.prototype.init = function() {
 	this._colors = setColors.bind( this );
 
 	// Legend...
-	this._legendTransform = legendTransform.bind( this );
 	this._setLabels = setLabels.bind( this );
 
 	// Interaction:
@@ -562,6 +546,7 @@ Chart.prototype.init = function() {
 
 	// Elements...
 	this.$ = {
+		'root': null,
 		'canvas': null,
 		'clipPath': null,
 		'graph': null,
@@ -604,7 +589,9 @@ Chart.prototype.init = function() {
 		// Toggle the path visibility...
 		flg = !selection.classed( 'hidden' );
 		selection.classed( 'hidden', flg );
-		path.classed( 'hidden', flg );
+		if ( path ) {
+			path.classed( 'hidden', flg );
+		}
 
 		// TODO: determine how UI events should be handled. What data to pass along?
 		self.fire( 'click', {
@@ -654,8 +641,10 @@ Chart.prototype.createBase = function() {
 		pTop = this.paddingTop,
 		canvas;
 
+	this.$.root = this._d3.select( this.$.chart );
+
 	// Create the SVG element:
-	canvas = this._d3.select( this.$.chart ).append( 'svg:svg' )
+	canvas = this.$.root.append( 'svg:svg' )
 		.attr( 'property', 'canvas' )
 		.attr( 'class', 'canvas' )
 		.attr( 'width', width )
@@ -831,8 +820,6 @@ Chart.prototype.createLegend = function() {
 	var colors = this._colors,
 		setLabels = this._setLabels,
 		numLabels = this.labels.length,
-		numData = this._data.length,
-		len,
 		range,
 		legend,
 		entries,
@@ -841,55 +828,47 @@ Chart.prototype.createLegend = function() {
 		el,
 		i;
 
-	// Determine how many legend labels to create...
-	len = ( numLabels > numData ) ? numData : numLabels;
-	range = this._d3.range( len );
+	range = this._d3.range( numLabels );
 
-	legend = this.$.meta.append( 'svg:g' )
+	// Main legend container:
+	legend = this.$.root.append( 'xhtml:div' )
 		.attr( 'property', 'legend' )
-		.attr( 'class', 'legend' )
-		.attr( 'transform', 'translate(0,20)' );
+		.attr( 'class', 'legend' );
 	this.$.legend = legend;
 
+	// Create a legend entry for each label:
 	entries = legend.selectAll( '.entry' )
 		.data( range )
 		.enter()
-		.append( 'svg:g' )
+		.append( 'xhtml:p' )
 			.attr( 'class', 'entry noselect' )
-			.attr( 'transform', this._legendTransform )
 			.on( 'click', this._toggleSeries );
+
 	this.$.legendEntries = entries;
 
-	symbols = entries.append( 'svg:line' )
-		.attr( 'class', 'symbol' )
-		.attr( 'x1', 0 )
-		.attr( 'x2', 10 )
-		.attr( 'y1', 0 )
-		.attr( 'y2', 0 );
+	// Each entry should include a color-coded symbol and a label:
+	symbols = entries.append( 'xhtml:span' )
+		.attr( 'class', 'symbol' );
 	this.$.legendSymbols = symbols;
 
-	labels = entries.append( 'svg:text' )
-		.attr( 'class', 'label' )
-		.attr( 'dy', '.35em' )
-		.attr( 'transform', 'translate(15,0)' );
+	labels = entries.append( 'xhtml:span' )
+		.attr( 'class', 'label' );
 	this.$.legendLabels = labels;
 
 	// Set the color of all symbols...
 	for ( i = 0; i < symbols.length; i++ ) {
 		el = symbols[ i ][ 0 ];
 		if ( el ) {
-			el.setAttribute( 'color', colors( null, i ) );
+			el.classList.add( colors( null, i ) + '-span' );
 		}
 	}
-
 	// Set the text of all labels...
 	for ( i = 0; i < labels.length; i++ ) {
 		el = labels[ i ][ 0 ];
 		if ( el ) {
-			el.textContent = setLabels( null, i );
+			el.innerHTML = setLabels( null, i );
 		}
 	}
-
 	return this;
 }; // end METHOD createLegend()
 
@@ -938,8 +917,6 @@ Chart.prototype.resetLegend = function() {
 	var colors = this._colors,
 		setLabels = this._setLabels,
 		numLabels = this.labels.length,
-		numData = this._data.length,
-		len,
 		range,
 		entries,
 		gEnter,
@@ -947,9 +924,7 @@ Chart.prototype.resetLegend = function() {
 		labels,
 		i;
 
-	// Determine how many legend labels to create...
-	len = ( numLabels > numData ) ? numData : numLabels;
-	range = this._d3.range( len );
+	range = this._d3.range( numLabels );
 
 	// Bind a set of labels:
 	entries = this.$.legend.selectAll( '.entry' )
@@ -959,36 +934,30 @@ Chart.prototype.resetLegend = function() {
 	entries.exit().remove();
 
 	// Add any new entries:
-	gEnter = entries.enter().append( 'svg:g' )
+	gEnter = entries.enter().append( 'xhtml:p' )
 		.attr( 'class', 'entry noselect' )
-		.attr( 'transform', this._legendTransform )
 		.on( 'click', this._toggleSeries );
 
-	gEnter.append( 'svg:line' )
+	gEnter.append( 'xhtml:span' )
 		.attr( 'class', 'symbol' )
-		.attr( 'x1', 0 )
-		.attr( 'x2', 10 )
-		.attr( 'y1', 0 )
-		.attr( 'y2', 0 );
+		.html( '&nbsp;' );
 
-	gEnter.append( 'svg:text' )
-		.attr( 'class', 'label' )
-		.attr( 'dy', '.35em' )
-		.attr( 'transform', 'translate(15,0)' );
+	gEnter.append( 'xhtml:span' )
+		.attr( 'class', 'label' );
 
 	this.$.legendEntries = entries;
 
 	// Update all symbols:
 	symbols = entries.selectAll( '.symbol' );
 	for ( i = 0; i < symbols.length; i++ ) {
-		symbols[ i ][ 0 ].setAttribute( 'color', colors( null, i ) );
+		symbols[ i ][ 0 ].classList.add( colors( null, i ) + '-span' );
 	}
 	this.$.legendSymbols = symbols;
 
 	// Update all labels:
 	labels = entries.selectAll( '.label' );
 	for ( i = 0; i < labels.length; i++ ) {
-		labels[ i ][ 0 ].textContent = setLabels( null, i );
+		labels[ i ][ 0 ].innerHTML = setLabels( null, i );
 	}
 	this.$.legendLabels = labels;
 

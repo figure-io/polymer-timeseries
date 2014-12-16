@@ -21,6 +21,54 @@
 	<template>
 
 		<!-- STYLESHEETS -->
+		<style>/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}</style>
 		<style>/* COLORS */
 
 /* D3: Category10 */
@@ -310,6 +358,228 @@
 [color="category20c-20"] {
 	stroke: #d9d9d9;
 }
+
+
+
+
+
+/* D3: Category10 */
+.category10-1-span {
+	background-color: #1f77b4;
+}
+.category10-2-span {
+	background-color: #ff7f0e;
+}
+.category10-3-span {
+	background-color: #2ca02c;
+}
+.category10-4-span {
+	background-color: #d62728;
+}
+.category10-5-span {
+	background-color: #9467bd;
+}
+.category10-6-span {
+	background-color: #8c564b;
+}
+.category10-7-span {
+	background-color: #e377c2;
+}
+.category10-8-span {
+	background-color: #7f7f7f;
+}
+.category10-9-span {
+	background-color: #bcdb22;
+}
+.category10-10-span {
+	background-color: #17becf;
+}
+
+/* D3: category20 */
+.category20-1-span {
+	background-color: #1f77b4;
+}
+.category20-2-span {
+	background-color: #aec7e8;
+}
+.category20-3-span {
+	background-color: #ff7f0e;
+}
+.category20-4-span {
+	background-color: #ffbb78;
+}
+.category20-5-span {
+	background-color: #2ca02c;
+}
+.category20-6-span {
+	background-color: #98df8a;
+}
+.category20-7-span {
+	background-color: #d62728;
+}
+.category20-8-span {
+	background-color: #ff9896;
+}
+.category20-9-span {
+	background-color: #9467bd;
+}
+.category20-10-span {
+	background-color: #c5b0d5;
+}
+.category20-11-span {
+	background-color: #8c564b;
+}
+.category20-12-span {
+	background-color: #c49c94;
+}
+.category20-13-span {
+	background-color: #e377c2;
+}
+.category20-14-span {
+	background-color: #f7b6d2;
+}
+.category20-15-span {
+	background-color: #7f7f7f;
+}
+.category20-16-span {
+	background-color: #c7c7c7;
+}
+.category20-17-span {
+	background-color: #bcbd22;
+}
+.category20-18-span {
+	background-color: #dbdb8d;
+}
+.category20-19-span {
+	background-color: #17becf;
+}
+.category20-20-span {
+	background-color: #9edae5;
+}
+
+/* D3: category20b */
+.category20b-1-span {
+	background-color: #393b79;
+}
+.category20b-2-span {
+	background-color: #5254a3;
+}
+.category20b-3-span {
+	background-color: #6b6ecf;
+}
+.category20b-4-span {
+	background-color: #9c9ede;
+}
+.category20b-5-span {
+	background-color: #637939;
+}
+.category20b-6-span {
+	background-color: #8ca252;
+}
+.category20b-7-span {
+	background-color: #b5cf6b;
+}
+.category20b-8-span {
+	background-color: #cedb9c;
+}
+.category20b-9-span {
+	background-color: #8c6d31;
+}
+.category20b-10-span {
+	background-color: #bd9e39;
+}
+.category20b-11-span {
+	background-color: #e7ba52;
+}
+.category20b-12-span {
+	background-color: #e7cb94;
+}
+.category20b-13-span {
+	background-color: #843c39;
+}
+.category20b-14-span {
+	background-color: #ad494a;
+}
+.category20b-15-span {
+	background-color: #d6616b;
+}
+.category20b-16-span {
+	background-color: #e7969c;
+}
+.category20b-17-span {
+	background-color: #7b4173;
+}
+.category20b-18-span {
+	background-color: #a55194;
+}
+.category20b-19-span {
+	background-color: #ce6dbd;
+}
+.category20b-20-span {
+	background-color: #de9ed6;
+}
+
+/* D3: category20c */
+.category20c-1-span {
+	background-color: #3182bd;
+}
+.category20c-2-span {
+	background-color: #6baed6;
+}
+.category20c-3-span {
+	background-color: #9ecae1;
+}
+.category20c-4-span {
+	background-color: #c6dbef;
+}
+.category20c-5-span {
+	background-color: #e6550d;
+}
+.category20c-6-span {
+	background-color: #fd8d3c;
+}
+.category20c-7-span {
+	background-color: #fdae6b;
+}
+.category20c-8-span {
+	background-color: #fdd0a2;
+}
+.category20c-9-span {
+	background-color: #31a354;
+}
+.category20c-10-span {
+	background-color: #74c476;
+}
+.category20c-11-span {
+	background-color: #a1d99b;
+}
+.category20c-12-span {
+	background-color: #c7e9c0;
+}
+.category20c-13-span {
+	background-color: #756bb1;
+}
+.category20c-14-span {
+	background-color: #9e9ac8;
+}
+.category20c-15-span {
+	background-color: #bcbddc;
+}
+.category20c-16-span {
+	background-color: #dadaeb;
+}
+.category20c-17-span {
+	background-color: #636363;
+}
+.category20c-18-span {
+	background-color: #969696;
+}
+.category20c-19-span {
+	background-color: #bdbdbd;
+}
+.category20c-20-span {
+	background-color: #d9d9d9;
+}
 </style>
 		<style>:host {
 	display: block;
@@ -375,12 +645,38 @@
 	color: #474747;
 }
 
+.legend {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 60px;
+
+	-webkit-column-count: 3;
+	   -moz-column-count: 3;
+		-ms-column-count: 3;
+			column-count: 3;
+
+	-webkit-column-width: 150px;
+	   -moz-column-width: 150px;
+		-ms-column-width: 150px;
+			column-width: 150px;
+}
+
 .legend .entry {
 	cursor: pointer;
+	margin-bottom: 10px;
 }
 
 .legend .symbol {
-	stroke-width: 3;
+	display: inline-block;
+	height: 4px;
+	width: 10px;
+	line-height: 0.3em;
+}
+
+.legend .label {
+	margin-left: 10px;
 }
 
 .legend .hidden {
@@ -569,21 +865,6 @@ function graphWidth() {
 function graphHeight() {
 	/* jshint validthis: true */
 	return this.height - this.paddingTop - this.paddingBottom;
-}
-
-/**
-* FUNCTION: legendTransform( d, i )
-*	Sets a legend item position.
-*
-* @private
-* @param {String} d - legend label
-* @param {Number} i - index
-*/
-function legendTransform( d, i ) {
-	var xPos = Math.floor( i / 2 ) * 210,
-		yPos = (i%2) * 25;
-
-	return 'translate(' + xPos + ',' + yPos + ')';
 }
 
 
@@ -963,7 +1244,6 @@ Chart.prototype.init = function() {
 	this._colors = setColors.bind( this );
 
 	// Legend...
-	this._legendTransform = legendTransform.bind( this );
 	this._setLabels = setLabels.bind( this );
 
 	// Interaction:
@@ -971,6 +1251,7 @@ Chart.prototype.init = function() {
 
 	// Elements...
 	this.$ = {
+		'root': null,
 		'canvas': null,
 		'clipPath': null,
 		'graph': null,
@@ -1013,7 +1294,9 @@ Chart.prototype.init = function() {
 		// Toggle the path visibility...
 		flg = !selection.classed( 'hidden' );
 		selection.classed( 'hidden', flg );
-		path.classed( 'hidden', flg );
+		if ( path ) {
+			path.classed( 'hidden', flg );
+		}
 
 		// TODO: determine how UI events should be handled. What data to pass along?
 		self.fire( 'click', {
@@ -1063,8 +1346,10 @@ Chart.prototype.createBase = function() {
 		pTop = this.paddingTop,
 		canvas;
 
+	this.$.root = this._d3.select( this.$.chart );
+
 	// Create the SVG element:
-	canvas = this._d3.select( this.$.chart ).append( 'svg:svg' )
+	canvas = this.$.root.append( 'svg:svg' )
 		.attr( 'property', 'canvas' )
 		.attr( 'class', 'canvas' )
 		.attr( 'width', width )
@@ -1240,8 +1525,6 @@ Chart.prototype.createLegend = function() {
 	var colors = this._colors,
 		setLabels = this._setLabels,
 		numLabels = this.labels.length,
-		numData = this._data.length,
-		len,
 		range,
 		legend,
 		entries,
@@ -1250,55 +1533,47 @@ Chart.prototype.createLegend = function() {
 		el,
 		i;
 
-	// Determine how many legend labels to create...
-	len = ( numLabels > numData ) ? numData : numLabels;
-	range = this._d3.range( len );
+	range = this._d3.range( numLabels );
 
-	legend = this.$.meta.append( 'svg:g' )
+	// Main legend container:
+	legend = this.$.root.append( 'xhtml:div' )
 		.attr( 'property', 'legend' )
-		.attr( 'class', 'legend' )
-		.attr( 'transform', 'translate(0,20)' );
+		.attr( 'class', 'legend' );
 	this.$.legend = legend;
 
+	// Create a legend entry for each label:
 	entries = legend.selectAll( '.entry' )
 		.data( range )
 		.enter()
-		.append( 'svg:g' )
+		.append( 'xhtml:p' )
 			.attr( 'class', 'entry noselect' )
-			.attr( 'transform', this._legendTransform )
 			.on( 'click', this._toggleSeries );
+
 	this.$.legendEntries = entries;
 
-	symbols = entries.append( 'svg:line' )
-		.attr( 'class', 'symbol' )
-		.attr( 'x1', 0 )
-		.attr( 'x2', 10 )
-		.attr( 'y1', 0 )
-		.attr( 'y2', 0 );
+	// Each entry should include a color-coded symbol and a label:
+	symbols = entries.append( 'xhtml:span' )
+		.attr( 'class', 'symbol' );
 	this.$.legendSymbols = symbols;
 
-	labels = entries.append( 'svg:text' )
-		.attr( 'class', 'label' )
-		.attr( 'dy', '.35em' )
-		.attr( 'transform', 'translate(15,0)' );
+	labels = entries.append( 'xhtml:span' )
+		.attr( 'class', 'label' );
 	this.$.legendLabels = labels;
 
 	// Set the color of all symbols...
 	for ( i = 0; i < symbols.length; i++ ) {
 		el = symbols[ i ][ 0 ];
 		if ( el ) {
-			el.setAttribute( 'color', colors( null, i ) );
+			el.classList.add( colors( null, i ) + '-span' );
 		}
 	}
-
 	// Set the text of all labels...
 	for ( i = 0; i < labels.length; i++ ) {
 		el = labels[ i ][ 0 ];
 		if ( el ) {
-			el.textContent = setLabels( null, i );
+			el.innerHTML = setLabels( null, i );
 		}
 	}
-
 	return this;
 }; // end METHOD createLegend()
 
@@ -1347,8 +1622,6 @@ Chart.prototype.resetLegend = function() {
 	var colors = this._colors,
 		setLabels = this._setLabels,
 		numLabels = this.labels.length,
-		numData = this._data.length,
-		len,
 		range,
 		entries,
 		gEnter,
@@ -1356,9 +1629,7 @@ Chart.prototype.resetLegend = function() {
 		labels,
 		i;
 
-	// Determine how many legend labels to create...
-	len = ( numLabels > numData ) ? numData : numLabels;
-	range = this._d3.range( len );
+	range = this._d3.range( numLabels );
 
 	// Bind a set of labels:
 	entries = this.$.legend.selectAll( '.entry' )
@@ -1368,36 +1639,30 @@ Chart.prototype.resetLegend = function() {
 	entries.exit().remove();
 
 	// Add any new entries:
-	gEnter = entries.enter().append( 'svg:g' )
+	gEnter = entries.enter().append( 'xhtml:p' )
 		.attr( 'class', 'entry noselect' )
-		.attr( 'transform', this._legendTransform )
 		.on( 'click', this._toggleSeries );
 
-	gEnter.append( 'svg:line' )
+	gEnter.append( 'xhtml:span' )
 		.attr( 'class', 'symbol' )
-		.attr( 'x1', 0 )
-		.attr( 'x2', 10 )
-		.attr( 'y1', 0 )
-		.attr( 'y2', 0 );
+		.html( '&nbsp;' );
 
-	gEnter.append( 'svg:text' )
-		.attr( 'class', 'label' )
-		.attr( 'dy', '.35em' )
-		.attr( 'transform', 'translate(15,0)' );
+	gEnter.append( 'xhtml:span' )
+		.attr( 'class', 'label' );
 
 	this.$.legendEntries = entries;
 
 	// Update all symbols:
 	symbols = entries.selectAll( '.symbol' );
 	for ( i = 0; i < symbols.length; i++ ) {
-		symbols[ i ][ 0 ].setAttribute( 'color', colors( null, i ) );
+		symbols[ i ][ 0 ].classList.add( colors( null, i ) + '-span' );
 	}
 	this.$.legendSymbols = symbols;
 
 	// Update all labels:
 	labels = entries.selectAll( '.label' );
 	for ( i = 0; i < labels.length; i++ ) {
-		labels[ i ][ 0 ].textContent = setLabels( null, i );
+		labels[ i ][ 0 ].innerHTML = setLabels( null, i );
 	}
 	this.$.legendLabels = labels;
 

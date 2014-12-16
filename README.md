@@ -67,7 +67,7 @@ which installs [node modules](https://www.npmjs.org/) and [bower components](htt
 
 > WARNING: bower components are installed in the parent directory, __not__ the component directory.
 
-By installing components in the parent directory, we mimic a production environment, in which bower components are siblings (needed for correct relative paths). Beware, however, that this may result in conflicts with existing components. Or worse, for existing sibling components which are being developed (git repositories), completely overwriting siblings.
+By installing components in the parent directory, we mimic a production environment, in which bower components are siblings (needed for correct relative paths). Beware, however, that this may result in conflicts with existing components. Or worse, where existing sibling components are being developed (git repositories), completely overwriting siblings.
 
 To avoid such issues, you may want to clone the repository into its own isolated directory. The downside of this approach is increased disk usage due to (possibly) duplicated dependencies.
 

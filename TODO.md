@@ -47,3 +47,19 @@ TODO
 18. 
 19. replace d3 min/max with compute-min/max
 	- 	Not so simple, as would require extracting desired values into separate array, etc. D3 has advantage of using accessors.
+20. title positioning
+	- 	currently disregarded in favor of legend entries
+	- 	if set title, then should auto-update the padding
+	- 	or simply set legend to being below the chart
+21. should padding be public?
+	- 	if do not expose, do not have to honor any settings and can auto-update as see fit. e.g., when provide title, can increase top padding, etc. Remove axis, can expand graph area
+22. legend position
+	-	`top`, `bottom`, `left`, `right`
+23. make legend entries draggable!
+	-	emit events
+24. draggable timeseries
+	-	clone path element into new SVG which is draggable
+	-	if legend label, bind that to the data transfer object
+25. allow chart to be drag-droppable
+	- 	attribute: `dragdrop`
+	-	if `true`, will accept data transfer objects with `data` (and `label`) fields
