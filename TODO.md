@@ -37,7 +37,9 @@ TODO
 15. See how plottable does their time x-axis to improve formatting 
 16. timeseries stream as separate module (see stream.js and string parsing)
 17. move stream to flow
-18. 
+18. FIXME: stream currently assumes `objectMode`!!!!
+	-	e.g., that a chunk is not a partial datum! (half a stringified array, etc)
+	-	See how jsonstream parses incoming binary chunks
 19. replace d3 min/max with compute-min/max
 	- 	Not so simple, as would require extracting desired values into separate array, etc. D3 has advantage of using accessors.
 20. title positioning
@@ -68,10 +70,9 @@ TODO
 31. `changed` callbacks for `arrays` and `objects`
 	-	support both oldval/newval and item changed
 	-	will impact how some things are updated (e.g., dragEnd)
-32. add clear method
-	-	remove marks
-	-	reset y-min/max to `null`
-	-	reset x-min/max to X1/X2
+32. clear method
+	-	reset x/y labels? or keep until new data arrives?
+		-	can probably just do the latter
 33. annotations attribute
 	-	`array` of `arrays`
 	-	`[time,annotation]`
@@ -81,4 +82,21 @@ TODO
 36. create absolute and relative time components as part of component
 	-	hide until needed
 	- 	see datgui
+37. el.plot( data )
+	-	assuming a selection has been set (else default to body), append a new `polymer-chart-timeseries` element and plot the data.
+	- 	basically, a component, once configured, becomes a factory for similar components configured the same w diff data
+	-	if provided a clbk, return chart.toString()
+38. el.toString()
+	-	walk DOM (create string)
+	-	set styles
+	-	crowbar
 
+
+#### Notes
+
+As relates to a general plot()...
+
+1. 	distinguish between timeseries and line
+	-	parse x0; if fits a date, then create a timeseries element; else line
+2. 	if provided a symbol, go with a scatter
+3. 	if both, mixed

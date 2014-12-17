@@ -318,12 +318,16 @@ function dragEnd( d, i ) {
 
 	// Remove the dragged label:
 	labels.splice( i, 1 );
-	this.labels = labels;
 
 	// Remove the dragged timeseries:
 	data.splice( i, 1 );
-	this.data( data, true );
 
+	if ( !data.length ) {
+		this.clear();
+	} else {
+		this.labels = labels;
+		this.data( data, true );
+	}
 	this.fire( 'dragEnd', this._d3.event );
 
 	return false;
@@ -340,10 +344,20 @@ function drop( evt ) {
 	/* jshint validthis: true */
 	var data = this._data.slice(),
 		labels = this.labels.slice(),
+		types = evt.dataTransfer.types,
+		flg = false,
+		mimeType,
 		payload;
 
-	if ( evt.stopPropagation ) {
-		evt.stopPropagation();
+	mimeType  = 'application/x-polymer-chart-data';
+	for ( var i = 0; i < types.length; i++ ) {
+		if ( types[ i ] === mimeType ) {
+			flg = true;
+			break;
+		}
+	}
+	if ( !flg ) {
+		return;
 	}
 	payload = evt.dataTransfer.getData( 'application/x-polymer-chart-data' );
 
@@ -361,6 +375,12 @@ function drop( evt ) {
 
 	this.fire( 'dropped', payload );
 
+	if ( evt.preventDefault ) {
+		evt.preventDefault();
+	}
+	if ( evt.stopPropagation ) {
+		evt.stopPropagation();
+	}
 	return false;
 } // end FUNCTION drop()
 
@@ -669,6 +689,7 @@ Chart.prototype.colors = [
 	'category10-10'
 ];
 
+// TODO: clean-up events
 /**
 * ATTRIBUTE: events
 *	List of events emitted from the element.
@@ -1013,7 +1034,7 @@ Chart.prototype.createTitle = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createAnnotations = function() {
-	// TODO
+	// TODO: create annotations
 	// TODO: create an annotation factory (see figure.io)
 	return this;
 }; // end METHOD createAnnotations()
@@ -1181,6 +1202,34 @@ Chart.prototype.resetLegend = function() {
 
 	return this;
 }; // end METHOD resetLegend()
+
+/**
+* METHOD: clear()
+*	Clears the chart and resets axes.
+*
+* @returns {DOMElement} element instance
+*/
+Chart.prototype.clear = function() {
+	// TODO: remove annotations
+
+	// Remove data and labels:
+	this.labels = [];
+	this._data = [];
+
+	// Remove paths and corresponding label entries:
+	this.$.paths.remove();
+	this.$.legendEntries.remove();
+
+	// Reset the axes domains:
+	this._xScale.domain( [ X1, X2 ] );
+	this._yScale.domain( [ 0, 1 ] );
+
+	// Redraw the axes:
+	this.$.xAxis.call( this._xAxis );
+	this.$.yAxis.call( this._yAxis );
+
+	return this;
+}; // end METHOD clear()
 
 /**
 * METHOD: data( data[, bool] )
