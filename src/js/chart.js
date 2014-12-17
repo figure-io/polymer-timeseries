@@ -97,7 +97,7 @@ OPTS.interpolation = [
 function x( d ) {
 	/* jshint validthis: true */
 	return this._xScale( d[ 0 ] );
-}
+} // end FUNCTION x()
 
 /**
 * FUNCTION: y( d )
@@ -110,7 +110,7 @@ function x( d ) {
 function y( d ) {
 	/* jshint validthis: true */
 	return this._yScale( d[ 1 ] );
-}
+} // end FUNCTION y()
 
 /**
 * FUNCTION: setLabels( d, i )
@@ -123,7 +123,7 @@ function y( d ) {
 function setLabels( d, i ) {
 	/* jshint validthis: true */
 	return this.labels[ i ];
-}
+} // end FUNCTION setLabels()
 
 /**
 * FUNCTION: setColors( d, i )
@@ -136,7 +136,7 @@ function setLabels( d, i ) {
 function setColors( d, i ) {
 	/* jshint validthis: true */
 	return this.colors[ i % this.colors.length ];
-}
+} // end FUNCTION setColors()
 
 /**
 * FUNCTION: graphWidth()
@@ -148,7 +148,7 @@ function setColors( d, i ) {
 function graphWidth() {
 	/* jshint validthis: true */
 	return this.width - this.paddingLeft - this.paddingRight;
-}
+} // end FUNCTION graphWidth()
 
 /**
 * FUNCTION: graphHeight()
@@ -160,7 +160,209 @@ function graphWidth() {
 function graphHeight() {
 	/* jshint validthis: true */
 	return this.height - this.paddingTop - this.paddingBottom;
-}
+} // end FUNCTION graphHeight()
+
+/**
+* FUNCTION: toggleSeries( d, i )
+*	Event handler to toggle a displayed time series.
+*
+* @private
+* @param {Number} d - element data
+* @param {Number} i - element index
+*/
+function toggleSeries( d, i ) {
+	/* jshint validthis: true */
+	var d3 = this._d3,
+		selection,
+		path,
+		flg;
+
+	// Get the corresponding path element...
+	selection = d3.select( this.$.legendEntries[ 0 ][ i ] );
+	path = d3.select( this.$.paths[ 0 ][ i ] );
+
+	// Toggle the path visibility...
+	flg = !selection.classed( 'hidden' );
+	selection.classed( 'hidden', flg );
+	if ( path ) {
+		path.classed( 'hidden', flg );
+	}
+
+	// TODO: determine how UI events should be handled. What data to pass along?
+	this.fire( 'click', {
+		'msg': 'Legend entry clicked.',
+		'state': ( flg ? 'hidden' : '' )
+	});
+
+	return false;
+} // end FUNCTION toggleSeries()
+
+/**
+* FUNCTION: dragStart( d, i )
+*	Event handler invoked at the start of dragging chart elements.
+*
+* @private
+* @param {Array|Number} d - element data
+* @param {Number} i - element index
+*/
+function dragStart( d, i ) {
+	/* jshint validthis: true */
+	var evt = this._d3.event,
+		path,
+		label,
+		data;
+
+	// Get the label:
+	label = this.$.legendLabels[ i ][ 0 ].innerHTML;
+
+	// Get the path data...
+	if ( this.$.paths ) {
+		path = this.$.paths[ 0 ][ i ];
+		// Possibility that a corresponding path has not yet been drawn; e.g., more labels than datasets.
+		if ( path ) {
+			data = this._d3.select( path ).data();
+		} else {
+			data = [];
+		}
+	} else {
+		data = [];
+	}
+	// Create a data object:
+	data = {
+		'uid': this.__uid__,
+		'id': i,
+		'type': 'timeseries',
+		'data': data[ 0 ],
+		'label': label,
+		'xMin': this.xMin,
+		'xMax': this.xMax,
+		'yMin': this.yMin,
+		'yMax': this.yMax,
+		'yLabel': this.yLabel
+	};
+
+	// Set the drag payload:
+	evt.dataTransfer.effectAllowed = 'move';
+	evt.dataTransfer.setData( 'application/x-polymer-chart-data', JSON.stringify( data ) );
+
+	// TODO: define additional behavior
+
+	this.fire( 'dragStart', evt );
+
+	return false;
+} // end FUNCTION dragStart()
+
+/**
+* FUNCTION: dragEnter( evt )
+*	Event handler invoked on a 'dragenter' event.
+*
+* @private
+* @param {Event} evt - event object
+*/
+function dragEnter( evt ) {
+	/* jshint validthis: true */
+	if ( evt.preventDefault ) {
+		evt.preventDefault();
+	}
+
+	// TODO: define additional behavior
+
+	this.fire( 'dragEnter', evt );
+
+	return false;
+} // end FUNCTION dragEnter()
+
+/**
+* FUNCTION: dragOver( evt )
+*	Event handler invoked on a 'dragover' event.
+*
+* @private
+* @param {Event} evt - event object
+*/
+function dragOver( evt ) {
+	if ( evt.preventDefault ) {
+		evt.preventDefault();
+	}
+	return false;
+} // end FUNCTION dragOver()
+
+/**
+* FUNCTION: dragLeave( evt )
+*	Event handler invoked on a 'dragleave' event.
+*
+* @private
+* @param {Event} evt - event object
+*/
+function dragLeave( evt ) {
+	/* jshint validthis: true */
+
+	// TODO: define additional behavior
+
+	this.fire( 'dragLeave', evt );
+
+	return false;
+} // end FUNCTION dragLeave()
+
+/**
+* FUNCTION: dragEnd( d, i )
+*	Event handler invoked on a 'dragend' event.
+*
+* @private
+* @param {Array|Number} d - data
+* @param {Number} i - index
+*/
+function dragEnd( d, i ) {
+	/* jshint validthis: true */
+	var labels = this.labels.slice(),
+		data = this._data.slice();
+
+	// Remove the dragged label:
+	labels.splice( i, 1 );
+	this.labels = labels;
+
+	// Remove the dragged timeseries:
+	data.splice( i, 1 );
+	this.data( data, true );
+
+	this.fire( 'dragEnd', this._d3.event );
+
+	return false;
+} // end FUNCTION dragEnd()
+
+/**
+* FUNCTION: drop( evt )
+*	Event handler invoked on a 'drop' event.
+*
+* @private
+* @param {Event} evt - event object
+*/
+function drop( evt ) {
+	/* jshint validthis: true */
+	var data = this._data.slice(),
+		labels = this.labels.slice(),
+		payload;
+
+	if ( evt.stopPropagation ) {
+		evt.stopPropagation();
+	}
+	payload = evt.dataTransfer.getData( 'application/x-polymer-chart-data' );
+
+	payload = JSON.parse( payload );
+
+	// Add the new dataset:
+	data.push( payload.data );
+
+	// Add the new label:
+	labels.push( payload.label );
+
+	// Set the data and labels:
+	this.data( data, true );
+	this.labels = labels;
+
+	this.fire( 'dropped', payload );
+
+	return false;
+} // end FUNCTION drop()
 
 
 // CHART //
@@ -260,6 +462,24 @@ Chart.prototype.height = 400;
 * @default []
 */
 Chart.prototype.labels = [];
+
+/**
+* ATTRIBUTE: isDraggable
+*	Specifies whether chart components (legend and paths) should be draggable. See [tutorial]{@link http://www.html5rocks.com/en/tutorials/dnd/basics/}.
+*
+* @type {Boolean}
+* @default true
+*/
+Chart.prototype.isDraggable = true;
+
+/**
+* ATTRIBUTE: isDroppable
+*	Specifies whether data can be dropped into the chart. See [tutorial]{@link http://www.html5rocks.com/en/tutorials/dnd/basics/}.
+*
+* @type {Boolean}
+* @default true
+*/
+Chart.prototype.isDroppable = true;
 
 /**
 * ATTRIBUTE: chartTitle
@@ -461,7 +681,12 @@ Chart.prototype.events = [
 	'error',
 	'changed',
 	'resize',
-	'click'
+	'click',
+	'dragStart',
+	'dragEnd',
+	'dragEnter',
+	'dragLeave',
+	'dropped'
 ];
 
 /**
@@ -478,7 +703,6 @@ Chart.prototype.created = function() {
 */
 Chart.prototype.init = function() {
 	var create = document.createElement.bind( document ),
-		self = this,
 		d3,
 		el;
 
@@ -490,6 +714,9 @@ Chart.prototype.init = function() {
 	// Create a new uuid element to access the library dependency for creating uuids:
 	el = create( 'polymer-uuid' );
 	this._uuid = el.uuid;
+
+	// Assign the chart a private uuid:
+	this.__uid__ = this._uuid.v4();
 
 	// Private methods...
 
@@ -541,8 +768,20 @@ Chart.prototype.init = function() {
 	// Legend...
 	this._setLabels = setLabels.bind( this );
 
-	// Interaction:
-	this._toggleSeries = toggleSeries;
+	// Interaction events...
+	this._toggleSeries = toggleSeries.bind( this );
+
+	this._dragStart = dragStart.bind( this );
+	this._dragEnter = dragEnter.bind( this );
+	this._dragOver = dragOver.bind( this );
+	this._dragLeave = dragLeave.bind( this );
+	this._dragEnd = dragEnd.bind( this );
+	this._drop = drop.bind( this );
+
+	this.addEventListener( 'dragenter', this._dragEnter, false );
+	this.addEventListener( 'dragover', this._dragOver, false );
+	this.addEventListener( 'dragleave', this._dragLeave, false );
+	this.addEventListener( 'drop', this._drop, false );
 
 	// Elements...
 	this.$ = {
@@ -557,6 +796,7 @@ Chart.prototype.init = function() {
 		'meta': null,
 		'title': null,
 		'legend': null,
+		'legendEntries': null,
 		'legendSymbols': null,
 		'legendLabels': null,
 		'bkgd': null,
@@ -565,40 +805,6 @@ Chart.prototype.init = function() {
 		'annotations': null
 	};
 	this._clipPathID = this._uuid.v4();
-
-	return;
-
-	/**
-	* FUNCTION: toggleSeries()
-	*	Event handler to toggle a displayed time series.
-	*/
-	function toggleSeries() {
-		/* jshint validthis: true */
-		var selection,
-			path,
-			idx,
-			flg;
-
-		// Note: `this` is the legend element which was clicked.
-
-		// Get the corresponding path element...
-		selection = d3.select( this );
-		idx = selection.data()[ 0 ];
-		path = d3.select( self.$.paths[ 0 ][ idx ] );
-
-		// Toggle the path visibility...
-		flg = !selection.classed( 'hidden' );
-		selection.classed( 'hidden', flg );
-		if ( path ) {
-			path.classed( 'hidden', flg );
-		}
-
-		// TODO: determine how UI events should be handled. What data to pass along?
-		self.fire( 'click', {
-			'msg': 'Legend entry clicked.',
-			'state': ( flg ? 'hidden' : '' )
-		});
-	} // end FUNCTION toggleSeries()
 }; // end METHOD init()
 
 /**
@@ -616,6 +822,8 @@ Chart.prototype.attached = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.chart = function() {
+	// TODO: if chart already exists, remove it all...
+
 	this
 		.createBase()
 		.createBackground()
@@ -842,7 +1050,10 @@ Chart.prototype.createLegend = function() {
 		.enter()
 		.append( 'xhtml:p' )
 			.attr( 'class', 'entry noselect' )
-			.on( 'click', this._toggleSeries );
+			.attr( 'draggable', this.isDraggable )
+			.on( 'click', this._toggleSeries, false )
+			.on( 'dragstart', this._dragStart, false )
+			.on( 'dragend', this._dragEnd, false );
 
 	this.$.legendEntries = entries;
 
@@ -936,7 +1147,10 @@ Chart.prototype.resetLegend = function() {
 	// Add any new entries:
 	gEnter = entries.enter().append( 'xhtml:p' )
 		.attr( 'class', 'entry noselect' )
-		.on( 'click', this._toggleSeries );
+		.attr( 'draggable', this.isDraggable )
+		.on( 'click', this._toggleSeries, false )
+		.on( 'dragstart', this._dragStart, false )
+		.on( 'dragend', this._dragEnd, false );
 
 	gEnter.append( 'xhtml:span' )
 		.attr( 'class', 'symbol' )
@@ -997,8 +1211,6 @@ Chart.prototype.data = function( data, bool ) {
 		data = this.formatData( data );
 	}
 	this._data = data;
-
-	// TODO: Transitions!!!!
 
 	// [0] Update the xDomain:
 	domain = this.xDomain( this.xMin, this.xMax );
@@ -1174,6 +1386,8 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 
 	this.width = newConfig.canvas.width;
 	this.height = newConfig.canvas.height;
+
+	// FIXME: title should not be part of annotations, but meta. The config should be standardized. Put in repo. Version it. Create an associated validator. NPM.
 	this.title = newConfig.annotations.title;
 	this.xLabel = newConfig.axes[ 0 ].label;
 	this.yLabel = newConfig.axes[ 1 ].label;
@@ -2052,6 +2266,56 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 	// [7] Update the paths:
 	this.$.paths.attr( 'd', this._line );
 }; // end METHOD paddingTopChanged()
+
+/**
+* METHOD: isDraggableChanged( oldVal, newVal )
+*	Event handler invoked when the `isDraggable` attribute changes.
+*
+* @param {Boolean} oldVal - old value
+* @param {Boolean} newVal - new value
+*/
+Chart.prototype.isDraggableChanged = function( oldVal, newVal ) {
+	var err;
+	if ( typeof newVal !== 'boolean' ) {
+		this.isDraggable = oldVal;
+		err = new TypeError( 'isDraggable::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
+		this.fire( 'error', err );
+		return;
+	}
+	this.fire( 'changed', {
+		'attr': 'isDraggable',
+		'prev': oldVal,
+		'curr': newVal
+	});
+	this.$.legendEntries.attr( 'draggable', newVal );
+}; // end METHOD isDraggableChanged()
+
+/**
+* METHOD: isDroppableChanged( oldVal, newVal )
+*	Event handler invoked when the `isDroppable` attribute changes.
+*
+* @param {Boolean} oldVal - old value
+* @param {Boolean} newVal - new value
+*/
+Chart.prototype.isDroppableChanged = function( oldVal, newVal ) {
+	var err;
+	if ( typeof newVal !== 'boolean' ) {
+		this.drag = oldVal;
+		err = new TypeError( 'isDroppable::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
+		this.fire( 'error', err );
+		return;
+	}
+	this.fire( 'changed', {
+		'attr': 'isDroppable',
+		'prev': oldVal,
+		'curr': newVal
+	});
+	if ( newVal ) {
+		this.addEventListener( 'drop', this._drop, false );
+		return;
+	}
+	this.removeEventListener( 'drop', this._drop );
+}; // end METHOD isDroppableChanged()
 
 /**
 * METHOD: onResize()

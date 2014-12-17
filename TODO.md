@@ -12,14 +12,7 @@ TODO
 	-	should you be able to specify the particular path you want to update? Makes updating rather hard, as updates which should be batched/grouped together arrive sequentially
 	- 	re-emit data event
 8. 	
-9. 	To view example,
-
-	``` bash
-	$ cd ..
-	$ python -m SimpleHTTPServer 9090
-	```
-
-	Navigate in browser to `chart-timeseries/examples`.
+9. 	Examples
 		- 	`/simple`
 		-	`/stream`
 10. dbl-click to zoom canvas
@@ -35,7 +28,7 @@ TODO
 	- 	window
 	-	incrmpath
 	- 	nan (missing values) --> encoded? Broken segment?
-	- 	keep in `array` and output using `Array.prototype.join`
+	- 	keep in `array` and output using `Array.prototype.join` ['M 0 0', 'L 1 1' ]
 14. `getConfig`
 	-	returns a chart configuration
 	- 	marks property should either be an `array` of settings or a single `object`. If `object`, applies to all marks
@@ -55,17 +48,37 @@ TODO
 	- 	if do not expose, do not have to honor any settings and can auto-update as see fit. e.g., when provide title, can increase top padding, etc. Remove axis, can expand graph area
 22. legend position
 	-	`top`, `bottom`, `left`, `right`
-23. make legend entries draggable!
-	-	emit events
+23. 
 24. draggable timeseries
 	-	clone path element into new SVG which is draggable
+	- 	probably more to this, cloned element has to be outside the normal DOM (absolute/fixed positioning); has to move with a cursor/finger. Things will probably feel hacky.
 	-	if legend label, bind that to the data transfer object
-25. allow chart to be drag-droppable
-	- 	attribute: `dragdrop`
-	-	if `true`, will accept data transfer objects with `data` (and `label`) fields
+25. 
 26. noselect for ticklabels
 	-	could be relatively expensive, as need to set the class every time an axis is updated
 27. update `package.json` scripts
 	- 	place coveralls command in Makefile
 28. for Travis, fire up firefox browser as before script and call it a day
 	- 	integrate saucelabs at later time
+29. 
+30. Clean-up events
+	- 	event list
+	-	data emitted
+	-	general 'changed' versus individual attribute (possibly both)
+31. `changed` callbacks for `arrays` and `objects`
+	-	support both oldval/newval and item changed
+	-	will impact how some things are updated (e.g., dragEnd)
+32. add clear method
+	-	remove marks
+	-	reset y-min/max to `null`
+	-	reset x-min/max to X1/X2
+33. annotations attribute
+	-	`array` of `arrays`
+	-	`[time,annotation]`
+	-	will want a reset annotations on annotations changed (similar to paths,legend)
+34. demo socket/sse server
+35. are transitions needed? I am skeptical.
+36. create absolute and relative time components as part of component
+	-	hide until needed
+	- 	see datgui
+
