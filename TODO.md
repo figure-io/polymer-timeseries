@@ -84,12 +84,20 @@ TODO
 	- 	see datgui
 37. el.plot( data )
 	-	assuming a selection has been set (else default to body), append a new `polymer-chart-timeseries` element and plot the data.
-	- 	basically, a component, once configured, becomes a factory for similar components configured the same w diff data
+	-	else returns the new chart element
+	- 	basically, a component, once configured, becomes a factory/template for similar components configured the same w diff data
 	-	if provided a clbk, return chart.toString()
 38. el.toString()
 	-	walk DOM (create string)
 	-	set styles
 	-	crowbar
+39. drop behavior
+	- 	empty chart
+		-	use data transfer min/max and labels
+	-	existing chart
+		-	min/max abide by new chart convention
+		-	conflicting y-labels is a problem
+40. 
 
 
 #### Notes

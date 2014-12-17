@@ -84,307 +84,6 @@ OPTS.interpolation = [
 ];
 
 
-// FUNCTIONS //
-
-/**
-* FUNCTION: x( d )
-*	Maps an x-value to a pixel value.
-*
-* @private
-* @param {Array} d - datum
-* @param {Number} pixel value
-*/
-function x( d ) {
-	/* jshint validthis: true */
-	return this._xScale( d[ 0 ] );
-} // end FUNCTION x()
-
-/**
-* FUNCTION: y( d )
-*	Maps an y-value to a pixel value.
-*
-* @private
-* @param {Array} d - datum
-* @param {Number} pixel value
-*/
-function y( d ) {
-	/* jshint validthis: true */
-	return this._yScale( d[ 1 ] );
-} // end FUNCTION y()
-
-/**
-* FUNCTION: setLabels( d, i )
-*	Sets data labels.
-*
-* @private
-* @param {Array} d - datum
-* @param {Number} i - index
-*/
-function setLabels( d, i ) {
-	/* jshint validthis: true */
-	return this.labels[ i ];
-} // end FUNCTION setLabels()
-
-/**
-* FUNCTION: setColors( d, i )
-*	Sets data colors.
-*
-* @private
-* @param {Array} d - datum
-* @param {Number} i - index
-*/
-function setColors( d, i ) {
-	/* jshint validthis: true */
-	return this.colors[ i % this.colors.length ];
-} // end FUNCTION setColors()
-
-/**
-* FUNCTION: graphWidth()
-*	Returns the graph width.
-*
-* @private
-* @returns {Number} graph width
-*/
-function graphWidth() {
-	/* jshint validthis: true */
-	return this.width - this.paddingLeft - this.paddingRight;
-} // end FUNCTION graphWidth()
-
-/**
-* FUNCTION: graphHeight()
-*	Returns the graph height.
-*
-* @private
-* @returns {Number} graph height
-*/
-function graphHeight() {
-	/* jshint validthis: true */
-	return this.height - this.paddingTop - this.paddingBottom;
-} // end FUNCTION graphHeight()
-
-/**
-* FUNCTION: toggleSeries( d, i )
-*	Event handler to toggle a displayed time series.
-*
-* @private
-* @param {Number} d - element data
-* @param {Number} i - element index
-*/
-function toggleSeries( d, i ) {
-	/* jshint validthis: true */
-	var d3 = this._d3,
-		selection,
-		path,
-		flg;
-
-	// Get the corresponding path element...
-	selection = d3.select( this.$.legendEntries[ 0 ][ i ] );
-	path = d3.select( this.$.paths[ 0 ][ i ] );
-
-	// Toggle the path visibility...
-	flg = !selection.classed( 'hidden' );
-	selection.classed( 'hidden', flg );
-	if ( path ) {
-		path.classed( 'hidden', flg );
-	}
-
-	// TODO: determine how UI events should be handled. What data to pass along?
-	this.fire( 'click', {
-		'msg': 'Legend entry clicked.',
-		'state': ( flg ? 'hidden' : '' )
-	});
-
-	return false;
-} // end FUNCTION toggleSeries()
-
-/**
-* FUNCTION: dragStart( d, i )
-*	Event handler invoked at the start of dragging chart elements.
-*
-* @private
-* @param {Array|Number} d - element data
-* @param {Number} i - element index
-*/
-function dragStart( d, i ) {
-	/* jshint validthis: true */
-	var evt = this._d3.event,
-		path,
-		label,
-		data;
-
-	// Get the label:
-	label = this.$.legendLabels[ i ][ 0 ].innerHTML;
-
-	// Get the path data...
-	if ( this.$.paths ) {
-		path = this.$.paths[ 0 ][ i ];
-		// Possibility that a corresponding path has not yet been drawn; e.g., more labels than datasets.
-		if ( path ) {
-			data = this._d3.select( path ).data();
-		} else {
-			data = [];
-		}
-	} else {
-		data = [];
-	}
-	// Create a data object:
-	data = {
-		'uid': this.__uid__,
-		'id': i,
-		'type': 'timeseries',
-		'data': data[ 0 ],
-		'label': label,
-		'xMin': this.xMin,
-		'xMax': this.xMax,
-		'yMin': this.yMin,
-		'yMax': this.yMax,
-		'yLabel': this.yLabel
-	};
-
-	// Set the drag payload:
-	evt.dataTransfer.effectAllowed = 'move';
-	evt.dataTransfer.setData( 'application/x-polymer-chart-data', JSON.stringify( data ) );
-
-	// TODO: define additional behavior
-
-	this.fire( 'dragStart', evt );
-
-	return false;
-} // end FUNCTION dragStart()
-
-/**
-* FUNCTION: dragEnter( evt )
-*	Event handler invoked on a 'dragenter' event.
-*
-* @private
-* @param {Event} evt - event object
-*/
-function dragEnter( evt ) {
-	/* jshint validthis: true */
-	if ( evt.preventDefault ) {
-		evt.preventDefault();
-	}
-
-	// TODO: define additional behavior
-
-	this.fire( 'dragEnter', evt );
-
-	return false;
-} // end FUNCTION dragEnter()
-
-/**
-* FUNCTION: dragOver( evt )
-*	Event handler invoked on a 'dragover' event.
-*
-* @private
-* @param {Event} evt - event object
-*/
-function dragOver( evt ) {
-	if ( evt.preventDefault ) {
-		evt.preventDefault();
-	}
-	return false;
-} // end FUNCTION dragOver()
-
-/**
-* FUNCTION: dragLeave( evt )
-*	Event handler invoked on a 'dragleave' event.
-*
-* @private
-* @param {Event} evt - event object
-*/
-function dragLeave( evt ) {
-	/* jshint validthis: true */
-
-	// TODO: define additional behavior
-
-	this.fire( 'dragLeave', evt );
-
-	return false;
-} // end FUNCTION dragLeave()
-
-/**
-* FUNCTION: dragEnd( d, i )
-*	Event handler invoked on a 'dragend' event.
-*
-* @private
-* @param {Array|Number} d - data
-* @param {Number} i - index
-*/
-function dragEnd( d, i ) {
-	/* jshint validthis: true */
-	var labels = this.labels.slice(),
-		data = this._data.slice();
-
-	// Remove the dragged label:
-	labels.splice( i, 1 );
-
-	// Remove the dragged timeseries:
-	data.splice( i, 1 );
-
-	if ( !data.length ) {
-		this.clear();
-	} else {
-		this.labels = labels;
-		this.data( data, true );
-	}
-	this.fire( 'dragEnd', this._d3.event );
-
-	return false;
-} // end FUNCTION dragEnd()
-
-/**
-* FUNCTION: drop( evt )
-*	Event handler invoked on a 'drop' event.
-*
-* @private
-* @param {Event} evt - event object
-*/
-function drop( evt ) {
-	/* jshint validthis: true */
-	var data = this._data.slice(),
-		labels = this.labels.slice(),
-		types = evt.dataTransfer.types,
-		flg = false,
-		mimeType,
-		payload;
-
-	mimeType  = 'application/x-polymer-chart-data';
-	for ( var i = 0; i < types.length; i++ ) {
-		if ( types[ i ] === mimeType ) {
-			flg = true;
-			break;
-		}
-	}
-	if ( !flg ) {
-		return;
-	}
-	payload = evt.dataTransfer.getData( 'application/x-polymer-chart-data' );
-
-	payload = JSON.parse( payload );
-
-	// Add the new dataset:
-	data.push( payload.data );
-
-	// Add the new label:
-	labels.push( payload.label );
-
-	// Set the data and labels:
-	this.data( data, true );
-	this.labels = labels;
-
-	this.fire( 'dropped', payload );
-
-	if ( evt.preventDefault ) {
-		evt.preventDefault();
-	}
-	if ( evt.stopPropagation ) {
-		evt.stopPropagation();
-	}
-	return false;
-} // end FUNCTION drop()
-
-
 // CHART //
 
 /**
@@ -741,20 +440,16 @@ Chart.prototype.init = function() {
 
 	// Private methods...
 
-	// Graph...
-	this._graphWidth = graphWidth.bind( this );
-	this._graphHeight = graphHeight.bind( this );
-
 	// Scales...
 	this._xScale = d3.time.scale();
 	this._yScale = d3.scale.linear();
 
 	this._xScale
 		.domain( [ X1, X2 ] )
-		.range( [ 0, this._graphWidth() ] );
+		.range( [ 0, this.graphWidth() ] );
 	this._yScale
 		.domain( [ 0, 1 ] )
-		.range( [ this._graphHeight(), 0 ] );
+		.range( [ this.graphHeight(), 0 ] );
 
 	// Axes...
 	this._xTickFormat = d3.time.format( this.xTickFormat );
@@ -773,36 +468,27 @@ Chart.prototype.init = function() {
 		.ticks( this.yNumTicks );
 
 	// Paths...
+	this._x = this.x.bind( this );
+	this._y = this.y.bind( this );
 	this._line = d3.svg.line()
-		.x( x.bind( this ) )
-		.y( y.bind( this ) )
+		.x( this._x )
+		.y( this._y )
 		.defined( this.isDefined )
 		.interpolate( this.interpolation )
 		.tension( this.tension );
 
+	this._getColor = this.getColor.bind( this );
+
+	// Legend...
+	this._getLabel = this.getLabel.bind( this );
+
 	// Stream...
 	this._stream = null;
 
-	// Encoding...
-	this._colors = setColors.bind( this );
-
-	// Legend...
-	this._setLabels = setLabels.bind( this );
-
-	// Interaction events...
-	this._toggleSeries = toggleSeries.bind( this );
-
-	this._dragStart = dragStart.bind( this );
-	this._dragEnter = dragEnter.bind( this );
-	this._dragOver = dragOver.bind( this );
-	this._dragLeave = dragLeave.bind( this );
-	this._dragEnd = dragEnd.bind( this );
-	this._drop = drop.bind( this );
-
-	this.addEventListener( 'dragenter', this._dragEnter, false );
-	this.addEventListener( 'dragover', this._dragOver, false );
-	this.addEventListener( 'dragleave', this._dragLeave, false );
-	this.addEventListener( 'drop', this._drop, false );
+	// Interaction...
+	this._toggleSeries = this.toggleSeries.bind( this );
+	this._onDragStart = this.onDragStart.bind( this );
+	this._onDragEnd = this.onDragEnd.bind( this );
 
 	// Elements...
 	this.$ = {
@@ -889,8 +575,8 @@ Chart.prototype.createBase = function() {
 			.attr( 'id', this._clipPathID )
 			.append( 'svg:rect' )
 				.attr( 'class', 'clipPath' )
-				.attr( 'width', this._graphWidth() )
-				.attr( 'height', this._graphHeight() );
+				.attr( 'width', this.graphWidth() )
+				.attr( 'height', this.graphHeight() );
 
 	// Create the graph element:
 	this.$.graph = canvas.append( 'svg:g' )
@@ -921,8 +607,8 @@ Chart.prototype.createBackground = function() {
 		.attr( 'class', 'background' )
 		.attr( 'x', 0 )
 		.attr( 'y', 0 )
-		.attr( 'width', this._graphWidth() )
-		.attr( 'height', this._graphHeight() );
+		.attr( 'width', this.graphWidth() )
+		.attr( 'height', this.graphHeight() );
 
 	return this;
 }; // end METHOD createBackground()
@@ -947,8 +633,8 @@ Chart.prototype.createPaths = function() {
 		.append( 'svg:path' )
 			.attr( 'property', 'line timeseries' )
 			.attr( 'class', 'line' )
-			.attr( 'data-label', this._setLabels )
-			.attr( 'color', this._colors )
+			.attr( 'data-label', this._getLabel )
+			.attr( 'color', this._getColor )
 			.attr( 'd', this._line );
 
 	return this;
@@ -962,7 +648,7 @@ Chart.prototype.createPaths = function() {
 */
 Chart.prototype.createAxes = function() {
 	var graph = this.$.graph,
-		height = this._graphHeight(),
+		height = this.graphHeight(),
 		axis;
 
 	axis = graph.append( 'svg:g' )
@@ -974,7 +660,7 @@ Chart.prototype.createAxes = function() {
 
 	this.$.xLabel = axis.append( 'svg:text' )
 		.attr( 'y', 40 )
-		.attr( 'x', ( this._graphWidth() ) / 2 )
+		.attr( 'x', ( this.graphWidth() ) / 2 )
 		.attr( 'text-anchor', 'middle' )
 		.attr( 'property', 'axis_label' )
 		.attr( 'class', 'label noselect' )
@@ -1046,8 +732,8 @@ Chart.prototype.createAnnotations = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createLegend = function() {
-	var colors = this._colors,
-		setLabels = this._setLabels,
+	var getColor = this._getColor,
+		getLabel = this._getLabel,
 		numLabels = this.labels.length,
 		range,
 		legend,
@@ -1073,8 +759,8 @@ Chart.prototype.createLegend = function() {
 			.attr( 'class', 'entry noselect' )
 			.attr( 'draggable', this.isDraggable )
 			.on( 'click', this._toggleSeries, false )
-			.on( 'dragstart', this._dragStart, false )
-			.on( 'dragend', this._dragEnd, false );
+			.on( 'dragstart', this._onDragStart, false )
+			.on( 'dragend', this._onDragEnd, false );
 
 	this.$.legendEntries = entries;
 
@@ -1091,14 +777,14 @@ Chart.prototype.createLegend = function() {
 	for ( i = 0; i < symbols.length; i++ ) {
 		el = symbols[ i ][ 0 ];
 		if ( el ) {
-			el.classList.add( colors( null, i ) + '-span' );
+			el.classList.add( getColor( null, i ) + '-span' );
 		}
 	}
 	// Set the text of all labels...
 	for ( i = 0; i < labels.length; i++ ) {
 		el = labels[ i ][ 0 ];
 		if ( el ) {
-			el.innerHTML = setLabels( null, i );
+			el.innerHTML = getLabel( null, i );
 		}
 	}
 	return this;
@@ -1125,8 +811,8 @@ Chart.prototype.resetPaths = function() {
 	paths.enter().append( 'svg:path' )
 		.attr( 'property', 'line timeseries' )
 		.attr( 'class', 'line' )
-		.attr( 'data-label', this._setLabels )
-		.attr( 'color', this._colors )
+		.attr( 'data-label', this._getLabel )
+		.attr( 'color', this._getColor )
 		.attr( 'd', this._line );
 
 	// Cache a reference to the paths:
@@ -1146,8 +832,8 @@ Chart.prototype.resetPaths = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.resetLegend = function() {
-	var colors = this._colors,
-		setLabels = this._setLabels,
+	var getColor = this._getColor,
+		getLabel = this._getLabel,
 		numLabels = this.labels.length,
 		range,
 		entries,
@@ -1170,8 +856,8 @@ Chart.prototype.resetLegend = function() {
 		.attr( 'class', 'entry noselect' )
 		.attr( 'draggable', this.isDraggable )
 		.on( 'click', this._toggleSeries, false )
-		.on( 'dragstart', this._dragStart, false )
-		.on( 'dragend', this._dragEnd, false );
+		.on( 'dragstart', this._onDragStart, false )
+		.on( 'dragend', this._onDragEnd, false );
 
 	gEnter.append( 'xhtml:span' )
 		.attr( 'class', 'symbol' )
@@ -1185,14 +871,14 @@ Chart.prototype.resetLegend = function() {
 	// Update all symbols:
 	symbols = entries.selectAll( '.symbol' );
 	for ( i = 0; i < symbols.length; i++ ) {
-		symbols[ i ][ 0 ].classList.add( colors( null, i ) + '-span' );
+		symbols[ i ][ 0 ].classList.add( getColor( null, i ) + '-span' );
 	}
 	this.$.legendSymbols = symbols;
 
 	// Update all labels:
 	labels = entries.selectAll( '.label' );
 	for ( i = 0; i < labels.length; i++ ) {
-		labels[ i ][ 0 ].innerHTML = setLabels( null, i );
+		labels[ i ][ 0 ].innerHTML = getLabel( null, i );
 	}
 	this.$.legendLabels = labels;
 
@@ -1327,6 +1013,72 @@ Chart.prototype.formatData = function( data ) {
 	}
 	return out;
 }; // end METHOD formatData()
+
+/**
+* METHOD: x( d )
+*	Maps an x-value to a pixel value.
+*
+* @param {Array} d - datum
+* @returns {Number} pixel value
+*/
+Chart.prototype.x = function( d ) {
+	return this._xScale( d[ 0 ] );
+}; // end METHOD x()
+
+/**
+* METHOD: y( d )
+*	Maps an y-value to a pixel value.
+*
+* @param {Array} d - datum
+* @returns {Number} pixel value
+*/
+Chart.prototype.y = function( d ) {
+	return this._yScale( d[ 1 ] );
+}; // end METHOD y()
+
+/**
+* METHOD: getLabel( d, i )
+*	Returns a label based on a provided index.
+*
+* @param {Array} d - datum
+* @param {Number} i - index
+* @returns {String} data label
+*/
+Chart.prototype.getLabel = function( d, i ) {
+	return this.labels[ i ];
+}; // end METHOD getLabel()
+
+/**
+* METHOD: getColor( d, i )
+*	Returns a color based on a provided index.
+*
+* @param {Array} d - datum
+* @param {Number} i - index
+* @returns {String} color class/data attribute
+*/
+Chart.prototype.getColor = function( d, i ) {
+	return this.colors[ i % this.colors.length ];
+}; // end METHOD getColor()
+
+/**
+* METHOD: graphWidth()
+*	Returns the graph width.
+*
+* @returns {Number} graph width
+*/
+Chart.prototype.graphWidth = function() {
+	return this.width - this.paddingLeft - this.paddingRight;
+}; // end METHOD graphWidth()
+
+/**
+* METHOD: graphHeight()
+*	Returns the graph height.
+*
+* @returns {Number} graph height
+*/
+Chart.prototype.graphHeight = function() {
+	return this.height - this.paddingTop - this.paddingBottom;
+}; // end METHOD graphHeight()
 
 /**
 * METHOD: xDomain( min, max )
@@ -1651,7 +1403,7 @@ Chart.prototype.labelsChanged = function( oldVal, newVal ) {
 	});
 
 	// [0] Reset the data labels:
-	this.$.paths.attr( 'data-label', this._setLabels );
+	this.$.paths.attr( 'data-label', this._getLabel );
 
 	// [1] Reset the chart legend:
 	this.resetLegend();
@@ -2117,7 +1869,7 @@ Chart.prototype.colorsChanged = function( oldVal, newVal ) {
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this.$.paths.attr( 'color', this._colors );
+	this.$.paths.attr( 'color', this._getColor );
 }; // end METHOD colorsChanged()
 
 /**
@@ -2317,6 +2069,40 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 }; // end METHOD paddingTopChanged()
 
 /**
+* METHOD: toggleSeries( d, i )
+*	Event handler to toggle a displayed time series.
+*
+* @param {Number} d - element data
+* @param {Number} i - element index
+* @returns {Boolean} false
+*/
+Chart.prototype.toggleSeries = function( d, i ) {
+	var d3 = this._d3,
+		selection,
+		path,
+		flg;
+
+	// Get the corresponding path element...
+	selection = d3.select( this.$.legendEntries[ 0 ][ i ] );
+	path = d3.select( this.$.paths[ 0 ][ i ] );
+
+	// Toggle the path visibility...
+	flg = !selection.classed( 'hidden' );
+	selection.classed( 'hidden', flg );
+	if ( path ) {
+		path.classed( 'hidden', flg );
+	}
+
+	// TODO: determine how UI events should be handled. What data to pass along?
+	this.fire( 'click', {
+		'msg': 'Legend entry clicked.',
+		'state': ( flg ? 'hidden' : '' )
+	});
+
+	return false;
+}; // end METHOD toggleSeries()
+
+/**
 * METHOD: isDraggableChanged( oldVal, newVal )
 *	Event handler invoked when the `isDraggable` attribute changes.
 *
@@ -2359,12 +2145,200 @@ Chart.prototype.isDroppableChanged = function( oldVal, newVal ) {
 		'prev': oldVal,
 		'curr': newVal
 	});
-	if ( newVal ) {
-		this.addEventListener( 'drop', this._drop, false );
+}; // end METHOD isDroppableChanged()
+
+/**
+* FUNCTION: onDragStart( d, i )
+*	Event handler invoked at the start of dragging chart elements.
+*
+* @param {Array|Number} d - element data
+* @param {Number} i - element index
+* @returns {Boolean} false
+*/
+Chart.prototype.onDragStart = function( d, i ) {
+	var evt = this._d3.event,
+		path,
+		label,
+		data;
+
+	// Get the label:
+	label = this.$.legendLabels[ i ][ 0 ].innerHTML;
+
+	// Get the path data...
+	if ( this.$.paths ) {
+		path = this.$.paths[ 0 ][ i ];
+		// Possibility that a corresponding path has not yet been drawn; e.g., more labels than datasets.
+		if ( path ) {
+			data = this._d3.select( path ).data();
+		} else {
+			data = [];
+		}
+	} else {
+		data = [];
+	}
+	// Create a data object:
+	data = {
+		'uid': this.__uid__,
+		'id': i,
+		'type': 'timeseries',
+		'data': data[ 0 ],
+		'label': label,
+		'xMin': this.xMin,
+		'xMax': this.xMax,
+		'yMin': this.yMin,
+		'yMax': this.yMax,
+		'yLabel': this.yLabel
+	};
+
+	// Set the drag payload:
+	evt.dataTransfer.effectAllowed = 'move';
+	evt.dataTransfer.setData( 'application/x-polymer-chart-data', JSON.stringify( data ) );
+
+	// TODO: define additional behavior
+
+	this.fire( 'dragStart', evt );
+
+	return false;
+}; // end METHOD onDragStart()
+
+/**
+* METHOD: onDragEnter( evt, detail, sender )
+*	Event handler invoked on a 'dragenter' event.
+*
+* @param {Event} evt - event object
+* @param {*} detail - event detail
+* @param {DOMElement} sender - event source
+* @returns {Boolean} false
+*/
+Chart.prototype.onDragEnter = function( evt ) {
+	if ( evt.preventDefault ) {
+		evt.preventDefault();
+	}
+
+	// TODO: define additional behavior
+
+	this.fire( 'dragEnter', evt );
+
+	return false;
+}; // end METHOD onDragEnter()
+
+/**
+* METHOD: onDragOver( evt, detail, sender )
+*	Event handler invoked on a 'dragover' event.
+*
+* @param {Event} evt - event object
+* @param {*} detail - event detail
+* @param {DOMElement} sender - event source
+* @returns {Boolean} false
+*/
+Chart.prototype.onDragOver = function( evt ) {
+	if ( evt.preventDefault ) {
+		evt.preventDefault();
+	}
+	return false;
+}; // end METHOD onDragOver()
+
+/**
+* FUNCTION: onDragLeave( evt, detail, sender )
+*	Event handler invoked on a 'dragleave' event.
+*
+* @param {Event} evt - event object
+* @param {*} detail - event detail
+* @param {DOMElement} sender - event source
+* @returns {Boolean} false
+*/
+Chart.prototype.onDragLeave = function( evt ) {
+
+	// TODO: define additional behavior
+
+	this.fire( 'dragLeave', evt );
+
+	return false;
+}; // end METHOD onDragLeave()
+
+/**
+* METHOD: onDrop( evt, detail, sender )
+*	Event handler invoked on a 'drop' event.
+*
+* @param {Event} evt - event object
+* @param {*} detail - event detail
+* @param {DOMElement} sender - event source
+* @returns {Undefined|Boolean} undefined or false
+*/
+Chart.prototype.onDrop = function( evt ) {
+	var data = this._data.slice(),
+		labels = this.labels.slice(),
+		types = evt.dataTransfer.types,
+		flg = false,
+		mimeType,
+		payload;
+
+	if ( !this.isDroppable ) {
 		return;
 	}
-	this.removeEventListener( 'drop', this._drop );
-}; // end METHOD isDroppableChanged()
+	mimeType  = 'application/x-polymer-chart-data';
+	for ( var i = 0; i < types.length; i++ ) {
+		if ( types[ i ] === mimeType ) {
+			flg = true;
+			break;
+		}
+	}
+	if ( !flg ) {
+		return;
+	}
+	payload = evt.dataTransfer.getData( 'application/x-polymer-chart-data' );
+
+	payload = JSON.parse( payload );
+
+	// Add the new dataset:
+	data.push( payload.data );
+
+	// Add the new label:
+	labels.push( payload.label );
+
+	// Set the data and labels:
+	this.data( data, true );
+	this.labels = labels;
+
+	this.fire( 'dropped', payload );
+
+	if ( evt.preventDefault ) {
+		evt.preventDefault();
+	}
+	if ( evt.stopPropagation ) {
+		evt.stopPropagation();
+	}
+	return false;
+}; // end METHOD onDrop()
+
+/**
+* METHOD: onDragEnd( d, i )
+*	Event handler invoked on a 'dragend' event.
+*
+* @param {Array|Number} d - data
+* @param {Number} i - index
+* @returns {Boolean} false
+*/
+Chart.prototype.onDragEnd = function( d, i ) {
+	var labels = this.labels.slice(),
+		data = this._data.slice();
+
+	// Remove the dragged label:
+	labels.splice( i, 1 );
+
+	// Remove the dragged timeseries:
+	data.splice( i, 1 );
+
+	if ( !data.length ) {
+		this.clear();
+	} else {
+		this.labels = labels;
+		this.data( data, true );
+	}
+	this.fire( 'dragEnd', this._d3.event );
+
+	return false;
+}; // end METHOD onDragEnd()
 
 /**
 * METHOD: onResize()
