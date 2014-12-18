@@ -2297,6 +2297,7 @@ Chart.prototype.onDrop = function( evt ) {
 	labels.push( payload.label );
 
 	// Set the data and labels:
+	// FIXME: need to handle case where data is empty; otherwise, attempts to calculate range of empty array
 	this.data( data, true );
 	this.labels = labels;
 
