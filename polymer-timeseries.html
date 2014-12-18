@@ -790,34 +790,6 @@ var OPTS = {},
 X2 = new Date();
 X1 = new Date( X2.getTime() - 3600000 );
 
-// https://github.com/mbostock/d3/wiki/Time-Formatting
-OPTS.xTickFormat = [
-	'%a',
-	'%A',
-	'%b',
-	'%B',
-	'%c',
-	'%d',
-	'%e',
-	'%H',
-	'%I',
-	'%j',
-	'%m',
-	'%M',
-	'%L',
-	'%p',
-	'%S',
-	'%U',
-	'%w',
-	'%W',
-	'%x',
-	'%X',
-	'%y',
-	'%Y',
-	'%Z',
-	'%%'
-];
-
 OPTS.xAxisOrient = [
 	'bottom',
 	'top'
@@ -1031,7 +1003,7 @@ Chart.prototype.yMax = null;
 * @type {String}
 * @default '%M' (minutes)
 */
-Chart.prototype.xTickFormat = '%H:5';
+Chart.prototype.xTickFormat = '%H:%M';
 
 /**
 * ATTRIBUTE: yTickFormat
@@ -2508,9 +2480,9 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 		xAxis = this._xAxis,
 		err;
 
-	if ( typeof newVal !== 'string' || OPTS.xTickFormat.indexOf( newVal ) === -1 ) {
+	if ( typeof newVal !== 'string' ) {
 		this.xTickFormat = oldVal;
-		err = new TypeError( 'xTickFormat::invalid assignment. Must be one of the following: `' + OPTS.xTickFormat.join( ',' ) + '`. Value: `' + newVal + '`.' );
+		err = new TypeError( 'xTickFormat::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
 		return;
 	}
