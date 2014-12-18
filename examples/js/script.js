@@ -41,15 +41,17 @@
 	function onData( body ) {
 		var el = document.querySelector( '#figure2' ).querySelector( '.chart' );
 
+		body = el.formatData( JSON.parse( body ) );
+
 		el.yMin = 0;
 		el.yMax = 1;
-		el.xLabel = 'seconds';
+		el.xLabel = 'time';
 		el.labels = [
 			'cpu.utilization',
 			'mem.utilization',
 			'disk.utilization'
 		];
-		el.data( JSON.parse( body ), false );
+		el.data = body;
 	} // end FUNCTION onData()
 
 

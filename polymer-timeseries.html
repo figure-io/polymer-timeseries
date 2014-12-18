@@ -16,7 +16,7 @@
 <link rel="import" href="../polymer-d3/polymer-d3.html">
 
 <!-- ELEMENT -->
-</head><body><polymer-element name="polymer-timeseries" attributes="uid config width height labels chartTitle xLabel yLabel xMin xMax yMin yMax xNumTicks yNumTicks xAxisOrient yAxisOrient xTickFormat yTickFormat interpolation tension paddingLeft paddingRight paddingBottom paddingTop xValue yValue isDefined isDraggable isDroppable" on-dragenter="{{ onDragEnter }}" on-dragover="{{ onDragOver }}" on-dragleave="{{ onDragLeave }}" on-drop="{{ onDrop }}" assetpath="build/">
+</head><body><polymer-element name="polymer-timeseries" attributes="data config width height labels chartTitle xLabel yLabel xMin xMax yMin yMax xNumTicks yNumTicks xAxisOrient yAxisOrient xTickFormat yTickFormat interpolation tension paddingLeft paddingRight paddingBottom paddingTop xValue yValue isDefined isDraggable isDroppable" on-dragenter="{{ onDragEnter }}" on-dragover="{{ onDragOver }}" on-dragleave="{{ onDragLeave }}" on-drop="{{ onDrop }}" assetpath="build/">
 
 	<template>
 
@@ -834,25 +834,6 @@ function Chart() {
 } // end FUNCTION Chart()
 
 /**
-* ATTRIBUTE: config
-*	Chart configuration object.
-*
-* @type {Object}
-* @default {}
-*/
-Chart.prototype.config = {};
-
-/**
-* ATTRIBUTE: _data
-*	Chart data.
-*
-* @private
-* @type {Array}
-* @default []
-*/
-Chart.prototype._data = [];
-
-/**
 * ATTRIBUTE: paddingLeft
 *	Chart canvas left padding.
 *
@@ -905,15 +886,6 @@ Chart.prototype.width = 600;
 * @default 400px
 */
 Chart.prototype.height = 400;
-
-/**
-* ATTRIBUTE: labels
-*	Data labels.
-*
-* @type {Array}
-* @default []
-*/
-Chart.prototype.labels = [];
 
 /**
 * ATTRIBUTE: isDraggable
@@ -1171,6 +1143,17 @@ Chart.prototype.init = function() {
 	// Assign the chart a private uuid:
 	this.__uid__ = this._uuid.v4();
 
+	// Initialize attributes...
+
+	// Config... (hint an object)
+	this.config = {};
+
+	// Data... (hint an array)
+	this.data = [];
+
+	// Labels... (hint an array)
+	this.labels = [];
+
 	// Private methods...
 
 	// Scales...
@@ -1361,7 +1344,7 @@ Chart.prototype.createPaths = function() {
 
 	// Add paths:
 	this.$.paths = this.$.marks.selectAll( '.line' )
-		.data( this._data )
+		.data( this.data )
 		.enter()
 		.append( 'svg:path' )
 			.attr( 'property', 'line timeseries' )
@@ -1392,7 +1375,7 @@ Chart.prototype.createAxes = function() {
 	this.$.xAxis = axis;
 
 	this.$.xLabel = axis.append( 'svg:text' )
-		.attr( 'y', 40 )
+		.attr( 'y', 45 )
 		.attr( 'x', ( this.graphWidth() ) / 2 )
 		.attr( 'text-anchor', 'middle' )
 		.attr( 'property', 'axis_label' )
@@ -1534,7 +1517,7 @@ Chart.prototype.resetPaths = function() {
 
 	// Bind the data and update existing paths:
 	paths = this.$.marks.selectAll( '.line' )
-		.data( this._data )
+		.data( this.data )
 		.attr( 'd', this._line );
 
 	// Remove any old paths:
@@ -1632,12 +1615,8 @@ Chart.prototype.clear = function() {
 	// TODO: remove annotations
 
 	// Remove data and labels:
-	this.labels = [];
-	this._data = [];
-
-	// Remove paths and corresponding label entries:
-	this.$.paths.remove();
-	this.$.legendEntries.remove();
+	this.labels.length = 0;
+	this.data.length = 0;
 
 	// Reset the axes domains:
 	this._xScale.domain( [ X1, X2 ] );
@@ -1649,60 +1628,6 @@ Chart.prototype.clear = function() {
 
 	return this;
 }; // end METHOD clear()
-
-/**
-* METHOD: data( data[, bool] )
-*	Sets the chart data.
-*
-* @param {Array} data - array of arrays
-* @param {Boolean} [bool] - boolean flag indicating if the data is already formatted (default: false)
-* @returns {Null|Array} data - array of arrays
-*/
-Chart.prototype.data = function( data, bool ) {
-	var flg = false,
-		domain,
-		err;
-	if ( !Array.isArray( data ) ) {
-		err = new TypeError( 'data()::invalid input argument. Must provide an array. Value: `' + data + '`.' );
-		this.fire( 'error', err );
-		return;
-	}
-	if ( arguments.length > 1 ) {
-		if ( typeof bool !== 'boolean' ) {
-			err = new TypeError( 'data()::invalid input argument. Second argument must be a boolean. Value: `' + bool + '`.' );
-			this.fire( 'error', err );
-			return;
-		}
-		flg = bool;
-	}
-	if ( !bool ) {
-		data = this.formatData( data );
-	}
-	this._data = data;
-
-	// [0] Update the xDomain:
-	domain = this.xDomain( this.xMin, this.xMax );
-
-	// [1] Update the xScale:
-	this._xScale.domain( domain );
-
-	// [2] Update the xAxis:
-	this.$.xAxis.call( this._xAxis );
-
-	// [3] Update the yDomain:
-	domain = this.yDomain( this.yMin, this.yMax );
-
-	// [4] Update the yScale:
-	this._yScale.domain( domain );
-
-	// [5] Update the yAxis:
-	this.$.yAxis.call( this._yAxis );
-
-	// [6] Create new paths:
-	this.resetPaths();
-
-	return this;
-}; // end METHOD data()
 
 /**
 * METHOD: formatData( data )
@@ -1823,7 +1748,7 @@ Chart.prototype.graphHeight = function() {
 */
 Chart.prototype.xDomain = function( min, max ) {
 	var d3 = this._d3,
-		data = this._data,
+		data = this.data,
 		err;
 
 	if ( min !== null && !( min instanceof Date ) ) {
@@ -1863,7 +1788,7 @@ Chart.prototype.xDomain = function( min, max ) {
 */
 Chart.prototype.yDomain = function( min, max ) {
 	var d3 = this._d3,
-		data = this._data,
+		data = this.data,
 		err;
 
 	if ( min !== null && ( typeof min !== 'number' || min !== min ) ) {
@@ -1894,6 +1819,70 @@ Chart.prototype.yDomain = function( min, max ) {
 }; // end METHOD yDomain()
 
 /**
+* METHOD: dataChanged( val[, newVal] )
+*	Event handler invoked when the `data` attribute changes.
+*
+* @param {Array} val - change event value
+* @param {Array} [newVal] - new value
+*/
+Chart.prototype.dataChanged = function( val, newVal ) {
+	var data = this.data,
+		len,
+		domain,
+		err,
+		i;
+
+	// Determine if we have a new data array...
+	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
+		err = new TypeError( 'data::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
+		this.fire( 'error', err );
+		this.data = val;
+		return;
+	}
+	len = data.length;
+	// Validate that all array elements are arrays...
+	for ( i = 0; i < len; i++ ) {
+		if ( !Array.isArray( data[ i ] ) ) {
+			val = data.splice( i, 1 );
+			err = new TypeError( 'data::invalid assignment. Data must be an array of arrays. Invalid array element: `' + val + '`.' );
+			this.fire( 'error', err );
+			return;
+		}
+	}
+	// TODO: elaborate on how the attribute changed.
+	this.fire( 'changed', {
+		'attr': 'data'
+	});
+	// Do we even have any data arrays?
+	if ( !len ) {
+		if ( this.$.paths ) {
+			this.$.paths.remove();
+		}
+		return;
+	}
+	// [0] Update the xDomain:
+	domain = this.xDomain( this.xMin, this.xMax );
+
+	// [1] Update the xScale:
+	this._xScale.domain( domain );
+
+	// [2] Update the xAxis:
+	this.$.xAxis.call( this._xAxis );
+
+	// [3] Update the yDomain:
+	domain = this.yDomain( this.yMin, this.yMax );
+
+	// [4] Update the yScale:
+	this._yScale.domain( domain );
+
+	// [5] Update the yAxis:
+	this.$.yAxis.call( this._yAxis );
+
+	// [6] Create new paths:
+	this.resetPaths();
+}; // end METHOD dataChanged()
+
+/**
 * METHOD: configChanged( oldConfig, newConfig )
 *	Event handler invoked when the `config` attribute changes.
 *
@@ -1903,9 +1892,9 @@ Chart.prototype.yDomain = function( min, max ) {
 Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 	var err;
 	if ( typeof newConfig !== 'object' || newConfig === null || Array.isArray( newConfig) ) {
-		this.config = oldConfig;
 		err = new TypeError( 'config::invalid assignment. Must be an `object`. Value: `' + newConfig + '`.' );
 		this.fire( 'error', err );
+		this.config = oldConfig;
 		return;
 	}
 	// TODO: schema validator
@@ -1922,7 +1911,7 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 	this.height = newConfig.canvas.height;
 
 	// FIXME: title should not be part of annotations, but meta. The config should be standardized. Put in repo. Version it. Create an associated validator. NPM.
-	this.title = newConfig.annotations.title;
+	this.chartTitle = newConfig.annotations.title;
 	this.xLabel = newConfig.axes[ 0 ].label;
 	this.yLabel = newConfig.axes[ 1 ].label;
 	this.xMin = newConfig.scales[ 0 ].domain[ 0 ];
@@ -1953,9 +1942,9 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 Chart.prototype.xValueChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'function' ) {
-		this.xValue = oldVal;
 		err = new TypeError( 'xValue::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.xValue = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -1973,9 +1962,9 @@ Chart.prototype.xValueChanged = function( oldVal, newVal ) {
 Chart.prototype.yValueChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'function' ) {
-		this.yValue = oldVal;
 		err = new TypeError( 'yValue::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.yValue = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -1995,9 +1984,9 @@ Chart.prototype.isDefinedChanged = function( oldVal, newVal ) {
 		line = this._line,
 		err;
 	if ( typeof newVal !== 'function' ) {
-		this.isDefined = oldVal;
 		err = new TypeError( 'isDefined::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.isDefined = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2020,9 +2009,9 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 		range,
 		err;
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal <= 0 ) {
-		this.width = oldVal;
 		err = new TypeError( 'width::invalid assignment. Must be a number greater than 0. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.width = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2072,9 +2061,9 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 		height,
 		err;
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal <= 0 ) {
-		this.height = oldVal;
 		err = new TypeError( 'height::invalid assignment. Must be a number greater than 0. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.height = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2115,26 +2104,41 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 }; // end METHOD heightChanged()
 
 /**
-* METHOD: labelsChanged( oldVal, newVal )
+* METHOD: labelsChanged( val[ , newVal] )
 *	Event handler invoked when the `labels` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {Array} val - change event value
+* @param {Array} [newVal] - new value
 */
-Chart.prototype.labelsChanged = function( oldVal, newVal ) {
-	var err;
-	if ( !Array.isArray( newVal ) ) {
-		this.labels = oldVal;
+Chart.prototype.labelsChanged = function( val, newVal ) {
+	var labels = this.labels,
+		len,
+		err,
+		i;
+
+	// Determine if we have a new label array...
+	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'labels::invalid assignment. Must be an array. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.labels = val;
 		return;
 	}
+	len = labels.length;
+	// Validate that all labels are strings...
+	for ( i = 0; i < len; i++ ) {
+		if ( typeof labels[ i ] !== 'string' ) {
+			val = this.labels.splice( i, 1 );
+			err = new TypeError( 'labels::invalid assignment. Labels must be an array of strings. Invalid label: `' + val + '`.' );
+			this.fire( 'error', err );
+			return;
+		}
+	}
+	// TODO: elaborate on how the attribute changed.
 	this.fire( 'changed', {
 		'attr': 'labels',
-		'prev': oldVal,
+		'prev': val,
 		'curr': newVal
 	});
-
 	// [0] Reset the data labels:
 	this.$.paths.attr( 'data-label', this._getLabel );
 
@@ -2146,15 +2150,15 @@ Chart.prototype.labelsChanged = function( oldVal, newVal ) {
 * METHOD: chartTitleChanged( oldVal, newVal )
 *	Event handler invoked when the `chartTitle` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {String} oldVal - old value
+* @param {String} newVal - new value
 */
 Chart.prototype.chartTitleChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'string' ) {
-		this.chartTitle = oldVal;
 		err = new TypeError( 'charTitle::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.chartTitle = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2170,15 +2174,15 @@ Chart.prototype.chartTitleChanged = function( oldVal, newVal ) {
 * METHOD: xLabelChanged( oldVal, newVal )
 *	Event handler invoked when the `xLabel` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {String} oldVal - old value
+* @param {String} newVal - new value
 */
 Chart.prototype.xLabelChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'string' ) {
-		this.xLabel = oldVal;
 		err = new TypeError( 'xlabel::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.xLabel = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2193,15 +2197,15 @@ Chart.prototype.xLabelChanged = function( oldVal, newVal ) {
 * METHOD: yLabelChanged( oldVal, newVal )
 *	Event handler invoked when the `yLabel` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {String} oldVal - old value
+* @param {String} newVal - new value
 */
 Chart.prototype.yLabelChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'string' ) {
-		this.yLabel = oldVal;
 		err = new TypeError( 'yLabel::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.yLabel = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2225,9 +2229,9 @@ Chart.prototype.xMinChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( newVal !== null && !( newVal instanceof Date ) ) {
-		this.xMin = oldVal;
 		err = new TypeError( 'xMin::invalid assignment. Must be a `Date` object or `null`. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.xMin = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2261,9 +2265,9 @@ Chart.prototype.xMaxChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( newVal !== null && !( newVal instanceof Date ) ) {
-		this.xMax = oldVal;
 		err = new TypeError( 'xMax::invalid assignment. Must be a `Date` object or `null`. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.xMax = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2297,9 +2301,9 @@ Chart.prototype.yMinChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( newVal !== null && (typeof newVal !== 'number' || newVal !== newVal) ) {
-		this.yMin = oldVal;
 		err = new TypeError( 'yMin::invalid assignment. Must be a numeric or `null`. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.yMin = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2333,9 +2337,9 @@ Chart.prototype.yMaxChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( newVal !== null && (typeof newVal !== 'number' || newVal !== newVal) ) {
-		this.yMax = oldVal;
 		err = new TypeError( 'yMax::invalid assignment. Must be numeric or `null`. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.yMax = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2369,9 +2373,9 @@ Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		this.xNumTicks = oldVal;
 		err = new TypeError( 'xNumTicks::invalid assignment. Must be a positive integer. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.xNumTicks = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2396,9 +2400,9 @@ Chart.prototype.yNumTicksChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		this.yNumTicks = oldVal;
 		err = new TypeError( 'yNumTicks::invalid assignment. Must be a positive integer. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.yNumTicks = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2414,8 +2418,8 @@ Chart.prototype.yNumTicksChanged = function( oldVal, newVal ) {
 * METHOD: xAxisOrientChanged( oldVal, newVal )
 *	Event handler invoked when the `xAxisOrient` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {String} oldVal - old value
+* @param {String} newVal - new value
 */
 Chart.prototype.xAxisOrientChanged = function( oldVal, newVal ) {
 	var selection = this.$.xAxis,
@@ -2423,9 +2427,9 @@ Chart.prototype.xAxisOrientChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'string' || OPTS.xAxisOrient.indexOf( newVal ) === -1 ) {
-		this.xAxisOrient = oldVal;
 		err = new TypeError( 'xAxisOrient::invalid assignment. Must be one of the following: `' + OPTS.xAxisOrient.join( ',' ) + '`. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.xAxisOrient = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2443,8 +2447,8 @@ Chart.prototype.xAxisOrientChanged = function( oldVal, newVal ) {
 * METHOD: yAxisOrientChanged( oldVal, newVal )
 *	Event handler invoked when the `yAxisOrient` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {String} oldVal - old value
+* @param {String} newVal - new value
 */
 Chart.prototype.yAxisOrientChanged = function( oldVal, newVal ) {
 	var selection = this.$.yAxis,
@@ -2452,9 +2456,9 @@ Chart.prototype.yAxisOrientChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'string' || OPTS.yAxisOrient.indexOf( newVal ) === -1 ) {
-		this.yAxisOrient = oldVal;
 		err = new TypeError( 'yAxisOrient::invalid assignment. Must be one of the following: `' + OPTS.yAxisOrient.join( ',' ) + '`. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.yAxisOrient = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2481,9 +2485,9 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'string' ) {
-		this.xTickFormat = oldVal;
 		err = new TypeError( 'xTickFormat::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.xTickFormat = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2509,9 +2513,9 @@ Chart.prototype.yTickFormatChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'string' && newVal !== null ) {
-		this.yTickFormat = oldVal;
 		err = new TypeError( 'yTickFormat::invalid assignment. Must be either a string specifier or null. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.yTickFormat = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2541,9 +2545,9 @@ Chart.prototype.interpolationChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'string' || OPTS.interpolation.indexOf( newVal ) === -1 ) {
-		this.interpolation = oldVal;
 		err = new TypeError( 'intepolation::invalid assignment. Must be one of the following: `' + OPTS.interpolation.join( ',' ) + '`. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.interpolation = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2568,9 +2572,9 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'number' ) {
-		this.tension = oldVal;
 		err = new TypeError( 'tension::invalid assignment. Must be numeric. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.tension = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2592,9 +2596,9 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 Chart.prototype.colorsChanged = function( oldVal, newVal ) {
 	var err;
 	if ( !Array.isArray( newVal ) ) {
-		this.colors = oldVal;
 		err = new TypeError( 'colors::invalid assignment. Must be an `array` of classes. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.colors = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2618,9 +2622,9 @@ Chart.prototype.paddingLeftChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		this.paddingLeft = oldVal;
 		err = new TypeError( 'paddingLeft::invalid assignment. Must be an integer greater than or equal to 0. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.paddingLeft = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2667,9 +2671,9 @@ Chart.prototype.paddingRightChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		this.paddingRight = oldVal;
 		err = new TypeError( 'paddingRight::invalid assignment. Must be an integer greater than or equal to 0. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.paddingRight = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2713,9 +2717,9 @@ Chart.prototype.paddingBottomChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		this.paddingBottom = oldVal;
 		err = new TypeError( 'paddingBottom::invalid assignment. Must be an integer greater than or equal to 0. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
+		this.paddingBottom = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2762,9 +2766,9 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 		err;
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		this.paddingTop = oldVal;
 		err = new TypeError( 'paddingTop::invalid assignment. Must be an integer greater than or equal to 0.  Value: `' + newVal + '.' );
 		this.fire( 'error', err );
+		this.paddingTop = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2845,9 +2849,9 @@ Chart.prototype.toggleSeries = function( d, i ) {
 Chart.prototype.isDraggableChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'boolean' ) {
-		this.isDraggable = oldVal;
 		err = new TypeError( 'isDraggable::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
 		this.fire( 'error', err );
+		this.isDraggable = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2868,9 +2872,9 @@ Chart.prototype.isDraggableChanged = function( oldVal, newVal ) {
 Chart.prototype.isDroppableChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'boolean' ) {
-		this.drag = oldVal;
 		err = new TypeError( 'isDroppable::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
 		this.fire( 'error', err );
+		this.isDroppable = oldVal;
 		return;
 	}
 	this.fire( 'changed', {
@@ -2999,9 +3003,7 @@ Chart.prototype.onDragLeave = function( evt ) {
 * @returns {Undefined|Boolean} undefined or false
 */
 Chart.prototype.onDrop = function( evt ) {
-	var data = this._data.slice(),
-		labels = this.labels.slice(),
-		types = evt.dataTransfer.types,
+	var types = evt.dataTransfer.types,
 		flg = false,
 		mimeType,
 		payload;
@@ -3023,18 +3025,16 @@ Chart.prototype.onDrop = function( evt ) {
 
 	payload = JSON.parse( payload );
 
-	// Add the new dataset:
-	data.push( payload.data );
-
+	// Add the new dataset...
+	if ( payload.data.length ) {
+		this.data.push( payload.data );
+	}
 	// Add the new label:
-	labels.push( payload.label );
-
-	// Set the data and labels:
-	// FIXME: need to handle case where data is empty; otherwise, attempts to calculate range of empty array
-	this.data( data, true );
-	this.labels = labels;
+	this.labels.push( payload.label );
 
 	this.fire( 'dropped', payload );
+
+	// TODO: define additional behavior (#39)
 
 	if ( evt.preventDefault ) {
 		evt.preventDefault();
@@ -3054,20 +3054,14 @@ Chart.prototype.onDrop = function( evt ) {
 * @returns {Boolean} false
 */
 Chart.prototype.onDragEnd = function( d, i ) {
-	var labels = this.labels.slice(),
-		data = this._data.slice();
-
 	// Remove the dragged label:
-	labels.splice( i, 1 );
+	this.labels.splice( i, 1 );
 
 	// Remove the dragged timeseries:
-	data.splice( i, 1 );
+	this.data.splice( i, 1 );
 
-	if ( !data.length ) {
+	if ( !this.data.length && !this.labels.length ) {
 		this.clear();
-	} else {
-		this.labels = labels;
-		this.data( data, true );
 	}
 	this.fire( 'dragEnd', this._d3.event );
 

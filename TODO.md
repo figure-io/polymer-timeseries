@@ -67,12 +67,12 @@ TODO
 	- 	event list
 	-	data emitted
 	-	general 'changed' versus individual attribute (possibly both)
-31. `changed` callbacks for `arrays` and `objects`
-	-	support both oldval/newval and item changed
+31. `changed` callbacks for `objects` (e.g., config)
 	-	will impact how some things are updated (e.g., dragEnd)
 32. clear method
 	-	reset x/y labels? or keep until new data arrives?
 		*	can probably just do the latter
+		*	WARNING: not particularly generalizable between chart types (e.g., from timeseries to histogram; the labels will not match; I suppose, however, that each chart can decide whether and how to use label information)
 33. annotations attribute
 	-	`array` of `arrays`
 	-	`[time,annotation]`
@@ -98,7 +98,7 @@ TODO
 		-	min/max abide by new chart convention
 		-	conflicting y-labels is a problem
 40. favicon
-41. 
+41. When setting colors, ability to provide a string name; we then assign the corresponding color array. Currently, user would have to assemble category20b, etc.
 
 
 #### Notes
