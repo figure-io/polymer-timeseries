@@ -44,19 +44,6 @@ var OPTS = {},
 X2 = new Date();
 X1 = new Date( X2.getTime() - 3600000 );
 
-OPTS.xTickFormat = [
-	'%Y',
-	'%B',
-	'%b',
-	'%a',
-	'%d',
-	'%I',
-	'%p',
-	'%M',
-	'%S',
-	'%L'
-];
-
 OPTS.xAxisOrient = [
 	'bottom',
 	'top'
@@ -270,7 +257,7 @@ Chart.prototype.yMax = null;
 * @type {String}
 * @default '%M' (minutes)
 */
-Chart.prototype.xTickFormat = '%M';
+Chart.prototype.xTickFormat = '%H:%M';
 
 /**
 * ATTRIBUTE: yTickFormat
@@ -1747,9 +1734,9 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 		xAxis = this._xAxis,
 		err;
 
-	if ( typeof newVal !== 'string' || OPTS.xTickFormat.indexOf( newVal ) === -1 ) {
+	if ( typeof newVal !== 'string' ) {
 		this.xTickFormat = oldVal;
-		err = new TypeError( 'xTickFormat::invalid assignment. Must be one of the following: `' + OPTS.xTickFormat.join( ',' ) + '`. Value: `' + newVal + '`.' );
+		err = new TypeError( 'xTickFormat::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
 		return;
 	}

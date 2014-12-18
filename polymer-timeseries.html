@@ -790,17 +790,32 @@ var OPTS = {},
 X2 = new Date();
 X1 = new Date( X2.getTime() - 3600000 );
 
+// https://github.com/mbostock/d3/wiki/Time-Formatting
 OPTS.xTickFormat = [
-	'%Y',
-	'%B',
-	'%b',
 	'%a',
+	'%A',
+	'%b',
+	'%B',
+	'%c',
 	'%d',
+	'%e',
+	'%H',
 	'%I',
-	'%p',
+	'%j',
+	'%m',
 	'%M',
+	'%L',
+	'%p',
 	'%S',
-	'%L'
+	'%U',
+	'%w',
+	'%W',
+	'%x',
+	'%X',
+	'%y',
+	'%Y',
+	'%Z',
+	'%%'
 ];
 
 OPTS.xAxisOrient = [
@@ -1016,7 +1031,7 @@ Chart.prototype.yMax = null;
 * @type {String}
 * @default '%M' (minutes)
 */
-Chart.prototype.xTickFormat = '%M';
+Chart.prototype.xTickFormat = '%H:5';
 
 /**
 * ATTRIBUTE: yTickFormat
