@@ -1,7 +1,7 @@
 {
-  "name": "polymer-chart-timeseries",
+  "name": "polymer-timeseries",
   "version": "0.0.0",
-  "description": "UI element for displaying timeseries graphs in a chart.",
+  "description": "A Polymer web component for displaying timeseries graphs.",
   "author": {
     "name": "Athan Reines",
     "email": "kgryte@gmail.com"
@@ -13,27 +13,31 @@
     }
   ],
   "scripts": {
-    "test": "./node_modules/.bin/mocha",
-    "test-cov": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --dir ./reports/coverage -- -R spec",
+    "test": "make test",
+    "test-cov": "make test-cov",
     "coveralls": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --dir ./reports/coveralls/coverage --report lcovonly -- -R spec && cat ./reports/coveralls/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./reports/coveralls"
   },
   "main": "",
   "repository": {
     "type": "git",
-    "url": "git://github.com/figure-io/polymer-chart-timeseries.git"
+    "url": "git://github.com/figure-io/polymer-timeseries.git"
   },
   "keywords": [
+  	"polymer",
+  	"web component",
     "visualization",
     "viz",
-    "metrics",
-    "chart",
-    "timeseries",
+    "ui",
     "figure",
+    "chart",
+    "graph",
     "data",
-    "ui"
+    "metrics",
+    "timeseries",
+    "d3"
   ],
   "bugs": {
-    "url": "https://github.com/figure-io/polymer-chart-timeseries/issues"
+    "url": "https://github.com/figure-io/polymer-timeseries/issues"
   },
   "dependencies": {
     "next-tick": "^0.2.2",

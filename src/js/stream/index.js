@@ -1,10 +1,10 @@
 /**
 *
-*	CHART: stream
+*	COMPONENT: stream
 *
 *
 *	DESCRIPTION:
-*		- Defines the chart stream interface.
+*		- Defines the component stream interface.
 *
 *
 *	NOTES:

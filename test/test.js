@@ -3,7 +3,7 @@
 
 // TESTS //
 
-suite( 'polymer-chart-timeseries', function tests() {
+suite( 'polymer-timeseries', function tests() {
 
 	var el = document.querySelector( '#fixture' );
 

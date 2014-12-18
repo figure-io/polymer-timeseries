@@ -3,7 +3,7 @@
 # VARIABLES #
 
 # Component Name:
-NAME ?= chart-timeseries
+NAME ?= polymer-timeseries
 
 # Distributable filename:
 OUT ?= $(NAME).html

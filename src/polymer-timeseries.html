@@ -1,13 +1,13 @@
 <!--
-	POLYMER-CHART-TIMESERIES
+	POLYMER-TIMESERIES
 
 	DESCRIPTION:
-		- `polymer-chart-timeseries` is a UI element for displaying timeseries graphs in a chart.
+		- `polymer-timeseries` is a UI element for displaying timeseries graphs.
 
 	EXAMPLE:
-		<polymer-chart-timeseries uid="1234"></polymer-chart-timeseries>
+		<polymer-timeseries uid="1234"></polymer-timeseries>
 
-	@element polymer-chart-timeseries
+	@element polymer-timeseries
 	@status unstable
 -->
 
@@ -19,7 +19,7 @@
 <link rel="import" href="../../polymer-d3/polymer-d3.html">
 
 <!-- ELEMENT -->
-<polymer-element name="polymer-chart-timeseries" attributes="uid config width height labels chartTitle xLabel yLabel xMin xMax yMin yMax xNumTicks yNumTicks xAxisOrient yAxisOrient xTickFormat yTickFormat interpolation tension paddingLeft paddingRight paddingBottom paddingTop xValue yValue isDefined isDraggable isDroppable" on-dragenter="{{ onDragEnter }}" on-dragover="{{ onDragOver }}" on-dragleave="{{ onDragLeave }}" on-drop="{{ onDrop }}">
+<polymer-element name="polymer-timeseries" attributes="uid config width height labels chartTitle xLabel yLabel xMin xMax yMin yMax xNumTicks yNumTicks xAxisOrient yAxisOrient xTickFormat yTickFormat interpolation tension paddingLeft paddingRight paddingBottom paddingTop xValue yValue isDefined isDraggable isDroppable" on-dragenter="{{ onDragEnter }}" on-dragover="{{ onDragOver }}" on-dragleave="{{ onDragLeave }}" on-drop="{{ onDrop }}">
 
 	<template>
 

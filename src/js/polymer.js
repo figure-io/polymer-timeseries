@@ -1,10 +1,10 @@
 /**
 *
-*	POLYMER: chart-timeseries
+*	COMPONENT: polymer-timeseries
 *
 *
 *	DESCRIPTION:
-*		- Registers the chart-timeseries web-component.
+*		- Registers the polymer-timeseries web-component.
 *
 *
 *	NOTES:
@@ -36,4 +36,4 @@ var Chart = require( './chart.js' );
 
 // POLYMER //
 
-Polymer( 'polymer-chart-timeseries', Chart.prototype );
+Polymer( 'polymer-timeseries', Chart.prototype );

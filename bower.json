@@ -1,28 +1,31 @@
 {
-  "name": "chart-timeseries",
+  "name": "polymer-timeseries",
   "version": "0.0.0",
-  "description": "UI element for displaying timeseries graphs in a chart.",
+  "description": "A Polymer web component for displaying timeseries graphs.",
   "authors": [
     {
       "name": "Athan Reines",
       "email": "kgryte@gmail.com"
     }
   ],
-  "main": "./polymer-chart-timeseries.html",
+  "main": "./polymer-timeseries.html",
   "repository": {
     "type": "git",
-    "url": "git://github.com/figure-io/polymer-chart-timeseries"
+    "url": "git://github.com/figure-io/polymer-timeseries"
   },
   "keywords": [
-    "data",
+    "polymer",
+  	"web component",
     "visualization",
     "viz",
-    "metrics",
+    "ui",
     "figure",
     "chart",
     "graph",
+    "data",
+    "metrics",
     "timeseries",
-    "ui"
+    "d3"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5.1",
@@ -41,6 +44,8 @@
     "src",
     "Makefile",
     "vulcanize.conf.js",
+    "wct.conf.js",
+    "sauce-browsers.json",
     "package.json"
   ],
   "license": "MIT"

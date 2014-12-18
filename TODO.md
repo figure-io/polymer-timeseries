@@ -72,7 +72,7 @@ TODO
 	-	will impact how some things are updated (e.g., dragEnd)
 32. clear method
 	-	reset x/y labels? or keep until new data arrives?
-		-	can probably just do the latter
+		*	can probably just do the latter
 33. annotations attribute
 	-	`array` of `arrays`
 	-	`[time,annotation]`
@@ -97,7 +97,7 @@ TODO
 	-	existing chart
 		-	min/max abide by new chart convention
 		-	conflicting y-labels is a problem
-40. 
+40. favicon
 
 
 #### Notes

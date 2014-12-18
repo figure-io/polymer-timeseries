@@ -1,14 +1,14 @@
-Timeseries Chart
+Timeseries
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> UI element for displaying timeseries graphs in a chart.
+> A [Polymer](https://www.polymer-project.org/) web component for displaying timeseries graphs.
 
 
 ## Install
 
 ``` bash
-$ bower install figure-io/polymer-chart-timeseries
+$ bower install figure-io/polymer-timeseries
 ```
 
 
@@ -21,10 +21,10 @@ To use the component,
 <html>
 	<head>
 		<script src="path/to/webcomponentsjs/webcomponents.min.js"></script>
-		<link rel="import" href="path/to/chart-timeseries">
+		<link rel="import" href="path/to/polymer-timeseries">
 	</head>
 	<body>
-		<polymer-chart-timeseries id="chart"></polymer-chart-timeseries>
+		<polymer-timeseries id="chart"></polymer-timeseries>
 	</body>
 </html>
 ```
@@ -51,7 +51,7 @@ $ python -m SimpleHTTPServer 9090
 Once the server is running, open the following URL in your browser
 
 ```
-http://127.0.0.1:9090/chart-timeseries/examples
+http://127.0.0.1:9090/polymer-timeseries/examples
 ```
 
 
@@ -125,18 +125,18 @@ Copyright &copy; 2014. Athan Reines.
 [npm-image]: http://img.shields.io/npm/v/.svg
 [npm-url]: https://npmjs.org/package/
 
-[travis-image]: http://img.shields.io/travis/figure-io/polymer-chart-timeseries/master.svg
-[travis-url]: https://travis-ci.org/figure-io/polymer-chart-timeseries
+[travis-image]: http://img.shields.io/travis/figure-io/polymer-timeseries/master.svg
+[travis-url]: https://travis-ci.org/figure-io/polymer-timeseries
 
-[coveralls-image]: https://img.shields.io/coveralls/figure-io/polymer-chart-timeseries/master.svg
-[coveralls-url]: https://coveralls.io/r/figure-io/polymer-chart-timeseries?branch=master
+[coveralls-image]: https://img.shields.io/coveralls/figure-io/polymer-timeseries/master.svg
+[coveralls-url]: https://coveralls.io/r/figure-io/polymer-timeseries?branch=master
 
-[dependencies-image]: http://img.shields.io/david/figure-io/polymer-chart-timeseries.svg
-[dependencies-url]: https://david-dm.org/figure-io/polymer-chart-timeseries
+[dependencies-image]: http://img.shields.io/david/figure-io/polymer-timeseries.svg
+[dependencies-url]: https://david-dm.org/figure-io/polymer-timeseries
 
-[dev-dependencies-image]: http://img.shields.io/david/dev/figure-io/polymer-chart-timeseries.svg
-[dev-dependencies-url]: https://david-dm.org/dev/figure-io/polymer-chart-timeseries
+[dev-dependencies-image]: http://img.shields.io/david/dev/figure-io/polymer-timeseries.svg
+[dev-dependencies-url]: https://david-dm.org/dev/figure-io/polymer-timeseries
 
-[github-issues-image]: http://img.shields.io/github/issues/figure-io/polymer-chart-timeseries.svg
-[github-issues-url]: https://github.com/figure-io/polymer-chart-timeseries/issues
+[github-issues-image]: http://img.shields.io/github/issues/figure-io/polymer-timeseries.svg
+[github-issues-url]: https://github.com/figure-io/polymer-timeseries/issues
 
