@@ -70,6 +70,96 @@ OPTS.interpolation = [
 	'monotone'
 ];
 
+// See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/Ordinal-Scales#category10}.
+OPTS.colors = [
+	'category10',
+	'category20',
+	'category20b',
+	'category20c'
+];
+
+OPTS.category10 = [
+	'category10-1',
+	'category10-2',
+	'category10-3',
+	'category10-4',
+	'category10-5',
+	'category10-6',
+	'category10-7',
+	'category10-8',
+	'category10-9',
+	'category10-10'
+];
+
+OPTS.category20 = [
+	'category20-1',
+	'category20-2',
+	'category20-3',
+	'category20-4',
+	'category20-5',
+	'category20-6',
+	'category20-7',
+	'category20-8',
+	'category20-9',
+	'category20-10',
+	'category20-11',
+	'category20-12',
+	'category20-13',
+	'category20-14',
+	'category20-15',
+	'category20-16',
+	'category20-17',
+	'category20-18',
+	'category20-19',
+	'category20-20'
+];
+
+OPTS.category20b = [
+	'category20b-1',
+	'category20b-2',
+	'category20b-3',
+	'category20b-4',
+	'category20b-5',
+	'category20b-6',
+	'category20b-7',
+	'category20b-8',
+	'category20b-9',
+	'category20b-10',
+	'category20b-11',
+	'category20b-12',
+	'category20b-13',
+	'category20b-14',
+	'category20b-15',
+	'category20b-16',
+	'category20b-17',
+	'category20b-18',
+	'category20b-19',
+	'category20b-20'
+];
+
+OPTS.category20c = [
+	'category20c-1',
+	'category20c-2',
+	'category20c-3',
+	'category20c-4',
+	'category20c-5',
+	'category20c-6',
+	'category20c-7',
+	'category20c-8',
+	'category20c-9',
+	'category20c-10',
+	'category20c-11',
+	'category20c-12',
+	'category20c-13',
+	'category20c-14',
+	'category20c-15',
+	'category20c-16',
+	'category20c-17',
+	'category20c-18',
+	'category20c-19',
+	'category20c-20'
+];
+
 
 // CHART //
 
@@ -227,7 +317,7 @@ Chart.prototype.yMax = null;
 *	x-axis tick format. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Axes#tickFormat}.
 *
 * @type {String}
-* @default '%M' (minutes)
+* @default '%H:%M' (hours:minutes)
 */
 Chart.prototype.xTickFormat = '%H:%M';
 
@@ -327,26 +417,6 @@ Chart.prototype.interpolation = 'linear';
 */
 Chart.prototype.tension = 0.7;
 
-/**
-* ATTRIBUTE: colors
-*	Defines a list of possible line colors. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/Ordinal-Scales#category10}.
-*
-* @type {Array}
-* @default [...]
-*/
-Chart.prototype.colors = [
-	'category10-1',
-	'category10-2',
-	'category10-3',
-	'category10-4',
-	'category10-5',
-	'category10-6',
-	'category10-7',
-	'category10-8',
-	'category10-9',
-	'category10-10'
-];
-
 // TODO: clean-up events
 /**
 * ATTRIBUTE: events
@@ -408,6 +478,9 @@ Chart.prototype.init = function() {
 	// Labels... (hint an array)
 	this.labels = [];
 
+	// Colors...
+	this.colors = 'category10';
+
 	// Private methods...
 
 	// Scales...
@@ -447,6 +520,8 @@ Chart.prototype.init = function() {
 		.interpolate( this.interpolation )
 		.tension( this.tension );
 
+	// Colors...
+	this._colors = OPTS.category10;
 	this._getColor = this.getColor.bind( this );
 
 	// Legend...
@@ -969,7 +1044,7 @@ Chart.prototype.getLabel = function( d, i ) {
 * @returns {String} color class/data attribute
 */
 Chart.prototype.getColor = function( d, i ) {
-	return this.colors[ i % this.colors.length ];
+	return this._colors[ i % this._colors.length ];
 }; // end METHOD getColor()
 
 /**
@@ -1844,23 +1919,59 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 * METHOD: colorsChanged( oldVal, newVal )
 *	Event handler invoked when the `colors` attribute changes.
 *
-* @param {Array} oldVal - old value
-* @param {Array} newVal - new value
+* @param {String|Array} oldVal - old value
+* @param {String|Array} newVal - new value
 */
 Chart.prototype.colorsChanged = function( oldVal, newVal ) {
-	var err;
-	if ( !Array.isArray( newVal ) ) {
+	var getColor = this._getColor,
+		re = /^category\d{2}[a-z]{0,1}-\d+-span$/,
+		list,
+		symbols,
+		el,
+		err,
+		i, j;
+
+	if ( typeof newVal === 'string' ) {
+		if ( OPTS.colors.indexOf( newVal ) === -1 ) {
+			err = new TypeError( 'colors::invalid assignement. Unrecognized color set. Value: `' + newVal + '`.' );
+			this.fire( 'error', err );
+			this.colors = oldVal;
+			return;
+		}
+		this._colors = OPTS[ newVal ];
+	}
+	else if ( !Array.isArray( newVal ) ) {
 		err = new TypeError( 'colors::invalid assignment. Must be an `array` of classes. Value: `' + newVal + '`.' );
 		this.fire( 'error', err );
 		this.colors = oldVal;
 		return;
+	}
+	else {
+		this._colors = newVal;
 	}
 	this.fire( 'changed', {
 		'attr': 'colors',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this.$.paths.attr( 'color', this._getColor );
+	this.$.paths.attr( 'color', getColor );
+
+	// Set the color of all symbols...
+	symbols = this.$.legendSymbols;
+	for ( i = 0; i < symbols.length; i++ ) {
+		el = symbols[ i ][ 0 ];
+		if ( el ) {
+			// Remove any existing color class...
+			list = el.classList;
+			for ( j = 0; j < list.length; j++ ) {
+				if ( re.test( list[j] ) ) {
+					el.classList.remove( list[j] );
+				}
+			}
+			// Add the new color class:
+			el.classList.add( getColor( null, i ) + '-span' );
+		}
+	}
 }; // end METHOD colorsChanged()
 
 /**

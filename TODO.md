@@ -98,7 +98,7 @@ TODO
 		-	min/max abide by new chart convention
 		-	conflicting y-labels is a problem
 40. favicon
-41. When setting colors, ability to provide a string name; we then assign the corresponding color array. Currently, user would have to assemble category20b, etc.
+41. 
 
 
 #### Notes
