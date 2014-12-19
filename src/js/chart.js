@@ -1433,7 +1433,7 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 }; // end METHOD heightChanged()
 
 /**
-* METHOD: labelsChanged( val[ , newVal] )
+* METHOD: labelsChanged( val[, newVal] )
 *	Event handler invoked when the `labels` attribute changes.
 *
 * @param {Array} val - change event value
@@ -1916,13 +1916,13 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 }; // end METHOD tensionChanged()
 
 /**
-* METHOD: colorsChanged( oldVal, newVal )
+* METHOD: colorsChanged( val[, newVal] )
 *	Event handler invoked when the `colors` attribute changes.
 *
-* @param {String|Array} oldVal - old value
-* @param {String|Array} newVal - new value
+* @param {String|Array} val - change event value
+* @param {String|Array} [newVal] - new value
 */
-Chart.prototype.colorsChanged = function( oldVal, newVal ) {
+Chart.prototype.colorsChanged = function( val, newVal ) {
 	var getColor = this._getColor,
 		re = /^category\d{2}[a-z]{0,1}-\d+-span$/,
 		list,
@@ -1931,27 +1931,30 @@ Chart.prototype.colorsChanged = function( oldVal, newVal ) {
 		err,
 		i, j;
 
-	if ( typeof newVal === 'string' ) {
-		if ( OPTS.colors.indexOf( newVal ) === -1 ) {
-			err = new TypeError( 'colors::invalid assignement. Unrecognized color set. Value: `' + newVal + '`.' );
+	if ( newVal !== void 0 ) {
+		if ( typeof newVal === 'string' ) {
+			if ( OPTS.colors.indexOf( newVal ) === -1 ) {
+				err = new TypeError( 'colors::invalid assignement. Unrecognized color set. Value: `' + newVal + '`.' );
+				this.fire( 'error', err );
+				this.colors = val;
+				return;
+			}
+			this._colors = OPTS[ newVal ];
+		}
+		else if ( Array.isArray( newVal ) ) {
+			this._colors = newVal;
+		}
+		else {
+			err = new TypeError( 'colors::invalid assignment. Must be an `array` of classes or a recognized color set. Value: `' + newVal + '`.' );
 			this.fire( 'error', err );
-			this.colors = oldVal;
+			this.colors = val;
 			return;
 		}
-		this._colors = OPTS[ newVal ];
 	}
-	else if ( !Array.isArray( newVal ) ) {
-		err = new TypeError( 'colors::invalid assignment. Must be an `array` of classes. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
-		this.colors = oldVal;
-		return;
-	}
-	else {
-		this._colors = newVal;
-	}
+	// TODO: elaborate on change event (distinguish between new reference and changed array)
 	this.fire( 'changed', {
 		'attr': 'colors',
-		'prev': oldVal,
+		'prev': val,
 		'curr': newVal
 	});
 	this.$.paths.attr( 'color', getColor );
