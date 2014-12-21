@@ -490,9 +490,54 @@ Chart.prototype.autoResize = true;
 * @default [...]
 */
 Chart.prototype.events = [
-	'reset',
-	'error',
+	'canvas',
+	'graph',
+	'background',
+	'timeseries',
+	'xAxis',
+	'yAxis',
+	'title',
+	'annotations', // multiple meanings
+	'legend',
+	'clear',
+
+	'data',
+	'config',
+	'xValue',
+	'yValue',
+	'aValue',
+	'isDefined',
+	'width',
+	'height',
+	'labels',
+	'title',
+	'xLabel',
+	'yLabel',
+	'xMin',
+	'xMax',
+	'yMin',
+	'yMax',
+	'xNumTicks',
+	'yNumTicks',
+	'xAxisOrient',
+	'yAxisOrient',
+	'xTickFormat',
+	'interpolation',
+	'tension',
+	'colors',
+	'paddingLeft',
+	'paddingRight',
+	'paddingTop',
+	'paddingBottom',
+	'isDraggable',
+	'isDroppable',
+	'autoResize',
+
+	'stream',
+
 	'changed',
+	'error',
+
 	'resized',
 	'clicked',
 	'dragStart',
@@ -728,6 +773,11 @@ Chart.prototype.createBase = function() {
 		.attr( 'height', height );
 	this.$.canvas = canvas;
 
+	this.fire( 'canvas', {
+		'evt': 'created',
+		'msg': 'Chart canvas created.'
+	});
+
 	// Create the clip-path:
 	this.$.clipPath = canvas.append( 'svg:defs' )
 		.append( 'svg:clipPath' )
@@ -743,6 +793,11 @@ Chart.prototype.createBase = function() {
 		.attr( 'class', 'graph' )
 		.attr( 'data-graph-type', 'timeseries' )
 		.attr( 'transform', 'translate(' + pLeft + ',' + pTop + ')' );
+
+	this.fire( 'graph', {
+		'evt': 'created',
+		'msg': 'Chart graph created.'
+	});
 
 	// Create the meta element:
 	this.$.meta = canvas.append( 'svg:g' )
@@ -771,6 +826,11 @@ Chart.prototype.createBackground = function() {
 		.attr( 'y', 0 )
 		.attr( 'width', this.graphWidth() )
 		.attr( 'height', this.graphHeight() );
+
+	this.fire( 'background', {
+		'evt': 'created',
+		'msg': 'Graph background created.'
+	});
 
 	return this;
 }; // end METHOD createBackground()
@@ -802,6 +862,11 @@ Chart.prototype.createPaths = function() {
 			.attr( 'data-label', this._getLabel )
 			.attr( 'color', this._getColor )
 			.attr( 'd', this._line );
+
+	this.fire( 'timeseries', {
+		'evt': 'created',
+		'msg': 'Graph timeseries created.'
+	});
 
 	return this;
 }; // end METHOD createPaths()
@@ -845,6 +910,11 @@ Chart.prototype.createAxes = function() {
 	axis.selectAll( '.domain' )
 		.attr( 'property', 'axis_domain' );
 
+	this.fire( 'xAxis', {
+		'evt': 'created',
+		'msg': 'Graph x-axis created.'
+	});
+
 	axis = graph.append( 'svg:g' )
 		.attr( 'property', 'axis' )
 		.attr( 'class', 'y axis' )
@@ -866,6 +936,11 @@ Chart.prototype.createAxes = function() {
 	axis.selectAll( '.domain' )
 		.attr( 'property', 'axis_domain' );
 
+	this.fire( 'yAxis', {
+		'evt': 'created',
+		'msg': 'Graph y-axis created.'
+	});
+
 	return this;
 }; // end METHOD createAxes()
 
@@ -885,6 +960,11 @@ Chart.prototype.createTitle = function() {
 		.attr( 'x', 0 )
 		.attr( 'y', 0 )
 		.text( this.chartTitle );
+
+	this.fire( 'title', {
+		'evt': 'created',
+		'msg': 'Chart title created.'
+	});
 
 	return this;
 }; // end METHOD createTitle()
@@ -921,6 +1001,11 @@ Chart.prototype.createAnnotations = function() {
 		.attr( 'class', 'vline' )
 		.attr( 'd', this._vline )
 		.attr( 'stroke-dasharray', '4,4' );
+
+	this.fire( 'annotations', {
+		'evt': 'created',
+		'msg': 'Graph annotations created.'
+	});
 
 	return this;
 }; // end METHOD createAnnotations()
@@ -990,6 +1075,10 @@ Chart.prototype.createLegend = function() {
 			el.innerHTML = getLabel( null, i );
 		}
 	}
+	this.fire( 'legend', {
+		'evt': 'created',
+		'msg': 'Chart legend created.'
+	});
 	return this;
 }; // end METHOD createLegend()
 
@@ -1021,8 +1110,9 @@ Chart.prototype.resetPaths = function() {
 	// Cache a reference to the paths:
 	this.$.paths = paths;
 
-	this.fire( 'reset', {
-		'msg': 'Reset chart paths.'
+	this.fire( 'timeseries', {
+		'evt': 'reset',
+		'msg': 'Graph timeseries reset.'
 	});
 
 	return this;
@@ -1064,8 +1154,9 @@ Chart.prototype.resetAnnotations = function() {
 	this.$.annotationMarkers = annotations.selectAll( '.marker' );
 	this.$.annotationLines = annotations.selectAll( '.vline' );
 
-	this.fire( 'reset', {
-		'msg': 'Reset chart annotations.'
+	this.fire( 'annotations', {
+		'evt': 'reset',
+		'msg': 'Graph annotations reset.'
 	});
 	return this;
 }; // end METHOD resetAnnotations()
@@ -1127,8 +1218,9 @@ Chart.prototype.resetLegend = function() {
 	}
 	this.$.legendLabels = labels;
 
-	this.fire( 'reset', {
-		'msg': 'Reset chart legend.'
+	this.fire( 'legend', {
+		'evt': 'reset',
+		'msg': 'Chart legend reset.'
 	});
 	return this;
 }; // end METHOD resetLegend()
@@ -1155,6 +1247,9 @@ Chart.prototype.clear = function() {
 	this.$.xAxis.call( this._xAxis );
 	this.$.yAxis.call( this._yAxis );
 
+	this.fire( 'clear', {
+		'msg': 'Chart cleared.'
+	});
 	return this;
 }; // end METHOD clear()
 
@@ -1408,7 +1503,10 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 			return;
 		}
 	}
-	// TODO: elaborate on how the attribute changed.
+	this.fire( 'data', {
+		'evt': 'changed'
+	});
+	// TODO: elaborate on how the attribute changed. e.g., array updated, entirely new array, etc.
 	this.fire( 'changed', {
 		'attr': 'data'
 	});
@@ -1475,7 +1573,10 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 			return;
 		}
 	}
-	// TODO: elaborate on how the attribute changed.
+	this.fire( 'annotations', {
+		'evt': 'changed'
+	});
+	// TODO: elaborate on how the attribute changed. similar to data.
 	this.fire( 'changed', {
 		'attr': 'annotations'
 	});
@@ -1506,12 +1607,6 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 	}
 	// TODO: schema validator
 
-	this.fire( 'changed', {
-		'attr': 'config',
-		'prev': oldConfig,
-		'curr': newConfig
-	});
-
 	// TODO: want a way to update everything after setting all params; not constantly updating. Recall: this._init = false. Something more semantic?
 
 	this.width = newConfig.canvas.width;
@@ -1537,6 +1632,15 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 	this.labels = newConfig.marks.map( function onMark( mark ) {
 		return mark.data;
 	});
+
+	this.fire( 'config', {
+		'evt': 'changed'
+	});
+	this.fire( 'changed', {
+		'attr': 'config',
+		'prev': oldConfig,
+		'curr': newConfig
+	});
 }; // end METHOD configChanged()
 
 /**
@@ -1554,6 +1658,9 @@ Chart.prototype.xValueChanged = function( oldVal, newVal ) {
 		this.xValue = oldVal;
 		return;
 	}
+	this.fire( 'xValue', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'xValue'
 	});
@@ -1574,6 +1681,9 @@ Chart.prototype.yValueChanged = function( oldVal, newVal ) {
 		this.yValue = oldVal;
 		return;
 	}
+	this.fire( 'yValue', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'yValue'
 	});
@@ -1594,6 +1704,9 @@ Chart.prototype.aValueChanged = function( oldVal, newVal ) {
 		this.aValue = oldVal;
 		return;
 	}
+	this.fire( 'aValue', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'aValue'
 	});
@@ -1616,11 +1729,15 @@ Chart.prototype.isDefinedChanged = function( oldVal, newVal ) {
 		this.isDefined = oldVal;
 		return;
 	}
+	line.defined( newVal );
+	selection.attr( 'd', line );
+
+	this.fire( 'isDefined', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'isDefined'
 	});
-	line.defined( newVal );
-	selection.attr( 'd', line );
 }; // end METHOD isDefinedChanged()
 
 /**
@@ -1640,6 +1757,9 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 		this.width = oldVal;
 		return;
 	}
+	this.fire( 'width', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'width',
 		'prev': oldVal,
@@ -1695,6 +1815,9 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 		this.height = oldVal;
 		return;
 	}
+	this.fire( 'height', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'height',
 		'prev': oldVal,
@@ -1766,6 +1889,9 @@ Chart.prototype.labelsChanged = function( val, newVal ) {
 			return;
 		}
 	}
+	this.fire( 'labels', {
+		'evt': 'changed'
+	});
 	// TODO: elaborate on how the attribute changed.
 	this.fire( 'changed', {
 		'attr': 'labels',
@@ -1794,6 +1920,9 @@ Chart.prototype.chartTitleChanged = function( oldVal, newVal ) {
 		this.chartTitle = oldVal;
 		return;
 	}
+	this.fire( 'title', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'title',
 		'prev': oldVal,
@@ -1817,6 +1946,9 @@ Chart.prototype.xLabelChanged = function( oldVal, newVal ) {
 		this.xLabel = oldVal;
 		return;
 	}
+	this.fire( 'xLabel', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'xLabel',
 		'prev': oldVal,
@@ -1840,6 +1972,9 @@ Chart.prototype.yLabelChanged = function( oldVal, newVal ) {
 		this.yLabel = oldVal;
 		return;
 	}
+	this.fire( 'yLabel', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'yLabel',
 		'prev': oldVal,
@@ -1866,6 +2001,9 @@ Chart.prototype.xMinChanged = function( oldVal, newVal ) {
 		this.xMin = oldVal;
 		return;
 	}
+	this.fire( 'xMin', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'xMin',
 		'prev': oldVal,
@@ -1906,6 +2044,9 @@ Chart.prototype.xMaxChanged = function( oldVal, newVal ) {
 		this.xMax = oldVal;
 		return;
 	}
+	this.fire( 'xMax', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'xMax',
 		'prev': oldVal,
@@ -1946,6 +2087,9 @@ Chart.prototype.yMinChanged = function( oldVal, newVal ) {
 		this.yMin = oldVal;
 		return;
 	}
+	this.fire( 'yMin', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'yMin',
 		'prev': oldVal,
@@ -1982,6 +2126,9 @@ Chart.prototype.yMaxChanged = function( oldVal, newVal ) {
 		this.yMax = oldVal;
 		return;
 	}
+	this.fire( 'yMax', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'yMax',
 		'prev': oldVal,
@@ -2018,6 +2165,9 @@ Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 		this.xNumTicks = oldVal;
 		return;
 	}
+	this.fire( 'xNumTicks', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'xNumTicks',
 		'prev': oldVal,
@@ -2045,6 +2195,9 @@ Chart.prototype.yNumTicksChanged = function( oldVal, newVal ) {
 		this.yNumTicks = oldVal;
 		return;
 	}
+	this.fire( 'yNumTicks', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'yNumTicks',
 		'prev': oldVal,
@@ -2072,6 +2225,9 @@ Chart.prototype.xAxisOrientChanged = function( oldVal, newVal ) {
 		this.xAxisOrient = oldVal;
 		return;
 	}
+	this.fire( 'xAxisOrient', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'xAxisOrient',
 		'prev': oldVal,
@@ -2101,6 +2257,9 @@ Chart.prototype.yAxisOrientChanged = function( oldVal, newVal ) {
 		this.yAxisOrient = oldVal;
 		return;
 	}
+	this.fire( 'yAxisOrient', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'yAxisOrient',
 		'prev': oldVal,
@@ -2130,6 +2289,9 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 		this.xTickFormat = oldVal;
 		return;
 	}
+	this.fire( 'xTickFormat', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'xTickFormat',
 		'prev': oldVal,
@@ -2158,6 +2320,9 @@ Chart.prototype.yTickFormatChanged = function( oldVal, newVal ) {
 		this.yTickFormat = oldVal;
 		return;
 	}
+	this.fire( 'yTickFormat', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'yTickFormat',
 		'prev': oldVal,
@@ -2190,6 +2355,9 @@ Chart.prototype.interpolationChanged = function( oldVal, newVal ) {
 		this.interpolation = oldVal;
 		return;
 	}
+	this.fire( 'interpolation', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'interpolation',
 		'prev': oldVal,
@@ -2217,6 +2385,9 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 		this.tension = oldVal;
 		return;
 	}
+	this.fire( 'tension', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'tension',
 		'prev': oldVal,
@@ -2262,6 +2433,9 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 			return;
 		}
 	}
+	this.fire( 'colors', {
+		'evt': 'changed'
+	});
 	// TODO: elaborate on change event (distinguish between new reference and changed array)
 	this.fire( 'changed', {
 		'attr': 'colors',
@@ -2306,6 +2480,9 @@ Chart.prototype.paddingLeftChanged = function( oldVal, newVal ) {
 		this.paddingLeft = oldVal;
 		return;
 	}
+	this.fire( 'paddingLeft', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'paddingLeft',
 		'prev': oldVal,
@@ -2359,6 +2536,9 @@ Chart.prototype.paddingRightChanged = function( oldVal, newVal ) {
 		this.paddingRight = oldVal;
 		return;
 	}
+	this.fire( 'paddingRight', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'paddingRight',
 		'prev': oldVal,
@@ -2409,6 +2589,9 @@ Chart.prototype.paddingBottomChanged = function( oldVal, newVal ) {
 		this.paddingBottom = oldVal;
 		return;
 	}
+	this.fire( 'paddingBottom', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'paddingBottom',
 		'prev': oldVal,
@@ -2462,6 +2645,9 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 		this.paddingTop = oldVal;
 		return;
 	}
+	this.fire( 'paddingTop', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'paddingTop',
 		'prev': oldVal,
@@ -2524,7 +2710,10 @@ Chart.prototype.toggleSeries = function( d, i ) {
 	if ( path ) {
 		path.classed( 'hidden', flg );
 	}
-
+	this.fire( 'legend', {
+		'evt': 'toggled',
+		'value': i
+	});
 	// TODO: determine how UI events should be handled. What data to pass along?
 	this.fire( 'clicked', {
 		'msg': 'Legend entry clicked.',
@@ -2553,6 +2742,10 @@ Chart.prototype.toggleVLine = function( d, i ) {
 	flg = !path.classed( 'hidden' );
 	path.classed( 'hidden', flg );
 
+	this.fire( 'annotations', {
+		'evt': 'toggled',
+		'value': i
+	});
 	// TODO: determine how UI events should be handled. What data to pass along?
 	this.fire( 'clicked', {
 		'msg': 'Annotation marker clicked.',
@@ -2576,6 +2769,9 @@ Chart.prototype.isDraggableChanged = function( oldVal, newVal ) {
 		this.isDraggable = oldVal;
 		return;
 	}
+	this.fire( 'isDraggable', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'isDraggable',
 		'prev': oldVal,
@@ -2599,6 +2795,9 @@ Chart.prototype.isDroppableChanged = function( oldVal, newVal ) {
 		this.isDroppable = oldVal;
 		return;
 	}
+	this.fire( 'isDroppable', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'isDroppable',
 		'prev': oldVal,
@@ -2805,6 +3004,9 @@ Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
 		this.autoResize = oldVal;
 		return;
 	}
+	this.fire( 'autoResize', {
+		'evt': 'changed'
+	});
 	this.fire( 'changed', {
 		'attr': 'autoResize',
 		'prev': oldVal,
@@ -2840,6 +3042,7 @@ Chart.prototype.onResize = function() {
 */
 Chart.prototype.stream = function( options ) {
 	var opts = {},
+		clbk,
 		err;
 	if ( arguments.length ) {
 		if ( typeof options !== 'object' || options === null || Array.isArray( options ) ) {
@@ -2849,8 +3052,11 @@ Chart.prototype.stream = function( options ) {
 		}
 		opts = options;
 	}
-	var clbk = onData.bind( this );
+	clbk = onData.bind( this );
 	this._stream = new Stream( clbk, opts );
+	this.fire( 'stream', {
+		'evt': 'created'
+	});
 	return this._stream;
 
 	function onData( error, arr ) {

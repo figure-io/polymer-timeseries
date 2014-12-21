@@ -64,10 +64,7 @@ TODO
 28. for Travis, fire up firefox browser as before script and call it a day
 	- 	integrate saucelabs at later time
 29. 
-30. Clean-up events
-	- 	event list
-	-	data emitted
-	-	general 'changed' versus individual attribute (possibly both)
+30. 
 31. `changed` callbacks for `objects` (e.g., config)
 	-	will impact how some things are updated (e.g., dragEnd)
 32. clear method
@@ -97,13 +94,13 @@ TODO
 		-	conflicting y-labels is a problem
 40. favicon
 41. 
-42. Emit events on element creation (???; e.g., base, graph, axes,...)
+42. 
 43. 
 44. 
 45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
 46. 
 47. on annotation marker click, fire an event with the data and index
-	-	let the client determine how to best display the annotation
+	-	let an observer determine how to best display the annotation
 	- 	any SVG solution will be less than optimal
 48. Should an option be provided to enforce an aspect ratio?
 	-	Maybe more trouble than it is worth.
