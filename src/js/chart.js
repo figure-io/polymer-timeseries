@@ -659,6 +659,7 @@ Chart.prototype.detached = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.addListeners = function() {
+	this.removeListeners();
 	if ( this.autoResize ) {
 		window.addEventListener( 'resize', this._onResize, false );
 	}

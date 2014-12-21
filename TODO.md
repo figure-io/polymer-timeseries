@@ -104,7 +104,7 @@ TODO
 	``` javascript
 	var width = this.width || this.node.clientWidth || Math.round( this.node.getBBox().width ) || this.parentNode.clientWidth
 	```
-44. prevent listeners from being added multiple times (e.g., if `addListeners` called more than once)
+44. 
 45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
 46. 
 47. 
