@@ -602,6 +602,8 @@ Chart.prototype.init = function() {
 
 	// Interaction...
 	this._toggleSeries = this.toggleSeries.bind( this );
+	this._toggleVLine = this.toggleVLine.bind( this );
+
 	this._onDragStart = this.onDragStart.bind( this );
 	this._onDragEnd = this.onDragEnd.bind( this );
 
@@ -910,7 +912,8 @@ Chart.prototype.createAnnotations = function() {
 
 	this.$.annotationMarkers = gEnter.append( 'svg:path' )
 		.attr( 'class', 'marker' )
-		.attr( 'd', this._triangle );
+		.attr( 'd', this._triangle )
+		.on( 'click', this._toggleVLine );
 
 	this.$.annotationLines = gEnter.append( 'svg:path' )
 		.attr( 'class', 'vline' )
@@ -1046,10 +1049,11 @@ Chart.prototype.resetAnnotations = function() {
 
 	gEnter.append( 'svg:path' )
 		.attr( 'class', 'marker' )
-		.attr( 'd', this._triangle );
+		.attr( 'd', this._triangle )
+		.on( 'click', this._toggleVLine );
 
 	gEnter.append( 'svg:path' )
-		.attr( 'class', 'vline' )
+		.attr( 'class', 'vline hidden' )
 		.attr( 'd', this._vline )
 		.attr( 'stroke-dasharray', '4,4' );
 
@@ -1061,7 +1065,6 @@ Chart.prototype.resetAnnotations = function() {
 	this.fire( 'reset', {
 		'msg': 'Reset chart annotations.'
 	});
-
 	return this;
 }; // end METHOD resetAnnotations()
 
@@ -1125,7 +1128,6 @@ Chart.prototype.resetLegend = function() {
 	this.fire( 'reset', {
 		'msg': 'Reset chart legend.'
 	});
-
 	return this;
 }; // end METHOD resetLegend()
 
@@ -1136,6 +1138,8 @@ Chart.prototype.resetLegend = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.clear = function() {
+	// TODO: should meta data (e.g., title) be cleared as well?
+
 	// Remove data, annotations, labels:
 	this.labels.length = 0;
 	this.data.length = 0;
@@ -1431,7 +1435,7 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 	// [5] Update the yAxis:
 	this.$.yAxis.call( this._yAxis );
 
-	// [6] Update annotations:
+	// [6] Update annotations: (TODO: this is not always necessary. Only when updating data such that the xMin and/or xMax changes.)
 	this.$.annotationMarkers.attr( 'd', this._triangle );
 	this.$.annotationLines.attr( 'd', this._vline );
 
@@ -2527,9 +2531,36 @@ Chart.prototype.toggleSeries = function( d, i ) {
 		'msg': 'Legend entry clicked.',
 		'state': ( flg ? 'hidden' : '' )
 	});
-
 	return false;
 }; // end METHOD toggleSeries()
+
+/**
+* METHOD: toggleVLine( d, i )
+*	Event handler to toggle a vertical line marking an annotation.
+*
+* @param {Number} d - element data
+* @param {Number} i - element index
+* @returns {Boolean} false
+*/
+Chart.prototype.toggleVLine = function( d, i ) {
+	var d3 = this._d3,
+		path,
+		flg;
+
+	// Get the vertical line element corresponding to the clicked annotation marker...
+	path = d3.select( this.$.annotationLines[ 0 ][ i ] );
+
+	// Toggle the line visibility...
+	flg = !path.classed( 'hidden' );
+	path.classed( 'hidden', flg );
+
+	// TODO: determine how UI events should be handled. What data to pass along?
+	this.fire( 'clicked', {
+		'msg': 'Annotation marker clicked.',
+		'state': ( flg ? 'hidden' : '' )
+	});
+	return false;
+}; // end METHOD toggleVLine()
 
 /**
 * METHOD: isDraggableChanged( oldVal, newVal )
