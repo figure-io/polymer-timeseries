@@ -52,7 +52,7 @@
     "jshint": "2.x.x",
     "jshint-stylish": "^1.0.0",
     "mocha": "1.x.x",
-    "vulcanize": "^0.7.4",
+    "vulcanize": "^0.7.5",
     "web-component-tester": "^2.0.5",
     "web-component-tester-istanbul": "^0.7.0"
   },

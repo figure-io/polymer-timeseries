@@ -16,7 +16,7 @@ TODO
 		- 	`/simple`
 		-	`/stream`
 10. dbl-click to zoom canvas
-	-	actually needs to be set on the parent container (e.g., a figure element)
+	-	actually needs to be set on the parent container (e.g., a figure element) --> why??
 	-	use fixed positioning to take up entire screen
 	-	could use magnifying glass icon
 11. breakpoints
@@ -28,7 +28,7 @@ TODO
 	- 	window
 	-	incrmpath
 	- 	nan (missing values) --> encoded? Broken segment?
-	- 	keep in `array` and output using `Array.prototype.join` ['M 0 0', 'L 1 1' ]
+	- 	keep in `array` and output using `Array.prototype.join` ['M0,0', 'L1,1' ]
 14. `getConfig`
 	-	returns a chart configuration
 	- 	marks property should either be an `array` of settings or a single `object`. If `object`, applies to all marks
@@ -73,10 +73,7 @@ TODO
 	-	reset x/y labels? or keep until new data arrives?
 		*	can probably just do the latter
 		*	WARNING: not particularly generalizable between chart types (e.g., from timeseries to histogram; the labels will not match; I suppose, however, that each chart can decide whether and how to use label information)
-33. annotations attribute
-	-	`array` of `arrays`
-	-	`[time,annotation]`
-	-	will want a reset annotations on annotations changed (similar to paths,legend)
+33. 
 34. demo socket/sse server
 35. are transitions needed? I am skeptical.
 36. create absolute and relative time components as part of component
@@ -99,7 +96,7 @@ TODO
 		-	conflicting y-labels is a problem
 40. favicon
 41. preserve font-size on scale transform
-42. Emit events on element creation (???)
+42. Emit events on element creation (???; e.g., base, graph, axes,...)
 43. set width/height to null and use approach similar to [chartist](https://github.com/gionkunz/chartist-js/blob/develop/src/scripts/svg.js).
 	``` javascript
 	var width = this.width || this.node.clientWidth || Math.round( this.node.getBBox().width ) || this.parentNode.clientWidth

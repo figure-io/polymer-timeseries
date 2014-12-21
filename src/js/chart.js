@@ -259,21 +259,21 @@ Chart.prototype.paddingTop = 80;
 
 /**
 * ATTRIBUTE: width
-*	Chart canvas width.
+*	Chart canvas width. If not explicitly set, defaults to the width of the parent node.
 *
 * @type {Number}
-* @default 600px
+* @default null
 */
-Chart.prototype.width = 600;
+Chart.prototype.width = null;
 
 /**
 * ATTRIBUTE: height
-*	Chart canvas height.
+*	Chart canvas height. If not explicitly set, defaults to the height of the parent node.
 *
 * @type {Number}
-* @default 400px
+* @default null
 */
-Chart.prototype.height = 400;
+Chart.prototype.height = null;
 
 /**
 * ATTRIBUTE: isDraggable
@@ -684,6 +684,11 @@ Chart.prototype.removeListeners = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.chart = function() {
+	// Ensure that the width and height are set before creating a chart...
+	this.width = this.width || this.clientWidth || this.parentNode.clientWidth;
+	this.height = this.height || this.clientHeight || this.parentNode.clientHeight;
+
+	// Create the chart layers...
 	this
 		.createBase()
 		.createBackground()
@@ -715,7 +720,6 @@ Chart.prototype.createBase = function() {
 	if ( this.$.canvas ) {
 		this.$.canvas.remove();
 	}
-
 	// Create the SVG element:
 	canvas = this.$.root.append( 'svg:svg' )
 		.attr( 'property', 'canvas' )
@@ -1648,15 +1652,18 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 
 	width = newVal - this.paddingLeft - this.paddingRight;
 
-	// [0] Update the SVG canvas:
+	// [0] Update the xScale:
+	range = [ 0, width ];
+	this._xScale.range( range );
+
+	if ( !this.$.canvas ) {
+		return;
+	}
+	// [1] Update the SVG canvas:
 	this.$.canvas
 		.attr( 'width', newVal )
 		.attr( 'viewBox', '0 0 ' + newVal + ' ' + height )
 		.attr( 'data-aspect', newVal / height );
-
-	// [1] Update the xScale:
-	range = [ 0, width ];
-	this._xScale.range( range );
 
 	// [2] Update the background:
 	this.$.bkgd.attr( 'width', width );
@@ -1704,15 +1711,18 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 
 	height = newVal - this.paddingTop - this.paddingBottom;
 
-	// [0] Update the SVG canvas:
+	// [0] Update the yScale:
+	range = [ height, 0 ];
+	this._yScale.range( range );
+
+	if ( !this.$.canvas ) {
+		return;
+	}
+	// [1] Update the SVG canvas:
 	this.$.canvas
 		.attr( 'height', newVal )
 		.attr( 'viewBox', '0 0 ' + width + ' ' + newVal )
 		.attr( 'data-aspect', width / newVal );
-
-	// [1] Update the yScale:
-	range = [ height, 0 ];
-	this._yScale.range( range );
 
 	// [2] Update the background:
 	this.$.bkgd.attr( 'height', height );
@@ -1733,8 +1743,8 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 	this.$.paths.attr( 'd', this._line );
 
 	// [8] Update the annotations:
-	this.$.annotationMarks( 'd', this._triangle );
-	this.$.annotationLines( 'd', this._vline );
+	this.$.annotationMarkers.attr( 'd', this._triangle );
+	this.$.annotationLines.attr( 'd', this._vline );
 }; // end METHOD heightChanged()
 
 /**
@@ -1800,8 +1810,7 @@ Chart.prototype.chartTitleChanged = function( oldVal, newVal ) {
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this.$.meta.select( '.title' )
-		.html( newVal );
+	this.$.title.text( newVal );
 }; // end METHOD chartTitleChanged()
 
 /**
