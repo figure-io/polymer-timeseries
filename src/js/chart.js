@@ -379,18 +379,18 @@ Chart.prototype.yTickFormat = null;
 *	Number of tick marks on the x-axis. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Axes#ticks}.
 *
 * @type {Number}
-* @default 5 ticks
+* @default null
 */
-Chart.prototype.xNumTicks = 5;
+Chart.prototype.xNumTicks = null;
 
 /**
 * ATTRIBUTE: yNumTicks
 *	Number of tick marks on the y-axis. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Axes#ticks}.
 *
 * @type {Number}
-* @default 5 ticks
+* @default null
 */
-Chart.prototype.yNumTicks = 5;
+Chart.prototype.yNumTicks = null;
 
 /**
 * ATTRIBUTE: xAxisOrient
@@ -569,13 +569,13 @@ Chart.prototype.init = function() {
 		.scale( this._xScale )
 		.orient( this.xAxisOrient )
 		.tickFormat( this._xTickFormat )
-		.ticks( this.xNumTicks );
+		.ticks( this.xNumTicks || 5 );
 
 	this._yAxis = d3.svg.axis()
 		.scale( this._yScale )
 		.orient( this.yAxisOrient )
 		.tickFormat( this._yTickFormat )
-		.ticks( this.yNumTicks );
+		.ticks( this.yNumTicks || 5 );
 
 	// Paths...
 	this._x = this.x.bind( this );

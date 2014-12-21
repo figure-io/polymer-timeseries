@@ -21,6 +21,7 @@ TODO
 	-	could use magnifying glass icon
 11. breakpoints
 	- 	at smaller resolutions, fire callback to, e.g., reduce number of tick marks (eventually could become similar to a sparkline)
+	-	use x and y num ticks being initially set to `null`
 12. Answer thread about code [organization](x-webdoc://ED43E348-979D-4AA7-89A7-9ED0353AFA37/#group_thread_5)
 13. Path stream
 	-	append
@@ -95,16 +96,18 @@ TODO
 		-	min/max abide by new chart convention
 		-	conflicting y-labels is a problem
 40. favicon
-41. preserve font-size on scale transform
+41. 
 42. Emit events on element creation (???; e.g., base, graph, axes,...)
 43. 
 44. 
 45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
 46. 
-47. 
+47. on annotation marker click, fire an event with the data and index
+	-	let the client determine how to best display the annotation
+	- 	any SVG solution will be less than optimal
 48. Should an option be provided to enforce an aspect ratio?
 	-	Maybe more trouble than it is worth.
-49. 
+49. should attributes like `xNumTicks`, `yNumTicks`, etc be allowed to equal `null` to resume, say, special resize behavior (details on demand)?
 
 
 #### Notes
