@@ -1443,8 +1443,8 @@ Chart.prototype.removeListeners = function() {
 */
 Chart.prototype.chart = function() {
 	// Ensure that the width and height are set before creating a chart...
-	this.width = this.width || this.clientWidth || this.parentNode.clientWidth;
-	this.height = this.height || this.clientHeight || this.parentNode.clientHeight;
+	this.width = this.width || this.clientWidth || this.parentNode.clientWidth || 600;
+	this.height = this.height || this.clientHeight || this.parentNode.clientHeight || 400;
 
 	// Create the chart layers...
 	this
@@ -1483,10 +1483,7 @@ Chart.prototype.createBase = function() {
 		.attr( 'property', 'canvas' )
 		.attr( 'class', 'canvas' )
 		.attr( 'width', width )
-		.attr( 'height', height )
-		.attr( 'viewBox', '0 0 ' + width + ' ' + height )
-		.attr( 'preserveAspectRatio', 'xMidYMid' )
-		.attr( 'data-aspect', width / height );
+		.attr( 'height', height );
 	this.$.canvas = canvas;
 
 	// Create the clip-path:
@@ -2392,8 +2389,7 @@ Chart.prototype.isDefinedChanged = function( oldVal, newVal ) {
 * @param {Number} newVal - new value
 */
 Chart.prototype.widthChanged = function( oldVal, newVal ) {
-	var height = this.height,
-		width,
+	var width,
 		range,
 		err;
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal <= 0 ) {
@@ -2418,10 +2414,7 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 		return;
 	}
 	// [1] Update the SVG canvas:
-	this.$.canvas
-		.attr( 'width', newVal )
-		.attr( 'viewBox', '0 0 ' + newVal + ' ' + height )
-		.attr( 'data-aspect', newVal / height );
+	this.$.canvas.attr( 'width', newVal );
 
 	// [2] Update the background:
 	this.$.bkgd.attr( 'width', width );
@@ -2451,8 +2444,7 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 * @param {Number} newVal - new value
 */
 Chart.prototype.heightChanged = function( oldVal, newVal ) {
-	var width = this.width,
-		range,
+	var range,
 		height,
 		err;
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal <= 0 ) {
@@ -2477,10 +2469,7 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 		return;
 	}
 	// [1] Update the SVG canvas:
-	this.$.canvas
-		.attr( 'height', newVal )
-		.attr( 'viewBox', '0 0 ' + width + ' ' + newVal )
-		.attr( 'data-aspect', width / newVal );
+	this.$.canvas.attr( 'height', newVal );
 
 	// [2] Update the background:
 	this.$.bkgd.attr( 'height', height );
@@ -3591,29 +3580,13 @@ Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
 *	Resize listener.
 */
 Chart.prototype.onResize = function() {
-	var canvas,
-		width,
-		aspect;
-
 	this.fire( 'resized', {
 		'msg': 'Received a resize event.'
 	});
-
 	if ( !this.$.canvas ) {
 		return;
 	}
-	// Get the element's width:
-	width = this.clientWidth;
-
-	// Get the canvas:
-	canvas = this.$.canvas[ 0 ][ 0 ];
-
-	// Get the canvas' aspect ratio:
-	aspect = canvas.getAttribute( 'data-aspect' );
-
-	// Set the canvas' width and height:
-	canvas.setAttribute( 'width', width );
-	canvas.setAttribute( 'height', Math.floor( width / aspect ) );
+	this.width = this.clientWidth;
 }; // end METHOD onResize()
 
 /**

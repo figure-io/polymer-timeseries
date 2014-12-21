@@ -97,15 +97,13 @@ TODO
 40. favicon
 41. preserve font-size on scale transform
 42. Emit events on element creation (???; e.g., base, graph, axes,...)
-43. set width/height to null and use approach similar to [chartist](https://github.com/gionkunz/chartist-js/blob/develop/src/scripts/svg.js).
-	``` javascript
-	var width = this.width || this.node.clientWidth || Math.round( this.node.getBBox().width ) || this.parentNode.clientWidth
-	```
+43. 
 44. 
 45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
 46. 
 47. 
-48. 
+48. Should an option be provided to enforce an aspect ratio?
+	-	Maybe more trouble than it is worth.
 49. 
 
 
