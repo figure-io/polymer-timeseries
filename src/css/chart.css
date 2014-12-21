@@ -38,6 +38,18 @@
 	opacity: 0;
 }
 
+.annotation .marker {
+	opacity: 0.2;
+	fill: #ff0000;
+	stroke: none;
+}
+
+.annotation .vline {
+	stroke: #000;
+	stroke-opacity: 0.2;
+	/*display: none;*/
+}
+
 .meta .title {
 	display: block;
 	/*font-size: 2em;*/

@@ -16,7 +16,7 @@
 <link rel="import" href="../polymer-d3/polymer-d3.html">
 
 <!-- ELEMENT -->
-</head><body><polymer-element name="polymer-timeseries" attributes="data config width height labels chartTitle xLabel yLabel xMin xMax yMin yMax xNumTicks yNumTicks xAxisOrient yAxisOrient xTickFormat yTickFormat interpolation tension paddingLeft paddingRight paddingBottom paddingTop xValue yValue isDefined isDraggable isDroppable" on-dragenter="{{ onDragEnter }}" on-dragover="{{ onDragOver }}" on-dragleave="{{ onDragLeave }}" on-drop="{{ onDrop }}" assetpath="build/">
+</head><body><polymer-element name="polymer-timeseries" attributes="data config width height labels chartTitle xLabel yLabel xMin xMax yMin yMax xNumTicks yNumTicks xAxisOrient yAxisOrient xTickFormat yTickFormat interpolation tension paddingLeft paddingRight paddingBottom paddingTop xValue yValue isDefined isDraggable isDroppable autoResize" on-dragenter="{{ onDragEnter }}" on-dragover="{{ onDragOver }}" on-dragleave="{{ onDragLeave }}" on-drop="{{ onDrop }}" assetpath="build/">
 
 	<template>
 
@@ -685,6 +685,18 @@ table {
 	opacity: 0;
 }
 
+.annotation .marker {
+	opacity: 0.2;
+	fill: #ff0000;
+	stroke: none;
+}
+
+.annotation .vline {
+	stroke: #000;
+	stroke-opacity: 0.2;
+	/*display: none;*/
+}
+
 .meta .title {
 	display: block;
 	/*font-size: 2em;*/
@@ -778,7 +790,10 @@ table {
 // MODULES //
 
 var // Writable stream constructor:
-	Stream = require( './stream' );
+	Stream = require( './stream' ),
+
+	// Utility to create delayed event listeners:
+	delayed = require( './utils/delayed.js' );
 
 
 // VARIABLES //
@@ -905,6 +920,47 @@ OPTS.category20c = [
 	'category20c-19',
 	'category20c-20'
 ];
+
+
+// FUNCTIONS //
+
+/**
+* FUNCTION: triangle( d, i )
+*	Creates a triangle using an SVG path.
+*
+* @private
+* @param {Array} d - datum
+* @param {Number} i - datum index
+* @returns {String} SVG path string
+*/
+function triangle( d ) {
+	/* jshint validthis: true */
+	var x, p1, p2, p3;
+	x = this._x( d );
+	p1 = (x-4) + ',-9';
+	p2 = x + ',-2';
+	p3 = (x+4) + ',-9';
+	return 'M' + p1 + 'L' + p2 + 'L' + p3 + 'Z';
+} // end FUNCTION triangle()
+
+/**
+* FUNCTION: vline( d, i )
+*	Creates a vertical line using an SVG path.
+*
+* @private
+* @param {Array} d - datum
+* @param {Number} i - datum index
+* @returns {String} SVG path string
+*/
+function vline( d ) {
+	/* jshint validthis: true */
+	var x, h, p1, p2;
+	x = this._x( d );
+	h = this.graphHeight();
+	p1 = x + ',' + h;
+	p2 = x + ',0';
+	return 'M' + p1 + 'L' + p2;
+} // end FUNCTION vline()
 
 
 // CHART //
@@ -1163,6 +1219,15 @@ Chart.prototype.interpolation = 'linear';
 */
 Chart.prototype.tension = 0.7;
 
+/**
+* ATTRIBUTE: autoResize
+*	Boolean flag indicating whether a chart should auto resize when the window resizes.
+*
+* @type {Boolean}
+* @default true
+*/
+Chart.prototype.autoResize = true;
+
 // TODO: clean-up events
 /**
 * ATTRIBUTE: events
@@ -1175,8 +1240,8 @@ Chart.prototype.events = [
 	'reset',
 	'error',
 	'changed',
-	'resize',
-	'click',
+	'resized',
+	'clicked',
 	'dragStart',
 	'dragEnd',
 	'dragEnter',
@@ -1220,6 +1285,9 @@ Chart.prototype.init = function() {
 
 	// Data... (hint an array)
 	this.data = [];
+
+	// Annotations... (hint an array)
+	this.annotations = [];
 
 	// Labels... (hint an array)
 	this.labels = [];
@@ -1266,6 +1334,9 @@ Chart.prototype.init = function() {
 		.interpolate( this.interpolation )
 		.tension( this.tension );
 
+	this._triangle = triangle.bind( this );
+	this._vline = vline.bind( this );
+
 	// Colors...
 	this._colors = OPTS.category10;
 	this._getColor = this.getColor.bind( this );
@@ -1280,6 +1351,8 @@ Chart.prototype.init = function() {
 	this._toggleSeries = this.toggleSeries.bind( this );
 	this._onDragStart = this.onDragStart.bind( this );
 	this._onDragEnd = this.onDragEnd.bind( this );
+
+	this._onResize = delayed( this.onResize.bind( this ), 400 );
 
 	// Elements...
 	this.$ = {
@@ -1300,7 +1373,10 @@ Chart.prototype.init = function() {
 		'bkgd': null,
 		'marks': null,
 		'paths': null,
-		'annotations': null
+		'agroup': null,
+		'annotations': null,
+		'annotationMarkers': null,
+		'annotationLines': null
 	};
 	this._clipPathID = this._uuid.v4();
 }; // end METHOD init()
@@ -1310,8 +1386,40 @@ Chart.prototype.init = function() {
 *	Polymer hook that is called when the element is inserted in the DOM.
 */
 Chart.prototype.attached = function() {
-	this.chart();
+	this.chart().addListeners();
 }; // end METHOD attached()
+
+/**
+* METHOD: detached()
+*	Polymer hook that is called when the element is removed from the DOM.
+*/
+Chart.prototype.detached = function() {
+	this.removeListeners();
+}; // end METHOD detached()
+
+/**
+* METHOD: addListeners()
+*	Adds event listeners.
+*
+* @returns {DOMElement} element instance
+*/
+Chart.prototype.addListeners = function() {
+	if ( this.autoResize ) {
+		window.addEventListener( 'resize', this._onResize, false );
+	}
+	return this;
+}; // end METHOD addListeners()
+
+/**
+* METHOD: removeListeners()
+*	Removes event listeners.
+*
+* @returns {DOMElement} element instance
+*/
+Chart.prototype.removeListeners = function() {
+	window.removeEventListener( 'resize', this._onResize );
+	return this;
+}; // end METHOD removeListeners()
 
 /**
 * METHOD: chart()
@@ -1320,8 +1428,6 @@ Chart.prototype.attached = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.chart = function() {
-	// TODO: if chart already exists, remove it all...
-
 	this
 		.createBase()
 		.createBackground()
@@ -1349,6 +1455,11 @@ Chart.prototype.createBase = function() {
 
 	this.$.root = this._d3.select( this.$.chart );
 
+	// Remove any existing canvas...
+	if ( this.$.canvas ) {
+		this.$.canvas.remove();
+	}
+
 	// Create the SVG element:
 	canvas = this.$.root.append( 'svg:svg' )
 		.attr( 'property', 'canvas' )
@@ -1374,7 +1485,6 @@ Chart.prototype.createBase = function() {
 		.attr( 'property', 'graph' )
 		.attr( 'class', 'graph' )
 		.attr( 'data-graph-type', 'timeseries' )
-		.attr( 'data-clipPath', this._clipPathID )
 		.attr( 'transform', 'translate(' + pLeft + ',' + pTop + ')' );
 
 	// Create the meta element:
@@ -1394,6 +1504,10 @@ Chart.prototype.createBase = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createBackground = function() {
+	// Remove any existing background...
+	if ( this.$.bkgd ) {
+		this.$.bkgd.remove();
+	}
 	this.$.bkgd = this.$.graph.append( 'svg:rect' )
 		.attr( 'class', 'background' )
 		.attr( 'x', 0 )
@@ -1411,6 +1525,10 @@ Chart.prototype.createBackground = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createPaths = function() {
+	// Remove any existing marks...
+	if ( this.$.marks ) {
+		this.$.marks.remove();
+	}
 	// Create a `marks` group:
 	this.$.marks = this.$.graph.append( 'svg:g' )
 		.attr( 'property', 'marks' )
@@ -1442,6 +1560,13 @@ Chart.prototype.createAxes = function() {
 		height = this.graphHeight(),
 		axis;
 
+	// Remove any existing x-axis...
+	if ( this.$.xAxis ) {
+		this.$.xAxis.remove();
+	}
+	if ( this.$.yAxis ) {
+		this.$.yAxis.remove();
+	}
 	axis = graph.append( 'svg:g' )
 		.attr( 'property', 'axis' )
 		.attr( 'class', 'x axis' )
@@ -1494,6 +1619,9 @@ Chart.prototype.createAxes = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createTitle = function() {
+	if ( this.$.title ) {
+		this.$.title.remove();
+	}
 	this.$.title = this.$.meta.append( 'svg:text' )
 		.attr( 'property', 'chart.title' )
 		.attr( 'class', 'title noselect' )
@@ -1511,8 +1639,31 @@ Chart.prototype.createTitle = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createAnnotations = function() {
-	// TODO: create annotations
-	// TODO: create an annotation factory (see figure.io)
+	var gEnter;
+
+	if ( this.$.agroup ) {
+		this.$.agroup.remove();
+	}
+	this.$.agroup = this.$.graph.append( 'svg:g' )
+		.attr( 'class', 'annotations' )
+		.attr( 'property', 'annotations' );
+
+	gEnter = this.$.agroup.selectAll( '.annotation' )
+		.data( this.annotations )
+		.enter().append( 'svg:g' )
+			.attr( 'class', 'annotation' )
+			.attr( 'property', 'annotation' );
+	this.$.annotations = gEnter;
+
+	this.$.annotationMarkers = gEnter.append( 'svg:path' )
+		.attr( 'class', 'marker' )
+		.attr( 'd', this._triangle );
+
+	this.$.annotationLines = gEnter.append( 'svg:path' )
+		.attr( 'class', 'vline' )
+		.attr( 'd', this._vline )
+		.attr( 'stroke-dasharray', '4,4' );
+
 	return this;
 }; // end METHOD createAnnotations()
 
@@ -1534,6 +1685,9 @@ Chart.prototype.createLegend = function() {
 		el,
 		i;
 
+	if ( this.$.legend ) {
+		this.$.legend.remove();
+	}
 	range = this._d3.range( numLabels );
 
 	// Main legend container:
@@ -1617,6 +1771,48 @@ Chart.prototype.resetPaths = function() {
 }; // end METHOD resetPaths()
 
 /**
+* METHOD: resetAnnotations()
+*	Resets graph annotations.
+*
+* @returns {DOMElement} element instance
+*/
+Chart.prototype.resetAnnotations = function() {
+	var annotations, gEnter;
+
+	// Bind the data and update existing annotations:
+	annotations = this.$.agroup.selectAll( '.annotation' )
+		.data( this.annotations );
+
+	// Remove any old annotations:
+	annotations.exit().remove();
+
+	// Add any new annotations:
+	gEnter = annotations.enter().append( 'svg:g' )
+		.attr( 'property', 'annotation' )
+		.attr( 'class', 'annotation' );
+
+	gEnter.append( 'svg:path' )
+		.attr( 'class', 'marker' )
+		.attr( 'd', this._triangle );
+
+	gEnter.append( 'svg:path' )
+		.attr( 'class', 'vline' )
+		.attr( 'd', this._vline )
+		.attr( 'stroke-dasharray', '4,4' );
+
+	// Cache a reference to the annotations:
+	this.$.annotations = annotations;
+	this.$.annotationMarkers = annotations.selectAll( '.marker' );
+	this.$.annotationLines = annotations.selectAll( '.vline' );
+
+	this.fire( 'reset', {
+		'msg': 'Reset chart annotations.'
+	});
+
+	return this;
+}; // end METHOD resetAnnotations()
+
+/**
 * METHOD: resetLegend()
 *	Resets legend elements.
 *
@@ -1687,11 +1883,10 @@ Chart.prototype.resetLegend = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.clear = function() {
-	// TODO: remove annotations
-
-	// Remove data and labels:
+	// Remove data, annotations, labels:
 	this.labels.length = 0;
 	this.data.length = 0;
+	this.annotations.length = 0;
 
 	// Reset the axes domains:
 	this._xScale.domain( [ X1, X2 ] );
@@ -1956,6 +2151,50 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 	// [6] Create new paths:
 	this.resetPaths();
 }; // end METHOD dataChanged()
+
+/**
+* METHOD: annotationsChanged( val[, newVal] )
+*	Event handler invoked when the `annotations` attribute changes.
+*
+* @param {Array} val - change event value
+* @param {Array} [newVal] - new value
+*/
+Chart.prototype.annotationsChanged = function( val, newVal ) {
+	var arr = this.annotations,
+		len,
+		err,
+		i;
+
+	// Determine if we have a new annotations array...
+	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
+		err = new TypeError( 'annotations::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
+		this.fire( 'error', err );
+		this.annotations = val;
+		return;
+	}
+	len = arr.length;
+	// Validate that all array elements are arrays...
+	for ( i = 0; i < len; i++ ) {
+		if ( !Array.isArray( arr[ i ] ) ) {
+			val = arr.splice( i, 1 );
+			err = new TypeError( 'annotations::invalid assignment. Must be an array of arrays. Invalid array element: `' + val + '`.' );
+			this.fire( 'error', err );
+			return;
+		}
+	}
+	// TODO: elaborate on how the attribute changed.
+	this.fire( 'changed', {
+		'attr': 'annotations'
+	});
+	// Do we even have any annotations?
+	if ( !len ) {
+		if ( this.$.annotations ) {
+			this.$.annotations.remove();
+		}
+		return;
+	}
+	this.resetAnnotations();
+}; // end METHOD annotationsChanged()
 
 /**
 * METHOD: configChanged( oldConfig, newConfig )
@@ -2945,7 +3184,7 @@ Chart.prototype.toggleSeries = function( d, i ) {
 	}
 
 	// TODO: determine how UI events should be handled. What data to pass along?
-	this.fire( 'click', {
+	this.fire( 'clicked', {
 		'msg': 'Legend entry clicked.',
 		'state': ( flg ? 'hidden' : '' )
 	});
@@ -3183,6 +3422,33 @@ Chart.prototype.onDragEnd = function( d, i ) {
 }; // end METHOD onDragEnd()
 
 /**
+* METHOD: autoResizeChanged( oldVal, newVal )
+*	Event handler invoked when the `autoResize` attribute changes.
+*
+* @param {Boolean} oldVal - old value
+* @param {Boolean} newVal - new value
+*/
+Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
+	var err;
+	if ( typeof newVal !== 'boolean' ) {
+		err = new TypeError( 'autoResize::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
+		this.fire( 'error', err );
+		this.autoResize = oldVal;
+		return;
+	}
+	this.fire( 'changed', {
+		'attr': 'autoResize',
+		'prev': oldVal,
+		'curr': newVal
+	});
+	if ( newVal ) {
+		window.addEventListener( 'resize', this._onResize, false );
+		return;
+	}
+	window.removeEventListener( 'resize', this._onResize );
+}; // end METHOD isDraggableChanged()
+
+/**
 * METHOD: onResize()
 *	Resize listener.
 */
@@ -3191,18 +3457,18 @@ Chart.prototype.onResize = function() {
 		width,
 		aspect;
 
-	this.fire( 'resize', {
+	this.fire( 'resized', {
 		'msg': 'Received a resize event.'
 	});
 
+	if ( !this.$.canvas ) {
+		return;
+	}
 	// Get the element's width:
 	width = this.clientWidth;
 
 	// Get the canvas:
-	canvas = this.$.canvas;
-	if ( !canvas ) {
-		return;
-	}
+	canvas = this.$.canvas[ 0 ][ 0 ];
 
 	// Get the canvas' aspect ratio:
 	aspect = canvas.getAttribute( 'data-aspect' );
@@ -3251,7 +3517,7 @@ Chart.prototype.stream = function( options ) {
 
 module.exports = Chart;
 
-},{"./stream":3}],2:[function(require,module,exports){
+},{"./stream":3,"./utils/delayed.js":5}],2:[function(require,module,exports){
 /**
 *
 *	COMPONENT: polymer-timeseries
@@ -3630,7 +3896,7 @@ module.exports.objectMode = objectMode;
 module.exports.factory = streamFactory;
 
 }).call(this,require("buffer").Buffer)
-},{"./validate.js":4,"buffer":5,"next-tick":26,"readable-stream":36}],4:[function(require,module,exports){
+},{"./validate.js":4,"buffer":6,"next-tick":27,"readable-stream":37}],4:[function(require,module,exports){
 /**
 *
 *	VALIDATE: options
@@ -3783,6 +4049,76 @@ function newline( value ) {
 module.exports = validate;
 
 },{}],5:[function(require,module,exports){
+/**
+*
+*	UTILS: delayed
+*
+*
+*	DESCRIPTION:
+*		- Throttles an event listener by delaying its invocation until after all events have finished firing.
+*
+*
+*	NOTES:
+*		[1]
+*
+*
+*	TODO:
+*		[1]
+*
+*
+*	LICENSE:
+*		MIT
+*
+*	Copyright (c) 2014. Athan Reines.
+*
+*
+*	AUTHOR:
+*		Athan Reines. kgryte@gmail.com. 2014.
+*
+*/
+
+'use strict';
+
+/**
+* FUNCTION: delayed( fcn, delay )
+*	Returns a function that fires after the end of an event. A `delay` parameter specifies the interval between when the event was last triggered and when the end listener should be fired (i.e., a form of throttling).
+*
+* @param {Function} fcn - function to fire at the end of an event
+* @param {Number} delay - millisecond delay to impose for function invocation
+* @returns {Function} delayed function
+*/
+function delayed( fcn, delay ) {
+	var timeout;
+	if ( typeof fcn !== 'function' ) {
+		throw new TypeError( 'delayed()::invalid input argument. First argument must be a function.' );
+	}
+	if ( typeof delay !== 'number' || delay !== delay || delay < 0 ) {
+		throw new TypeError( 'delayed()::invalid input argument. Second argument must be a number greater than 0.' );
+	}
+	return function delayed() {
+		var args;
+		if ( timeout ) {
+			clearTimeout( timeout );
+			timeout = setTimeout( later, delay );
+		}
+		args = arguments;
+
+		// Set a timeout for when the function can be invoked:
+		timeout = setTimeout( later, delay );
+
+		function later() {
+			timeout = null;
+			fcn.apply( null, args );
+		}
+	};
+} // end FUNCTION delayed()
+
+
+// EXPORTS //
+
+module.exports = delayed;
+
+},{}],6:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -4836,7 +5172,7 @@ function decodeUtf8Char (str) {
   }
 }
 
-},{"base64-js":6,"ieee754":7,"is-array":8}],6:[function(require,module,exports){
+},{"base64-js":7,"ieee754":8,"is-array":9}],7:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -4958,7 +5294,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 exports.read = function(buffer, offset, isLE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -5044,7 +5380,7 @@ exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 
 /**
  * isArray
@@ -5079,7 +5415,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5382,7 +5718,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -5407,12 +5743,12 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -5500,10 +5836,10 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":14}],14:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":15}],15:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -5596,7 +5932,7 @@ function forEach (xs, f) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_readable":16,"./_stream_writable":18,"_process":12,"core-util-is":19,"inherits":10}],15:[function(require,module,exports){
+},{"./_stream_readable":17,"./_stream_writable":19,"_process":13,"core-util-is":20,"inherits":11}],16:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5644,7 +5980,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":17,"core-util-is":19,"inherits":10}],16:[function(require,module,exports){
+},{"./_stream_transform":18,"core-util-is":20,"inherits":11}],17:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -6630,7 +6966,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"_process":12,"buffer":5,"core-util-is":19,"events":9,"inherits":10,"isarray":11,"stream":24,"string_decoder/":25}],17:[function(require,module,exports){
+},{"_process":13,"buffer":6,"core-util-is":20,"events":10,"inherits":11,"isarray":12,"stream":25,"string_decoder/":26}],18:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6842,7 +7178,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":14,"core-util-is":19,"inherits":10}],18:[function(require,module,exports){
+},{"./_stream_duplex":15,"core-util-is":20,"inherits":11}],19:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -7232,7 +7568,7 @@ function endWritable(stream, state, cb) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":14,"_process":12,"buffer":5,"core-util-is":19,"inherits":10,"stream":24}],19:[function(require,module,exports){
+},{"./_stream_duplex":15,"_process":13,"buffer":6,"core-util-is":20,"inherits":11,"stream":25}],20:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -7342,10 +7678,10 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":5}],20:[function(require,module,exports){
+},{"buffer":6}],21:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":15}],21:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":16}],22:[function(require,module,exports){
 var Stream = require('stream'); // hack to fix a circular dependency issue when used with browserify
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = Stream;
@@ -7355,13 +7691,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":14,"./lib/_stream_passthrough.js":15,"./lib/_stream_readable.js":16,"./lib/_stream_transform.js":17,"./lib/_stream_writable.js":18,"stream":24}],22:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":15,"./lib/_stream_passthrough.js":16,"./lib/_stream_readable.js":17,"./lib/_stream_transform.js":18,"./lib/_stream_writable.js":19,"stream":25}],23:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":17}],23:[function(require,module,exports){
+},{"./lib/_stream_transform.js":18}],24:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":18}],24:[function(require,module,exports){
+},{"./lib/_stream_writable.js":19}],25:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -7490,7 +7826,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":9,"inherits":10,"readable-stream/duplex.js":13,"readable-stream/passthrough.js":20,"readable-stream/readable.js":21,"readable-stream/transform.js":22,"readable-stream/writable.js":23}],25:[function(require,module,exports){
+},{"events":10,"inherits":11,"readable-stream/duplex.js":14,"readable-stream/passthrough.js":21,"readable-stream/readable.js":22,"readable-stream/transform.js":23,"readable-stream/writable.js":24}],26:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -7713,7 +8049,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":5}],26:[function(require,module,exports){
+},{"buffer":6}],27:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -7781,27 +8117,27 @@ module.exports = (function () {
 }());
 
 }).call(this,require('_process'))
-},{"_process":12}],27:[function(require,module,exports){
-module.exports=require(14)
-},{"./_stream_readable":29,"./_stream_writable":31,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_duplex.js":14,"_process":12,"core-util-is":32,"inherits":33}],28:[function(require,module,exports){
+},{"_process":13}],28:[function(require,module,exports){
 module.exports=require(15)
-},{"./_stream_transform":30,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_passthrough.js":15,"core-util-is":32,"inherits":33}],29:[function(require,module,exports){
+},{"./_stream_readable":30,"./_stream_writable":32,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_duplex.js":15,"_process":13,"core-util-is":33,"inherits":34}],29:[function(require,module,exports){
 module.exports=require(16)
-},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_readable.js":16,"_process":12,"buffer":5,"core-util-is":32,"events":9,"inherits":33,"isarray":34,"stream":24,"string_decoder/":35}],30:[function(require,module,exports){
+},{"./_stream_transform":31,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_passthrough.js":16,"core-util-is":33,"inherits":34}],30:[function(require,module,exports){
 module.exports=require(17)
-},{"./_stream_duplex":27,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_transform.js":17,"core-util-is":32,"inherits":33}],31:[function(require,module,exports){
+},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_readable.js":17,"_process":13,"buffer":6,"core-util-is":33,"events":10,"inherits":34,"isarray":35,"stream":25,"string_decoder/":36}],31:[function(require,module,exports){
 module.exports=require(18)
-},{"./_stream_duplex":27,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_writable.js":18,"_process":12,"buffer":5,"core-util-is":32,"inherits":33,"stream":24}],32:[function(require,module,exports){
+},{"./_stream_duplex":28,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_transform.js":18,"core-util-is":33,"inherits":34}],32:[function(require,module,exports){
 module.exports=require(19)
-},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/node_modules/core-util-is/lib/util.js":19,"buffer":5}],33:[function(require,module,exports){
-module.exports=require(10)
-},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/inherits/inherits_browser.js":10}],34:[function(require,module,exports){
+},{"./_stream_duplex":28,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/lib/_stream_writable.js":19,"_process":13,"buffer":6,"core-util-is":33,"inherits":34,"stream":25}],33:[function(require,module,exports){
+module.exports=require(20)
+},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/node_modules/core-util-is/lib/util.js":20,"buffer":6}],34:[function(require,module,exports){
 module.exports=require(11)
-},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/isarray/index.js":11}],35:[function(require,module,exports){
-module.exports=require(25)
-},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/string_decoder/index.js":25,"buffer":5}],36:[function(require,module,exports){
-module.exports=require(21)
-},{"./lib/_stream_duplex.js":27,"./lib/_stream_passthrough.js":28,"./lib/_stream_readable.js":29,"./lib/_stream_transform.js":30,"./lib/_stream_writable.js":31,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/readable.js":21,"stream":24}]},{},[2]);
+},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/inherits/inherits_browser.js":11}],35:[function(require,module,exports){
+module.exports=require(12)
+},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/isarray/index.js":12}],36:[function(require,module,exports){
+module.exports=require(26)
+},{"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/string_decoder/index.js":26,"buffer":6}],37:[function(require,module,exports){
+module.exports=require(22)
+},{"./lib/_stream_duplex.js":28,"./lib/_stream_passthrough.js":29,"./lib/_stream_readable.js":30,"./lib/_stream_transform.js":31,"./lib/_stream_writable.js":32,"/Users/kgryte/Coding/projects/personal/polymer/polymer-timeseries/node_modules/browserify/node_modules/readable-stream/readable.js":22,"stream":25}]},{},[2]);
 </script>
 
 </polymer-element>

@@ -98,7 +98,18 @@ TODO
 		-	min/max abide by new chart convention
 		-	conflicting y-labels is a problem
 40. favicon
-41. 
+41. preserve font-size on scale transform
+42. Emit events on element creation (???)
+43. set width/height to null and use approach similar to [chartist](https://github.com/gionkunz/chartist-js/blob/develop/src/scripts/svg.js).
+	``` javascript
+	var width = this.width || this.node.clientWidth || Math.round( this.node.getBBox().width ) || this.parentNode.clientWidth
+	```
+44. prevent listeners from being added multiple times (e.g., if `addListeners` called more than once)
+45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
+46. `aValue`, similar to `xValue` and `yValue`
+47. `formatAnnotations`, similar to `formatData`
+48. annotations update on xMin, xMax, yMin, yMax changes
+49. 
 
 
 #### Notes

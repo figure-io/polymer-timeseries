@@ -32,7 +32,10 @@
 // MODULES //
 
 var // Writable stream constructor:
-	Stream = require( './stream' );
+	Stream = require( './stream' ),
+
+	// Utility to create delayed event listeners:
+	delayed = require( './utils/delayed.js' );
 
 
 // VARIABLES //
@@ -159,6 +162,47 @@ OPTS.category20c = [
 	'category20c-19',
 	'category20c-20'
 ];
+
+
+// FUNCTIONS //
+
+/**
+* FUNCTION: triangle( d, i )
+*	Creates a triangle using an SVG path.
+*
+* @private
+* @param {Array} d - datum
+* @param {Number} i - datum index
+* @returns {String} SVG path string
+*/
+function triangle( d ) {
+	/* jshint validthis: true */
+	var x, p1, p2, p3;
+	x = this._x( d );
+	p1 = (x-4) + ',-9';
+	p2 = x + ',-2';
+	p3 = (x+4) + ',-9';
+	return 'M' + p1 + 'L' + p2 + 'L' + p3 + 'Z';
+} // end FUNCTION triangle()
+
+/**
+* FUNCTION: vline( d, i )
+*	Creates a vertical line using an SVG path.
+*
+* @private
+* @param {Array} d - datum
+* @param {Number} i - datum index
+* @returns {String} SVG path string
+*/
+function vline( d ) {
+	/* jshint validthis: true */
+	var x, h, p1, p2;
+	x = this._x( d );
+	h = this.graphHeight();
+	p1 = x + ',' + h;
+	p2 = x + ',0';
+	return 'M' + p1 + 'L' + p2;
+} // end FUNCTION vline()
 
 
 // CHART //
@@ -417,6 +461,15 @@ Chart.prototype.interpolation = 'linear';
 */
 Chart.prototype.tension = 0.7;
 
+/**
+* ATTRIBUTE: autoResize
+*	Boolean flag indicating whether a chart should auto resize when the window resizes.
+*
+* @type {Boolean}
+* @default true
+*/
+Chart.prototype.autoResize = true;
+
 // TODO: clean-up events
 /**
 * ATTRIBUTE: events
@@ -429,8 +482,8 @@ Chart.prototype.events = [
 	'reset',
 	'error',
 	'changed',
-	'resize',
-	'click',
+	'resized',
+	'clicked',
 	'dragStart',
 	'dragEnd',
 	'dragEnter',
@@ -474,6 +527,9 @@ Chart.prototype.init = function() {
 
 	// Data... (hint an array)
 	this.data = [];
+
+	// Annotations... (hint an array)
+	this.annotations = [];
 
 	// Labels... (hint an array)
 	this.labels = [];
@@ -520,6 +576,9 @@ Chart.prototype.init = function() {
 		.interpolate( this.interpolation )
 		.tension( this.tension );
 
+	this._triangle = triangle.bind( this );
+	this._vline = vline.bind( this );
+
 	// Colors...
 	this._colors = OPTS.category10;
 	this._getColor = this.getColor.bind( this );
@@ -534,6 +593,8 @@ Chart.prototype.init = function() {
 	this._toggleSeries = this.toggleSeries.bind( this );
 	this._onDragStart = this.onDragStart.bind( this );
 	this._onDragEnd = this.onDragEnd.bind( this );
+
+	this._onResize = delayed( this.onResize.bind( this ), 400 );
 
 	// Elements...
 	this.$ = {
@@ -554,7 +615,10 @@ Chart.prototype.init = function() {
 		'bkgd': null,
 		'marks': null,
 		'paths': null,
-		'annotations': null
+		'agroup': null,
+		'annotations': null,
+		'annotationMarkers': null,
+		'annotationLines': null
 	};
 	this._clipPathID = this._uuid.v4();
 }; // end METHOD init()
@@ -564,8 +628,40 @@ Chart.prototype.init = function() {
 *	Polymer hook that is called when the element is inserted in the DOM.
 */
 Chart.prototype.attached = function() {
-	this.chart();
+	this.chart().addListeners();
 }; // end METHOD attached()
+
+/**
+* METHOD: detached()
+*	Polymer hook that is called when the element is removed from the DOM.
+*/
+Chart.prototype.detached = function() {
+	this.removeListeners();
+}; // end METHOD detached()
+
+/**
+* METHOD: addListeners()
+*	Adds event listeners.
+*
+* @returns {DOMElement} element instance
+*/
+Chart.prototype.addListeners = function() {
+	if ( this.autoResize ) {
+		window.addEventListener( 'resize', this._onResize, false );
+	}
+	return this;
+}; // end METHOD addListeners()
+
+/**
+* METHOD: removeListeners()
+*	Removes event listeners.
+*
+* @returns {DOMElement} element instance
+*/
+Chart.prototype.removeListeners = function() {
+	window.removeEventListener( 'resize', this._onResize );
+	return this;
+}; // end METHOD removeListeners()
 
 /**
 * METHOD: chart()
@@ -574,8 +670,6 @@ Chart.prototype.attached = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.chart = function() {
-	// TODO: if chart already exists, remove it all...
-
 	this
 		.createBase()
 		.createBackground()
@@ -603,6 +697,11 @@ Chart.prototype.createBase = function() {
 
 	this.$.root = this._d3.select( this.$.chart );
 
+	// Remove any existing canvas...
+	if ( this.$.canvas ) {
+		this.$.canvas.remove();
+	}
+
 	// Create the SVG element:
 	canvas = this.$.root.append( 'svg:svg' )
 		.attr( 'property', 'canvas' )
@@ -628,7 +727,6 @@ Chart.prototype.createBase = function() {
 		.attr( 'property', 'graph' )
 		.attr( 'class', 'graph' )
 		.attr( 'data-graph-type', 'timeseries' )
-		.attr( 'data-clipPath', this._clipPathID )
 		.attr( 'transform', 'translate(' + pLeft + ',' + pTop + ')' );
 
 	// Create the meta element:
@@ -648,6 +746,10 @@ Chart.prototype.createBase = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createBackground = function() {
+	// Remove any existing background...
+	if ( this.$.bkgd ) {
+		this.$.bkgd.remove();
+	}
 	this.$.bkgd = this.$.graph.append( 'svg:rect' )
 		.attr( 'class', 'background' )
 		.attr( 'x', 0 )
@@ -665,6 +767,10 @@ Chart.prototype.createBackground = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createPaths = function() {
+	// Remove any existing marks...
+	if ( this.$.marks ) {
+		this.$.marks.remove();
+	}
 	// Create a `marks` group:
 	this.$.marks = this.$.graph.append( 'svg:g' )
 		.attr( 'property', 'marks' )
@@ -696,6 +802,13 @@ Chart.prototype.createAxes = function() {
 		height = this.graphHeight(),
 		axis;
 
+	// Remove any existing x-axis...
+	if ( this.$.xAxis ) {
+		this.$.xAxis.remove();
+	}
+	if ( this.$.yAxis ) {
+		this.$.yAxis.remove();
+	}
 	axis = graph.append( 'svg:g' )
 		.attr( 'property', 'axis' )
 		.attr( 'class', 'x axis' )
@@ -748,6 +861,9 @@ Chart.prototype.createAxes = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createTitle = function() {
+	if ( this.$.title ) {
+		this.$.title.remove();
+	}
 	this.$.title = this.$.meta.append( 'svg:text' )
 		.attr( 'property', 'chart.title' )
 		.attr( 'class', 'title noselect' )
@@ -765,8 +881,31 @@ Chart.prototype.createTitle = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.createAnnotations = function() {
-	// TODO: create annotations
-	// TODO: create an annotation factory (see figure.io)
+	var gEnter;
+
+	if ( this.$.agroup ) {
+		this.$.agroup.remove();
+	}
+	this.$.agroup = this.$.graph.append( 'svg:g' )
+		.attr( 'class', 'annotations' )
+		.attr( 'property', 'annotations' );
+
+	gEnter = this.$.agroup.selectAll( '.annotation' )
+		.data( this.annotations )
+		.enter().append( 'svg:g' )
+			.attr( 'class', 'annotation' )
+			.attr( 'property', 'annotation' );
+	this.$.annotations = gEnter;
+
+	this.$.annotationMarkers = gEnter.append( 'svg:path' )
+		.attr( 'class', 'marker' )
+		.attr( 'd', this._triangle );
+
+	this.$.annotationLines = gEnter.append( 'svg:path' )
+		.attr( 'class', 'vline' )
+		.attr( 'd', this._vline )
+		.attr( 'stroke-dasharray', '4,4' );
+
 	return this;
 }; // end METHOD createAnnotations()
 
@@ -788,6 +927,9 @@ Chart.prototype.createLegend = function() {
 		el,
 		i;
 
+	if ( this.$.legend ) {
+		this.$.legend.remove();
+	}
 	range = this._d3.range( numLabels );
 
 	// Main legend container:
@@ -871,6 +1013,48 @@ Chart.prototype.resetPaths = function() {
 }; // end METHOD resetPaths()
 
 /**
+* METHOD: resetAnnotations()
+*	Resets graph annotations.
+*
+* @returns {DOMElement} element instance
+*/
+Chart.prototype.resetAnnotations = function() {
+	var annotations, gEnter;
+
+	// Bind the data and update existing annotations:
+	annotations = this.$.agroup.selectAll( '.annotation' )
+		.data( this.annotations );
+
+	// Remove any old annotations:
+	annotations.exit().remove();
+
+	// Add any new annotations:
+	gEnter = annotations.enter().append( 'svg:g' )
+		.attr( 'property', 'annotation' )
+		.attr( 'class', 'annotation' );
+
+	gEnter.append( 'svg:path' )
+		.attr( 'class', 'marker' )
+		.attr( 'd', this._triangle );
+
+	gEnter.append( 'svg:path' )
+		.attr( 'class', 'vline' )
+		.attr( 'd', this._vline )
+		.attr( 'stroke-dasharray', '4,4' );
+
+	// Cache a reference to the annotations:
+	this.$.annotations = annotations;
+	this.$.annotationMarkers = annotations.selectAll( '.marker' );
+	this.$.annotationLines = annotations.selectAll( '.vline' );
+
+	this.fire( 'reset', {
+		'msg': 'Reset chart annotations.'
+	});
+
+	return this;
+}; // end METHOD resetAnnotations()
+
+/**
 * METHOD: resetLegend()
 *	Resets legend elements.
 *
@@ -941,11 +1125,10 @@ Chart.prototype.resetLegend = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.clear = function() {
-	// TODO: remove annotations
-
-	// Remove data and labels:
+	// Remove data, annotations, labels:
 	this.labels.length = 0;
 	this.data.length = 0;
+	this.annotations.length = 0;
 
 	// Reset the axes domains:
 	this._xScale.domain( [ X1, X2 ] );
@@ -1210,6 +1393,50 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 	// [6] Create new paths:
 	this.resetPaths();
 }; // end METHOD dataChanged()
+
+/**
+* METHOD: annotationsChanged( val[, newVal] )
+*	Event handler invoked when the `annotations` attribute changes.
+*
+* @param {Array} val - change event value
+* @param {Array} [newVal] - new value
+*/
+Chart.prototype.annotationsChanged = function( val, newVal ) {
+	var arr = this.annotations,
+		len,
+		err,
+		i;
+
+	// Determine if we have a new annotations array...
+	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
+		err = new TypeError( 'annotations::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
+		this.fire( 'error', err );
+		this.annotations = val;
+		return;
+	}
+	len = arr.length;
+	// Validate that all array elements are arrays...
+	for ( i = 0; i < len; i++ ) {
+		if ( !Array.isArray( arr[ i ] ) ) {
+			val = arr.splice( i, 1 );
+			err = new TypeError( 'annotations::invalid assignment. Must be an array of arrays. Invalid array element: `' + val + '`.' );
+			this.fire( 'error', err );
+			return;
+		}
+	}
+	// TODO: elaborate on how the attribute changed.
+	this.fire( 'changed', {
+		'attr': 'annotations'
+	});
+	// Do we even have any annotations?
+	if ( !len ) {
+		if ( this.$.annotations ) {
+			this.$.annotations.remove();
+		}
+		return;
+	}
+	this.resetAnnotations();
+}; // end METHOD annotationsChanged()
 
 /**
 * METHOD: configChanged( oldConfig, newConfig )
@@ -2199,7 +2426,7 @@ Chart.prototype.toggleSeries = function( d, i ) {
 	}
 
 	// TODO: determine how UI events should be handled. What data to pass along?
-	this.fire( 'click', {
+	this.fire( 'clicked', {
 		'msg': 'Legend entry clicked.',
 		'state': ( flg ? 'hidden' : '' )
 	});
@@ -2437,6 +2664,33 @@ Chart.prototype.onDragEnd = function( d, i ) {
 }; // end METHOD onDragEnd()
 
 /**
+* METHOD: autoResizeChanged( oldVal, newVal )
+*	Event handler invoked when the `autoResize` attribute changes.
+*
+* @param {Boolean} oldVal - old value
+* @param {Boolean} newVal - new value
+*/
+Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
+	var err;
+	if ( typeof newVal !== 'boolean' ) {
+		err = new TypeError( 'autoResize::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
+		this.fire( 'error', err );
+		this.autoResize = oldVal;
+		return;
+	}
+	this.fire( 'changed', {
+		'attr': 'autoResize',
+		'prev': oldVal,
+		'curr': newVal
+	});
+	if ( newVal ) {
+		window.addEventListener( 'resize', this._onResize, false );
+		return;
+	}
+	window.removeEventListener( 'resize', this._onResize );
+}; // end METHOD isDraggableChanged()
+
+/**
 * METHOD: onResize()
 *	Resize listener.
 */
@@ -2445,18 +2699,18 @@ Chart.prototype.onResize = function() {
 		width,
 		aspect;
 
-	this.fire( 'resize', {
+	this.fire( 'resized', {
 		'msg': 'Received a resize event.'
 	});
 
+	if ( !this.$.canvas ) {
+		return;
+	}
 	// Get the element's width:
 	width = this.clientWidth;
 
 	// Get the canvas:
-	canvas = this.$.canvas;
-	if ( !canvas ) {
-		return;
-	}
+	canvas = this.$.canvas[ 0 ][ 0 ];
 
 	// Get the canvas' aspect ratio:
 	aspect = canvas.getAttribute( 'data-aspect' );

@@ -15,10 +15,20 @@
 .figure {
 	float: left;
 	position: relative;
+	margin: 0;
+	margin-left: 1%;
+	margin-right: 1%;
 }
 
 .figure,
 .chart {
-	width: 600px;
 	height: 400px;
+}
+
+.figure {
+	width: 48%;
+}
+
+.chart {
+	width: 100%;
 }

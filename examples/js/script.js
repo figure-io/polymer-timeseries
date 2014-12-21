@@ -39,8 +39,23 @@
 	* @param {String} body - HTTP response body
 	*/
 	function onData( body ) {
-		var el = document.querySelector( '#figure2' ).querySelector( '.chart' );
+		var figs,
+			len,
+			charts,
+			el,
+			i;
 
+		// [0] Grab chart elements...
+		figs = document.querySelectorAll( '.figure' );
+
+		len = figs.length;
+		charts = new Array( len );
+		for ( i = 0; i < len; i++ ) {
+			charts[ i ] = figs[ i ].querySelector( '.chart' );
+		}
+
+		// [1] Configure the second figure...
+		el = charts[ 1 ];
 		body = el.formatData( JSON.parse( body ) );
 
 		el.yMin = 0;
@@ -52,6 +67,10 @@
 			'disk.utilization'
 		];
 		el.data = body;
+
+		el.annotations = [
+			[ 1417564926959,'beep boop bap foo' ]
+		];
 	} // end FUNCTION onData()
 
 
