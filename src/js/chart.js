@@ -433,6 +433,17 @@ Chart.prototype.yValue = function( d ) {
 }; // end METHOD yValue()
 
 /**
+* METHOD: aValue( d )
+*	Annotation accessor.
+*
+* @param {Array} d - datum
+* @return {String} text annotation
+*/
+Chart.prototype.aValue = function( d ) {
+	return d[ 1 ];
+}; // end METHOD aValue()
+
+/**
 * METHOD: isDefined( d )
 *	Accessor function which controls where a line is defined. Used to specify how missing values are encoded. Default behavior is to ignore data points or y-values which are `null`. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Shapes#line_defined}.
 *
@@ -1146,7 +1157,7 @@ Chart.prototype.clear = function() {
 *	Converts data to standard representation. Needed for non-deterministic accessors.
 *
 * @param {Array} data - array of arrays
-* @returns {Null|Array} data - array of arrays
+* @returns {Array} data - array of arrays
 */
 Chart.prototype.formatData = function( data ) {
 	var xValue = this.xValue,
@@ -1156,7 +1167,8 @@ Chart.prototype.formatData = function( data ) {
 		tmp,
 		n,
 		out,
-		err;
+		err,
+		i, j;
 
 	if ( !Array.isArray( data ) ) {
 		err = new TypeError( 'formatData()::invalid input argument. Must provide an array. Value: `' + data + '`.' );
@@ -1164,7 +1176,7 @@ Chart.prototype.formatData = function( data ) {
 		return;
 	}
 	out = new Array( len );
-	for ( var i = 0; i < len; i++ ) {
+	for ( i = 0; i < len; i++ ) {
 		dataset = data[ i ];
 		if ( !Array.isArray( dataset ) ) {
 			err = new TypeError( 'formatData()::invalid input argument. Must provide an array of arrays. Value: `' + data + '`.' );
@@ -1173,7 +1185,7 @@ Chart.prototype.formatData = function( data ) {
 		}
 		n = dataset.length;
 		tmp = new Array( n );
-		for ( var j = 0; j < n; j++ ) {
+		for ( j = 0; j < n; j++ ) {
 			tmp[ j ] = [
 				xValue( dataset[ j ] ),
 				yValue( dataset[ j ] )
@@ -1183,6 +1195,35 @@ Chart.prototype.formatData = function( data ) {
 	}
 	return out;
 }; // end METHOD formatData()
+
+/**
+* METHOD: formatAnnotations( arr )
+*	Converts an array of annotations to standard representation. Needed for non-deterministic accessors.
+*
+* @param {Array} arr - array of annotations
+* @returns {Array} annotations - array of annotations in standard format
+*/
+Chart.prototype.formatAnnotations = function( arr ) {
+	var xValue = this.xValue,
+		aValue = this.aValue,
+		len = arr.length,
+		out,
+		err;
+
+	if ( !Array.isArray( arr ) ) {
+		err = new TypeError( 'formatAnnotations()::invalid input argument. Must provide an array. Value: `' + arr + '`.' );
+		this.fire( 'error', err );
+		return;
+	}
+	out = new Array( len );
+	for ( var i = 0; i < len; i++ ) {
+		out[ i ] = [
+			xValue( arr[ i ] ),
+			aValue( arr[ i ] )
+		];
+	}
+	return out;
+}; // end METHOD formatAnnotations()
 
 /**
 * METHOD: x( d )
@@ -1527,6 +1568,26 @@ Chart.prototype.yValueChanged = function( oldVal, newVal ) {
 		'attr': 'yValue'
 	});
 }; // end METHOD yValueChanged()
+
+/**
+* METHOD: aValueChanged( oldVal, newVal )
+*	Event handler invoked when the `aValue` attribute changes.
+*
+* @param {Function} oldVal - old value
+* @param {Function} newVal - new value
+*/
+Chart.prototype.aValueChanged = function( oldVal, newVal ) {
+	var err;
+	if ( typeof newVal !== 'function' ) {
+		err = new TypeError( 'aValue::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
+		this.fire( 'error', err );
+		this.aValue = oldVal;
+		return;
+	}
+	this.fire( 'changed', {
+		'attr': 'aValue'
+	});
+}; // end METHOD aValueChanged()
 
 /**
 * METHOD: isDefinedChanged( oldVal, newVal )

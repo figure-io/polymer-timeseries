@@ -106,8 +106,8 @@ TODO
 	```
 44. prevent listeners from being added multiple times (e.g., if `addListeners` called more than once)
 45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
-46. `aValue`, similar to `xValue` and `yValue`
-47. `formatAnnotations`, similar to `formatData`
+46. 
+47. 
 48. annotations update on xMin, xMax, yMin, yMax changes
 49. 
 
