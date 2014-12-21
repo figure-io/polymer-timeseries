@@ -1431,7 +1431,11 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 	// [5] Update the yAxis:
 	this.$.yAxis.call( this._yAxis );
 
-	// [6] Create new paths:
+	// [6] Update annotations:
+	this.$.annotationMarkers.attr( 'd', this._triangle );
+	this.$.annotationLines.attr( 'd', this._vline );
+
+	// [7] Create new paths:
 	this.resetPaths();
 }; // end METHOD dataChanged()
 
@@ -1663,6 +1667,10 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 
 	// [6] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	// [7] Update the annotations:
+	this.$.annotationMarkers.attr( 'd', this._triangle );
+	this.$.annotationLines.attr( 'd', this._vline );
 }; // end METHOD widthChanged()
 
 /**
@@ -1718,6 +1726,10 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 
 	// [7] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	// [8] Update the annotations:
+	this.$.annotationMarks( 'd', this._triangle );
+	this.$.annotationLines( 'd', this._vline );
 }; // end METHOD heightChanged()
 
 /**
@@ -1867,6 +1879,10 @@ Chart.prototype.xMinChanged = function( oldVal, newVal ) {
 
 	// [3] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	// [4] Update the annotations:
+	this.$.annotationMarkers.attr( 'd', this._triangle );
+	this.$.annotationLines.attr( 'd', this._vline );
 }; // end METHOD xMinChanged()
 
 /**
@@ -1903,6 +1919,10 @@ Chart.prototype.xMaxChanged = function( oldVal, newVal ) {
 
 	// [3] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	// [4] Update the annotations:
+	this.$.annotationMarkers.attr( 'd', this._triangle );
+	this.$.annotationLines.attr( 'd', this._vline );
 }; // end METHOD xMaxChanged()
 
 /**
@@ -2312,6 +2332,10 @@ Chart.prototype.paddingLeftChanged = function( oldVal, newVal ) {
 
 	// [6] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	// [7] Update the annotations:
+	this.$.annotationMarkers.attr( 'd', this._triangle );
+	this.$.annotationLines.attr( 'd', this._vline );
 }; // end METHOD paddingLeftChanged()
 
 /**
@@ -2358,6 +2382,10 @@ Chart.prototype.paddingRightChanged = function( oldVal, newVal ) {
 
 	// [5] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	// [6] Update the annotations:
+	this.$.annotationMarkers.attr( 'd', this._triangle );
+	this.$.annotationLines.attr( 'd', this._vline );
 }; // end METHOD paddingRightChanged()
 
 /**
@@ -2407,6 +2435,10 @@ Chart.prototype.paddingBottomChanged = function( oldVal, newVal ) {
 
 	// [6] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	// [7] Update the annotations:
+	this.$.annotationMarkers.attr( 'd', this._triangle );
+	this.$.annotationLines.attr( 'd', this._vline );
 }; // end METHOD paddingBottomChanged()
 
 /**
@@ -2459,6 +2491,10 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 
 	// [7] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	// [8] Update the annotations:
+	this.$.annotationMarkers.attr( 'd', this._triangle );
+	this.$.annotationLines.attr( 'd', this._vline );
 }; // end METHOD paddingTopChanged()
 
 /**

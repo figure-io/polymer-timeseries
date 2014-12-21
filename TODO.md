@@ -108,7 +108,7 @@ TODO
 45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
 46. 
 47. 
-48. annotations update on xMin, xMax, yMin, yMax changes
+48. 
 49. 
 
 
