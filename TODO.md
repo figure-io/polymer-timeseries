@@ -2,7 +2,7 @@ TODO
 ====
 
 1. 	Include note about the distributed version being a vulcanized version (see core-component-page polymer element)
-2. 	Annotations
+2. 	
 3. 	Fix `core-component-page`. Currently, has hard-coded assumptions about `demo.html`, etc.
 4. 	jsdoc events/fires
 5. 	config method
@@ -49,6 +49,7 @@ TODO
 	- 	or simply set legend to being below the chart
 21. should padding be public?
 	- 	if do not expose, do not have to honor any settings and can auto-update as see fit. e.g., when provide title, can increase top padding, etc. Remove axis, can expand graph area
+	-	autopad attribute ???
 22. legend position
 	-	`top`, `bottom`, `left`, `right`
 23. 
@@ -66,7 +67,7 @@ TODO
 29. 
 30. 
 31. `changed` callbacks for `objects` (e.g., config)
-	-	will impact how some things are updated (e.g., dragEnd)
+	-	will impact how some things are updated (e.g., dragEnd) --> ????
 32. clear method
 	-	reset x/y labels? or keep until new data arrives?
 		*	can probably just do the latter
@@ -99,9 +100,7 @@ TODO
 44. 
 45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
 46. 
-47. on annotation marker click, fire an event with the data and index
-	-	let an observer determine how to best display the annotation
-	- 	any SVG solution will be less than optimal
+47. 
 48. Should an option be provided to enforce an aspect ratio?
 	-	Maybe more trouble than it is worth.
 49. should attributes like `xNumTicks`, `yNumTicks`, etc be allowed to equal `null` to resume, say, special resize behavior (details on demand)?

@@ -2650,6 +2650,12 @@ Chart.prototype.toggleVLine = function( d, i ) {
 		},
 		'msg': 'Annotation marker clicked.'
 	});
+	if ( !flg ) {
+		this.fire( 'annotation', {
+			'idx': i,
+			'value': d[ 0 ]
+		});
+	}
 	return false;
 }; // end METHOD toggleVLine()
 

@@ -685,6 +685,20 @@ el.addEventListener( 'clicked', function onClick( evt ) {
 });
 ```
 
+
+#### 'annotation'
+
+The element emits an `annotation` event when an annotation element is clicked and toggled to an active state.
+
+``` javascript
+el.addEventListener( 'annotation', function onClick( evt ) {
+	console.log( evt.idx, evt.value );
+});
+```
+
+Note: one use case for this event is linking the chart with an external element whose responsibility is displaying and filtering annotations. While an annotation could be displayed over top the graph, this will invariably be suboptimal within the context of an SVG. A more flexible solution would be to display the annotation in a separate UI element which is activated when a corresponding annotation SVG element is activated.
+
+
 #### 'dragStart'
 
 The element emits a `dragStart` event when a legend entry is dragged.
