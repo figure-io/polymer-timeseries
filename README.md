@@ -41,9 +41,7 @@ The component has the following public attributes and methods...
 
 ### Events
 
-The component emits events during both chart configuration and interaction.
-
-The following events are emitted... 
+The component emits events during both chart configuration and interaction. The following events are emitted... 
 
 
 #### 'error'
@@ -63,7 +61,7 @@ The element emits a `changed` event whenever an attribute changes.
 
 ``` javascript
 el.addEventListener( 'changed', function onChange( evt ) {
-	console.log( evt.attr, evt.oldVal, evt.newVal );	
+	console.log( evt.attr, evt.prev, evt.curr, evt.data );	
 });
 ```
 
@@ -174,7 +172,7 @@ el.addEventListener( 'resized', function onResize( evt ) {
 The element emits a `clicked` event when a chart element having a click handler is clicked.
 
 ``` javascript
-el.addEventListener( 'clicked', function onResize( evt ) {
+el.addEventListener( 'clicked', function onClick( evt ) {
 	console.log( evt );
 });
 ```
@@ -184,7 +182,7 @@ el.addEventListener( 'clicked', function onResize( evt ) {
 The element emits a `dragStart` event when a legend entry is dragged.
 
 ``` javascript
-el.addEventListener( 'dragStart', function onResize( evt ) {
+el.addEventListener( 'dragStart', function onDragStart( evt ) {
 	console.log( evt );
 });
 ```
@@ -194,7 +192,7 @@ el.addEventListener( 'dragStart', function onResize( evt ) {
 The element emits a `dragEnd` event when a legend entry stops being dragged.
 
 ``` javascript
-el.addEventListener( 'dragEnd', function onResize( evt ) {
+el.addEventListener( 'dragEnd', function onDragEnd( evt ) {
 	console.log( evt );
 });
 ```
@@ -204,7 +202,7 @@ el.addEventListener( 'dragEnd', function onResize( evt ) {
 The element emits a `dragEnter` event when a draggable element enters the chart area.
 
 ``` javascript
-el.addEventListener( 'dragEnter', function onResize( evt ) {
+el.addEventListener( 'dragEnter', function onDragEnter( evt ) {
 	console.log( evt );
 });
 ```
@@ -214,7 +212,7 @@ el.addEventListener( 'dragEnter', function onResize( evt ) {
 The element emits a `dragLeave` event when a draggable element leaves the chart area.
 
 ``` javascript
-el.addEventListener( 'dragLeave', function onResize( evt ) {
+el.addEventListener( 'dragLeave', function onDragLeave( evt ) {
 	console.log( evt );
 });
 ```
@@ -224,7 +222,7 @@ el.addEventListener( 'dragLeave', function onResize( evt ) {
 The element emits a `dropped` event when a draggable element is dropped into the chart area.
 
 ``` javascript
-el.addEventListener( 'dropped', function onResize( evt ) {
+el.addEventListener( 'dropped', function onDrop( evt ) {
 	console.log( evt );
 });
 ```
