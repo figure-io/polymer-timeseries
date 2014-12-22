@@ -41,103 +41,31 @@ The component has the following public attributes and methods...
 
 ### Events
 
-The component emits events during chart creation, configuration, and interaction. Listening to events can useful for linked graphics and logging.
+The component emits events during both chart configuration and interaction.
 
 The following events are emitted... 
 
-#### 'canvas'
 
-The element emits a `canvas` event to mark chart canvas lifecycle events; e.g., creation and removal.
+#### 'error'
+
+The element emits an `error` event whenever a error occurs; e.g., improper setting of attributes.
 
 ``` javascript
-el.addEventListener( 'canvas', function onEvent( evt ) {
-	console.log( evt );
+el.addEventListener( 'error', function onError( err ) {
+	console.log( err );	
 });
 ```
 
-#### 'graph'
 
-The element emits a `graph` event to mark graph lifecycle events; e.g., creation.
+#### 'changed'
 
-``` javascript
-el.addEventListener( 'graph', function onEvent( evt ) {
-	console.log( evt );
-});
-```
-
-#### 'background'
-
-The element emits a `background` event to mark graph background lifecycle events; e.g., creation and removal.
+The element emits a `changed` event whenever an attribute changes.
 
 ``` javascript
-el.addEventListener( 'background', function onEvent( evt ) {
-	console.log( evt );
+el.addEventListener( 'changed', function onChange( evt ) {
+	console.log( evt.attr, evt.oldVal, evt.newVal );	
 });
 ```
-
-#### 'timeseries'
-
-The element emits a `timeseries` event to mark timeseries lifecycle events; e.g., creation and reset.
-
-``` javascript
-el.addEventListener( 'timeseries', function onEvent( evt ) {
-	console.log( evt );
-});
-```
-
-#### 'xAxis'
-
-The element emits an `xAxis` event to mark x-axis lifecycle events; e.g., creation and removal.
-
-``` javascript
-el.addEventListener( 'xAxis', function onEvent( evt ) {
-	console.log( evt );
-});
-```
-
-#### 'yAxis'
-
-The element emits a `yAxis` event to mark y-axis lifecycle events; e.g., creation and removal.
-
-``` javascript
-el.addEventListener( 'yAxis', function onEvent( evt ) {
-	console.log( evt );
-});
-```
-
-#### 'title'
-
-The element emits a `title` event to mark chart title lifecycle events; e.g., creation, removal, and changed.
-
-``` javascript
-el.addEventListener( 'title', function onEvent( evt ) {
-	console.log( evt );
-	if ( evt.type === 'changed' ) {
-		console.log( this.chartTitle );
-	}
-});
-```
-
-#### 'annotations'
-
-The element emits an `annotations` event to mark graph annotation lifecycle events; e.g., creation, removal, and changed.
-
-``` javascript
-el.addEventListener( 'annotations', function onEvent( evt ) {
-	console.log( evt );
-});
-```
-
-#### 'legend'
-
-The element emits a `legend` event to mark legend lifecycle events; e.g., creation and removal.
-
-``` javascript
-el.addEventListener( 'legend', function onEvent( evt ) {
-	console.log( evt );
-});
-```
-
 
 #### 'data'
 
@@ -145,19 +73,30 @@ The element emits a `data` event when the `data` attribute changes.
 
 ``` javascript
 el.addEventListener( 'data', function onEvent( evt ) {
-	console.log( 'Data changed.' );
+	console.log( this.data );
 });
 ```
 
-#### 'config'
+#### 'annotations'
 
-The element emits a `config` event when the `config` attribute changes.
+The element emits an `annotations` when the `annotations` attribute changes.
 
 ``` javascript
-el.addEventListener( 'config', function onEvent( evt ) {
-	console.log( 'Chart config changed.' );
+el.addEventListener( 'annotations', function onEvent( evt ) {
+	console.log( this.annotations );
 });
 ```
+
+#### 'labels'
+
+The element emits a `labels` event when the `labels` attribute changes.
+
+``` javascript
+el.addEventListener( 'labels', function onEvent( evt ) {
+	console.log( this.labels );
+});
+```
+
 
 #### 'width'
 
@@ -176,76 +115,6 @@ The element emits a `height` event when the `height` attribute changes.
 ``` javascript
 el.addEventListener( 'height', function onEvent( evt ) {
 	console.log( this.height );
-});
-```
-
-#### 'xValue'
-
-The element emits an `xValue` event when the `xValue` attribute changes.
-
-``` javascript
-el.addEventListener( 'xValue', function onEvent( evt ) {
-	console.log( 'x-value accessor changed.' );
-});
-```
-
-#### 'yValue'
-
-The element emits an `yValue` event when the `yValue` attribute changes.
-
-``` javascript
-el.addEventListener( 'yValue', function onEvent( evt ) {
-	console.log( 'y-value accessor changed.' );
-});
-```
-
-#### 'aValue'
-
-The element emits an `aValue` event when the `aValue` attribute changes.
-
-``` javascript
-el.addEventListener( 'aValue', function onEvent( evt ) {
-	console.log( 'annotation accessor changed.' );
-});
-```
-
-#### 'isDefined'
-
-The element emits an `isDefined` event when the `isDefined` attribute changes.
-
-``` javascript
-el.addEventListener( 'isDefined', function onEvent( evt ) {
-	console.log( 'isDefined accessor changed.' );
-});
-```
-
-#### 'labels'
-
-The element emits a `labels` event when the `labels` attribute changes.
-
-``` javascript
-el.addEventListener( 'labels', function onEvent( evt ) {
-	console.log( 'Data labels changed.' );
-});
-```
-
-#### 'xLabel'
-
-The element emits an `xLabel` event when the `xLabel` attribute changes.
-
-``` javascript
-el.addEventListener( 'xLabel', function onEvent( evt ) {
-	console.log( this.xLabel );
-});
-```
-
-#### 'yLabel'
-
-The element emits a `yLabel` event when the `yLabel` attribute changes.
-
-``` javascript
-el.addEventListener( 'yLabel', function onEvent( evt ) {
-	console.log( this.yLabel );
 });
 ```
 
@@ -289,156 +158,6 @@ el.addEventListener( 'yMax', function onEvent( evt ) {
 });
 ```
 
-#### 'xNumTicks'
-
-The element emits an `xNumTicks` event when the `xNumTicks` attribute changes.
-
-``` javascript
-el.addEventListener( 'xNumTicks', function onEvent( evt ) {
-	console.log( this.xNumTicks );
-});
-```
-
-#### 'yNumTicks'
-
-The element emits a `yNumTicks` event when the `yNumTicks` attribute changes.
-
-``` javascript
-el.addEventListener( 'yNumTicks', function onEvent( evt ) {
-	console.log( this.yNumTicks );
-});
-```
-
-#### 'xAxisOrient'
-
-The element emits an `xAxisOrient` event when the `xAxisOrient` attribute changes.
-
-``` javascript
-el.addEventListener( 'xAxisOrient', function onEvent( evt ) {
-	console.log( this.xAxisOrient );
-});
-```
-
-#### 'yAxisOrient'
-
-The element emits a `yAxisOrient` event when the `yAxisOrient` attribute changes.
-
-``` javascript
-el.addEventListener( 'yAxisOrient', function onEvent( evt ) {
-	console.log( this.yAxisOrient );
-});
-```
-
-#### 'xTickFormat'
-
-The element emits an `xTickFormat` event when the `xTickFormat` attribute changes.
-
-``` javascript
-el.addEventListener( 'xTickFormat', function onEvent( evt ) {
-	console.log( this.xTickFormat );
-});
-```
-
-#### 'interpolation'
-
-The element emits an `interpolation` event when the `interpolation` attribute changes.
-
-``` javascript
-el.addEventListener( 'interpolation', function onEvent( evt ) {
-	console.log( this.interpolation );
-});
-```
-
-#### 'tension'
-
-The element emits a `tension` event when the `tension` attribute changes.
-
-``` javascript
-el.addEventListener( 'tension', function onEvent( evt ) {
-	console.log( this.tension );
-});
-```
-
-#### 'colors'
-
-The element emits a `colors` event when the `colors` attribute changes.
-
-``` javascript
-el.addEventListener( 'colors', function onEvent( evt ) {
-	console.log( this.colors );
-});
-```
-
-#### 'paddingLeft'
-
-The element emits a `paddingLeft` event when the `paddingLeft` attribute changes.
-
-``` javascript
-el.addEventListener( 'paddingLeft', function onEvent( evt ) {
-	console.log( this.paddingLeft );
-});
-```
-
-#### 'paddingRight'
-
-The element emits a `paddingRight` event when the `paddingRight` attribute changes.
-
-``` javascript
-el.addEventListener( 'paddingRight', function onEvent( evt ) {
-	console.log( this.paddingRight );
-});
-```
-
-#### 'paddingBottom'
-
-The element emits a `paddingBottom` event when the `paddingBottom` attribute changes.
-
-``` javascript
-el.addEventListener( 'paddingBottom', function onEvent( evt ) {
-	console.log( this.paddingBottom );
-});
-```
-
-#### 'paddingTop'
-
-The element emits a `paddingTop` event when the `paddingTop` attribute changes.
-
-``` javascript
-el.addEventListener( 'paddingTop', function onEvent( evt ) {
-	console.log( this.paddingTop );
-});
-```
-
-#### 'isDraggable'
-
-The element emits an `isDraggable` event when the `isDraggable` attribute changes.
-
-``` javascript
-el.addEventListener( 'isDraggable', function onEvent( evt ) {
-	console.log( this.isDraggable );
-});
-```
-
-#### 'isDroppable'
-
-The element emits an `isDroppable` event when the `isDroppable` attribute changes.
-
-``` javascript
-el.addEventListener( 'isDroppable', function onEvent( evt ) {
-	console.log( this.isDroppable );
-});
-```
-
-#### 'autoResize'
-
-The element emits an `autoResize` event when the `autoResize` attribute changes.
-
-``` javascript
-el.addEventListener( 'autoResize', function onEvent( evt ) {
-	console.log( this.autoResize );
-});
-```
-
 
 #### 'resized'
 
@@ -452,11 +171,11 @@ el.addEventListener( 'resized', function onResize( evt ) {
 
 #### 'clicked'
 
-The element emits a `clicked` event when a chart element is clicked.
+The element emits a `clicked` event when a chart element having a click handler is clicked.
 
 ``` javascript
 el.addEventListener( 'clicked', function onResize( evt ) {
-	console.log( evt.msg );
+	console.log( evt );
 });
 ```
 
@@ -502,7 +221,7 @@ el.addEventListener( 'dragLeave', function onResize( evt ) {
 
 #### 'dropped'
 
-The element emits a `dropped` event when a draggable element is dropped into the chart area (only when `isDroppable` is `true`).
+The element emits a `dropped` event when a draggable element is dropped into the chart area.
 
 ``` javascript
 el.addEventListener( 'dropped', function onResize( evt ) {
@@ -510,46 +229,9 @@ el.addEventListener( 'dropped', function onResize( evt ) {
 });
 ```
 
+__Note__: this event is only emitted when `isDroppable` is `true`.
 
-#### 'changed'
 
-The element emits a `changed` event whenever an attribute changes.
-
-``` javascript
-el.addEventListener( 'changed', function onChange( evt ) {
-	console.log( evt.attr, evt.oldVal, evt.newVal );	
-});
-```
-
-#### 'error'
-
-The element emits an `error` event whenever a error occurs; e.g., improper setting of attributes.
-
-``` javascript
-el.addEventListener( 'error', function onError( err ) {
-	console.log( err );	
-});
-```
-
-#### 'cleared'
-
-The element emits a `cleared` event whenever the chart is cleared.
-
-``` javascript
-el.addEventListener( 'cleared', function onChange( evt ) {
-	console.log( evt.msg );	
-});
-```
-
-#### 'stream'
-
-The element emits a `stream` event whenever a new writable chart stream is created.
-
-``` javascript
-el.addEventListener( 'stream', function onChange( evt ) {
-	console.log( 'Stream created.' );	
-});
-```
 
 
 ## Examples

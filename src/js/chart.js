@@ -165,53 +165,19 @@ OPTS.category20c = [
 ];
 
 EVENTS = [
-	'canvas',
-	'graph',
-	'background',
-	'timeseries',
-	'xAxis',
-	'yAxis',
-	'title',
-	'annotations', // multiple meanings
-	'legend',
-
 	'data',
-	'config',
-	'xValue',
-	'yValue',
-	'aValue',
-	'isDefined',
+	'annotations',
+	'labels',
+
 	'width',
 	'height',
-	'labels',
-	'title',
-	'xLabel',
-	'yLabel',
 	'xMin',
 	'xMax',
 	'yMin',
 	'yMax',
-	'xNumTicks',
-	'yNumTicks',
-	'xAxisOrient',
-	'yAxisOrient',
-	'xTickFormat',
-	'interpolation',
-	'tension',
-	'colors',
-	'paddingLeft',
-	'paddingRight',
-	'paddingTop',
-	'paddingBottom',
-	'isDraggable',
-	'isDroppable',
-	'autoResize',
-
-	'stream',
 
 	'changed',
 	'error',
-	'cleared',
 
 	'resized',
 	'clicked',
@@ -760,10 +726,6 @@ Chart.prototype.createBase = function() {
 	// Remove any existing canvas...
 	if ( this.$.canvas ) {
 		this.$.canvas.remove();
-		this.fire( 'canvas', {
-			'type': 'removed',
-			'msg': 'Existing canvas removed'
-		});
 	}
 	// Create the SVG element:
 	canvas = this.$.root.append( 'svg:svg' )
@@ -772,11 +734,6 @@ Chart.prototype.createBase = function() {
 		.attr( 'width', width )
 		.attr( 'height', height );
 	this.$.canvas = canvas;
-
-	this.fire( 'canvas', {
-		'type': 'created',
-		'msg': 'Chart canvas created.'
-	});
 
 	// Create the clip-path:
 	this.$.clipPath = canvas.append( 'svg:defs' )
@@ -793,11 +750,6 @@ Chart.prototype.createBase = function() {
 		.attr( 'class', 'graph' )
 		.attr( 'data-graph-type', 'timeseries' )
 		.attr( 'transform', 'translate(' + pLeft + ',' + pTop + ')' );
-
-	this.fire( 'graph', {
-		'type': 'created',
-		'msg': 'Chart graph created.'
-	});
 
 	// Create the meta element:
 	this.$.meta = canvas.append( 'svg:g' )
@@ -819,10 +771,6 @@ Chart.prototype.createBackground = function() {
 	// Remove any existing background...
 	if ( this.$.bkgd ) {
 		this.$.bkgd.remove();
-		this.fire( 'background', {
-			'type': 'removed',
-			'msg': 'Existing background removed'
-		});
 	}
 	this.$.bkgd = this.$.graph.append( 'svg:rect' )
 		.attr( 'class', 'background' )
@@ -830,11 +778,6 @@ Chart.prototype.createBackground = function() {
 		.attr( 'y', 0 )
 		.attr( 'width', this.graphWidth() )
 		.attr( 'height', this.graphHeight() );
-
-	this.fire( 'background', {
-		'type': 'created',
-		'msg': 'Graph background created.'
-	});
 
 	return this;
 }; // end METHOD createBackground()
@@ -849,10 +792,6 @@ Chart.prototype.createPaths = function() {
 	// Remove any existing marks...
 	if ( this.$.marks ) {
 		this.$.marks.remove();
-		this.fire( 'marks', {
-			'type': 'removed',
-			'msg': 'Existing marks removed'
-		});
 	}
 	// Create a `marks` group:
 	this.$.marks = this.$.graph.append( 'svg:g' )
@@ -871,11 +810,6 @@ Chart.prototype.createPaths = function() {
 			.attr( 'color', this._getColor )
 			.attr( 'd', this._line );
 
-	this.fire( 'timeseries', {
-		'type': 'created',
-		'msg': 'Graph timeseries created.'
-	});
-
 	return this;
 }; // end METHOD createPaths()
 
@@ -893,17 +827,9 @@ Chart.prototype.createAxes = function() {
 	// Remove any existing x-axis...
 	if ( this.$.xAxis ) {
 		this.$.xAxis.remove();
-		this.fire( 'xAxis', {
-			'type': 'removed',
-			'msg': 'Existing x-axis removed'
-		});
 	}
 	if ( this.$.yAxis ) {
 		this.$.yAxis.remove();
-		this.fire( 'yAxis', {
-			'type': 'removed',
-			'msg': 'Existing y-axis removed'
-		});
 	}
 	axis = graph.append( 'svg:g' )
 		.attr( 'property', 'axis' )
@@ -926,11 +852,6 @@ Chart.prototype.createAxes = function() {
 	axis.selectAll( '.domain' )
 		.attr( 'property', 'axis_domain' );
 
-	this.fire( 'xAxis', {
-		'type': 'created',
-		'msg': 'Graph x-axis created.'
-	});
-
 	axis = graph.append( 'svg:g' )
 		.attr( 'property', 'axis' )
 		.attr( 'class', 'y axis' )
@@ -952,11 +873,6 @@ Chart.prototype.createAxes = function() {
 	axis.selectAll( '.domain' )
 		.attr( 'property', 'axis_domain' );
 
-	this.fire( 'yAxis', {
-		'type': 'created',
-		'msg': 'Graph y-axis created.'
-	});
-
 	return this;
 }; // end METHOD createAxes()
 
@@ -969,10 +885,6 @@ Chart.prototype.createAxes = function() {
 Chart.prototype.createTitle = function() {
 	if ( this.$.title ) {
 		this.$.title.remove();
-		this.fire( 'title', {
-			'type': 'removed',
-			'msg': 'Existing chart title removed'
-		});
 	}
 	this.$.title = this.$.meta.append( 'svg:text' )
 		.attr( 'property', 'chart.title' )
@@ -980,11 +892,6 @@ Chart.prototype.createTitle = function() {
 		.attr( 'x', 0 )
 		.attr( 'y', 0 )
 		.text( this.chartTitle );
-
-	this.fire( 'title', {
-		'type': 'created',
-		'msg': 'Chart title created.'
-	});
 
 	return this;
 }; // end METHOD createTitle()
@@ -1000,10 +907,6 @@ Chart.prototype.createAnnotations = function() {
 
 	if ( this.$.agroup ) {
 		this.$.agroup.remove();
-		this.fire( 'annotations', {
-			'type': 'removed',
-			'msg': 'Existing annotations removed'
-		});
 	}
 	this.$.agroup = this.$.graph.append( 'svg:g' )
 		.attr( 'class', 'annotations' )
@@ -1025,11 +928,6 @@ Chart.prototype.createAnnotations = function() {
 		.attr( 'class', 'vline' )
 		.attr( 'd', this._vline )
 		.attr( 'stroke-dasharray', '4,4' );
-
-	this.fire( 'annotations', {
-		'type': 'created',
-		'msg': 'Graph annotations created.'
-	});
 
 	return this;
 }; // end METHOD createAnnotations()
@@ -1054,10 +952,6 @@ Chart.prototype.createLegend = function() {
 
 	if ( this.$.legend ) {
 		this.$.legend.remove();
-		this.fire( 'legend', {
-			'type': 'removed',
-			'msg': 'Existing legend removed'
-		});
 	}
 	range = this._d3.range( numLabels );
 
@@ -1103,10 +997,6 @@ Chart.prototype.createLegend = function() {
 			el.innerHTML = getLabel( null, i );
 		}
 	}
-	this.fire( 'legend', {
-		'type': 'created',
-		'msg': 'Chart legend created.'
-	});
 	return this;
 }; // end METHOD createLegend()
 
@@ -1137,11 +1027,6 @@ Chart.prototype.resetPaths = function() {
 
 	// Cache a reference to the paths:
 	this.$.paths = paths;
-
-	this.fire( 'timeseries', {
-		'type': 'reset',
-		'msg': 'Graph timeseries reset.'
-	});
 
 	return this;
 }; // end METHOD resetPaths()
@@ -1182,10 +1067,6 @@ Chart.prototype.resetAnnotations = function() {
 	this.$.annotationMarkers = annotations.selectAll( '.marker' );
 	this.$.annotationLines = annotations.selectAll( '.vline' );
 
-	this.fire( 'annotations', {
-		'type': 'reset',
-		'msg': 'Graph annotations reset.'
-	});
 	return this;
 }; // end METHOD resetAnnotations()
 
@@ -1246,10 +1127,6 @@ Chart.prototype.resetLegend = function() {
 	}
 	this.$.legendLabels = labels;
 
-	this.fire( 'legend', {
-		'type': 'reset',
-		'msg': 'Chart legend reset.'
-	});
 	return this;
 }; // end METHOD resetLegend()
 
@@ -1275,9 +1152,6 @@ Chart.prototype.clear = function() {
 	this.$.xAxis.call( this._xAxis );
 	this.$.yAxis.call( this._yAxis );
 
-	this.fire( 'cleared', {
-		'msg': 'Chart cleared.'
-	});
 	return this;
 }; // end METHOD clear()
 
@@ -1531,13 +1405,6 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 			return;
 		}
 	}
-	this.fire( 'data', {
-		'type': 'changed'
-	});
-	// TODO: elaborate on how the attribute changed. e.g., array updated, entirely new array, etc.
-	this.fire( 'changed', {
-		'attr': 'data'
-	});
 	// Do we even have any data arrays?
 	if ( !len ) {
 		if ( this.$.paths ) {
@@ -1569,6 +1436,22 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 
 	// [7] Create new paths:
 	this.resetPaths();
+
+	this.fire( 'data', {
+		'type': 'changed'
+	});
+	if ( newVal === void 0 ) {
+		this.fire( 'changed', {
+			'attr': 'data',
+			'data': val[ 0 ]
+		});
+	} else {
+		this.fire( 'changed', {
+			'attr': 'data',
+			'prev': val,
+			'curr': newVal
+		});
+	}
 }; // end METHOD dataChanged()
 
 /**
@@ -1601,13 +1484,6 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 			return;
 		}
 	}
-	this.fire( 'annotations', {
-		'type': 'changed'
-	});
-	// TODO: elaborate on how the attribute changed. similar to data.
-	this.fire( 'changed', {
-		'attr': 'annotations'
-	});
 	// Do we even have any annotations?
 	if ( !len ) {
 		if ( this.$.annotations ) {
@@ -1616,6 +1492,22 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 		return;
 	}
 	this.resetAnnotations();
+
+	this.fire( 'annotations', {
+		'type': 'changed'
+	});
+	if ( newVal === void 0 ) {
+		this.fire( 'changed', {
+			'attr': 'annotations',
+			'data': val[ 0 ]
+		});
+	} else {
+		this.fire( 'changed', {
+			'attr': 'annotations',
+			'prev': val,
+			'curr': newVal
+		});
+	}
 }; // end METHOD annotationsChanged()
 
 /**
@@ -1661,9 +1553,6 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 		return mark.data;
 	});
 
-	this.fire( 'config', {
-		'type': 'changed'
-	});
 	this.fire( 'changed', {
 		'attr': 'config',
 		'prev': oldConfig,
@@ -1686,11 +1575,10 @@ Chart.prototype.xValueChanged = function( oldVal, newVal ) {
 		this.xValue = oldVal;
 		return;
 	}
-	this.fire( 'xValue', {
-		'type': 'changed'
-	});
 	this.fire( 'changed', {
-		'attr': 'xValue'
+		'attr': 'xValue',
+		'prev': oldVal,
+		'curr': newVal
 	});
 }; // end METHOD xValueChanged()
 
@@ -1709,11 +1597,10 @@ Chart.prototype.yValueChanged = function( oldVal, newVal ) {
 		this.yValue = oldVal;
 		return;
 	}
-	this.fire( 'yValue', {
-		'type': 'changed'
-	});
 	this.fire( 'changed', {
-		'attr': 'yValue'
+		'attr': 'yValue',
+		'prev': oldVal,
+		'curr': newVal
 	});
 }; // end METHOD yValueChanged()
 
@@ -1732,11 +1619,10 @@ Chart.prototype.aValueChanged = function( oldVal, newVal ) {
 		this.aValue = oldVal;
 		return;
 	}
-	this.fire( 'aValue', {
-		'type': 'changed'
-	});
 	this.fire( 'changed', {
-		'attr': 'aValue'
+		'attr': 'aValue',
+		'prev': oldVal,
+		'curr': newVal
 	});
 }; // end METHOD aValueChanged()
 
@@ -1760,11 +1646,10 @@ Chart.prototype.isDefinedChanged = function( oldVal, newVal ) {
 	line.defined( newVal );
 	selection.attr( 'd', line );
 
-	this.fire( 'isDefined', {
-		'type': 'changed'
-	});
 	this.fire( 'changed', {
-		'attr': 'isDefined'
+		'attr': 'isDefined',
+		'prev': oldVal,
+		'curr': newVal
 	});
 }; // end METHOD isDefinedChanged()
 
@@ -1785,15 +1670,6 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 		this.width = oldVal;
 		return;
 	}
-	this.fire( 'width', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'width',
-		'prev': oldVal,
-		'curr': newVal
-	});
-
 	width = newVal - this.paddingLeft - this.paddingRight;
 
 	// [0] Update the xScale:
@@ -1824,6 +1700,15 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 	// [7] Update the annotations:
 	this.$.annotationMarkers.attr( 'd', this._triangle );
 	this.$.annotationLines.attr( 'd', this._vline );
+
+	this.fire( 'width', {
+		'type': 'changed'
+	});
+	this.fire( 'changed', {
+		'attr': 'width',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD widthChanged()
 
 /**
@@ -1843,15 +1728,6 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 		this.height = oldVal;
 		return;
 	}
-	this.fire( 'height', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'height',
-		'prev': oldVal,
-		'curr': newVal
-	});
-
 	height = newVal - this.paddingTop - this.paddingBottom;
 
 	// [0] Update the yScale:
@@ -1885,6 +1761,15 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 	// [8] Update the annotations:
 	this.$.annotationMarkers.attr( 'd', this._triangle );
 	this.$.annotationLines.attr( 'd', this._vline );
+
+	this.fire( 'height', {
+		'type': 'changed'
+	});
+	this.fire( 'changed', {
+		'attr': 'height',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD heightChanged()
 
 /**
@@ -1917,20 +1802,27 @@ Chart.prototype.labelsChanged = function( val, newVal ) {
 			return;
 		}
 	}
-	this.fire( 'labels', {
-		'type': 'changed'
-	});
-	// TODO: elaborate on how the attribute changed.
-	this.fire( 'changed', {
-		'attr': 'labels',
-		'prev': val,
-		'curr': newVal
-	});
 	// [0] Reset the data labels:
 	this.$.paths.attr( 'data-label', this._getLabel );
 
 	// [1] Reset the chart legend:
 	this.resetLegend();
+
+	this.fire( 'labels', {
+		'type': 'changed'
+	});
+	if ( newVal === void 0 ) {
+		this.fire( 'changed', {
+			'attr': 'labels',
+			'data': val[ 0 ]
+		});
+	} else {
+		this.fire( 'changed', {
+			'attr': 'labels',
+			'prev': val,
+			'curr': newVal
+		});
+	}
 }; // end METHOD labelsChanged()
 
 /**
@@ -1948,15 +1840,13 @@ Chart.prototype.chartTitleChanged = function( oldVal, newVal ) {
 		this.chartTitle = oldVal;
 		return;
 	}
-	this.fire( 'title', {
-		'type': 'changed'
-	});
+	this.$.title.text( newVal );
+
 	this.fire( 'changed', {
-		'attr': 'title',
+		'attr': 'chartTitle',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this.$.title.text( newVal );
 }; // end METHOD chartTitleChanged()
 
 /**
@@ -1974,15 +1864,13 @@ Chart.prototype.xLabelChanged = function( oldVal, newVal ) {
 		this.xLabel = oldVal;
 		return;
 	}
-	this.fire( 'xLabel', {
-		'type': 'changed'
-	});
+	this.$.xLabel.text( newVal );
+
 	this.fire( 'changed', {
 		'attr': 'xLabel',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this.$.xLabel.text( newVal );
 }; // end METHOD xLabelChanged()
 
 /**
@@ -2000,15 +1888,13 @@ Chart.prototype.yLabelChanged = function( oldVal, newVal ) {
 		this.yLabel = oldVal;
 		return;
 	}
-	this.fire( 'yLabel', {
-		'type': 'changed'
-	});
+	this.$.yLabel.text( newVal );
+
 	this.fire( 'changed', {
 		'attr': 'yLabel',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this.$.yLabel.text( newVal );
 }; // end METHOD yLabelChanged()
 
 /**
@@ -2029,14 +1915,6 @@ Chart.prototype.xMinChanged = function( oldVal, newVal ) {
 		this.xMin = oldVal;
 		return;
 	}
-	this.fire( 'xMin', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'xMin',
-		'prev': oldVal,
-		'curr': newVal
-	});
 	// [0] Update the domain:
 	domain = this.xDomain( newVal, domain[ 1 ] );
 
@@ -2052,6 +1930,15 @@ Chart.prototype.xMinChanged = function( oldVal, newVal ) {
 	// [4] Update the annotations:
 	this.$.annotationMarkers.attr( 'd', this._triangle );
 	this.$.annotationLines.attr( 'd', this._vline );
+
+	this.fire( 'xMin', {
+		'type': 'changed'
+	});
+	this.fire( 'changed', {
+		'attr': 'xMin',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD xMinChanged()
 
 /**
@@ -2072,14 +1959,6 @@ Chart.prototype.xMaxChanged = function( oldVal, newVal ) {
 		this.xMax = oldVal;
 		return;
 	}
-	this.fire( 'xMax', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'xMax',
-		'prev': oldVal,
-		'curr': newVal
-	});
 	// [0] Update the domain:
 	domain = this.xDomain( domain[ 0 ], newVal );
 
@@ -2095,6 +1974,15 @@ Chart.prototype.xMaxChanged = function( oldVal, newVal ) {
 	// [4] Update the annotations:
 	this.$.annotationMarkers.attr( 'd', this._triangle );
 	this.$.annotationLines.attr( 'd', this._vline );
+
+	this.fire( 'xMax', {
+		'type': 'changed'
+	});
+	this.fire( 'changed', {
+		'attr': 'xMax',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD xMaxChanged()
 
 /**
@@ -2115,14 +2003,6 @@ Chart.prototype.yMinChanged = function( oldVal, newVal ) {
 		this.yMin = oldVal;
 		return;
 	}
-	this.fire( 'yMin', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'yMin',
-		'prev': oldVal,
-		'curr': newVal
-	});
 	// [0] Update the domain:
 	domain = this.yDomain( newVal, domain[ 1 ] );
 
@@ -2134,6 +2014,15 @@ Chart.prototype.yMinChanged = function( oldVal, newVal ) {
 
 	// [3] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	this.fire( 'yMin', {
+		'type': 'changed'
+	});
+	this.fire( 'changed', {
+		'attr': 'yMin',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD yMinChanged()
 
 /**
@@ -2154,14 +2043,6 @@ Chart.prototype.yMaxChanged = function( oldVal, newVal ) {
 		this.yMax = oldVal;
 		return;
 	}
-	this.fire( 'yMax', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'yMax',
-		'prev': oldVal,
-		'curr': newVal
-	});
 	// [0] Update the domain:
 	domain = this.yDomain( domain[ 0 ], newVal );
 
@@ -2173,6 +2054,15 @@ Chart.prototype.yMaxChanged = function( oldVal, newVal ) {
 
 	// [3] Update the paths:
 	this.$.paths.attr( 'd', this._line );
+
+	this.fire( 'yMax', {
+		'type': 'changed'
+	});
+	this.fire( 'changed', {
+		'attr': 'yMax',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD yMaxChanged()
 
 /**
@@ -2193,16 +2083,14 @@ Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 		this.xNumTicks = oldVal;
 		return;
 	}
-	this.fire( 'xNumTicks', {
-		'type': 'changed'
-	});
+	xAxis.ticks( newVal );
+	selection.call( xAxis );
+
 	this.fire( 'changed', {
 		'attr': 'xNumTicks',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	xAxis.ticks( newVal );
-	selection.call( xAxis );
 }; // end METHOD xNumTicksChanged()
 
 /**
@@ -2223,16 +2111,14 @@ Chart.prototype.yNumTicksChanged = function( oldVal, newVal ) {
 		this.yNumTicks = oldVal;
 		return;
 	}
-	this.fire( 'yNumTicks', {
-		'type': 'changed'
-	});
+	yAxis.ticks( newVal );
+	selection.call( yAxis );
+
 	this.fire( 'changed', {
 		'attr': 'yNumTicks',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	yAxis.ticks( newVal );
-	selection.call( yAxis );
 }; // end METHOD yNumTicksChanged()
 
 /**
@@ -2253,18 +2139,16 @@ Chart.prototype.xAxisOrientChanged = function( oldVal, newVal ) {
 		this.xAxisOrient = oldVal;
 		return;
 	}
-	this.fire( 'xAxisOrient', {
-		'type': 'changed'
-	});
+	xAxis.orient( newVal );
+	selection.call( xAxis );
+
+	// TODO: this is subtle. As labels, etc may need to change.
+
 	this.fire( 'changed', {
 		'attr': 'xAxisOrient',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	xAxis.orient( newVal );
-	selection.call( xAxis );
-
-	// TODO: this is subtle. As labels, etc may need to change.
 }; // end METHOD xAxisOrientChanged()
 
 /**
@@ -2285,18 +2169,16 @@ Chart.prototype.yAxisOrientChanged = function( oldVal, newVal ) {
 		this.yAxisOrient = oldVal;
 		return;
 	}
-	this.fire( 'yAxisOrient', {
-		'type': 'changed'
-	});
+	yAxis.orient( newVal );
+	selection.call( yAxis );
+
+	// TODO: this is subtle. As labels, etc may need to change.
+
 	this.fire( 'changed', {
 		'attr': 'yAxisOrient',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	yAxis.orient( newVal );
-	selection.call( yAxis );
-
-	// TODO: this is subtle. As labels, etc may need to change.
 }; // end METHOD yAxisOrientChanged()
 
 /**
@@ -2317,17 +2199,15 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 		this.xTickFormat = oldVal;
 		return;
 	}
-	this.fire( 'xTickFormat', {
-		'type': 'changed'
-	});
+	this._xTickFormat = this._d3.time.format( newVal );
+	xAxis.tickFormat( this._xTickFormat );
+	selection.call( xAxis );
+
 	this.fire( 'changed', {
 		'attr': 'xTickFormat',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this._xTickFormat = this._d3.time.format( newVal );
-	xAxis.tickFormat( this._xTickFormat );
-	selection.call( xAxis );
 }; // end METHOD xTickFormatChanged()
 
 /**
@@ -2348,14 +2228,6 @@ Chart.prototype.yTickFormatChanged = function( oldVal, newVal ) {
 		this.yTickFormat = oldVal;
 		return;
 	}
-	this.fire( 'yTickFormat', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'yTickFormat',
-		'prev': oldVal,
-		'curr': newVal
-	});
 	if ( newVal !== null ) {
 		this._yTickFormat = this._d3.format( newVal );
 	} else {
@@ -2363,6 +2235,12 @@ Chart.prototype.yTickFormatChanged = function( oldVal, newVal ) {
 	}
 	yAxis.tickFormat( this._yTickFormat );
 	selection.call( yAxis );
+
+	this.fire( 'changed', {
+		'attr': 'yTickFormat',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD yTickFormatChanged()
 
 /**
@@ -2383,16 +2261,14 @@ Chart.prototype.interpolationChanged = function( oldVal, newVal ) {
 		this.interpolation = oldVal;
 		return;
 	}
-	this.fire( 'interpolation', {
-		'type': 'changed'
-	});
+	line.interpolate( newVal );
+	selection.attr( 'd', line );
+
 	this.fire( 'changed', {
 		'attr': 'interpolation',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	line.interpolate( newVal );
-	selection.attr( 'd', line );
 }; // end METHOD interpolationChanged()
 
 /**
@@ -2413,16 +2289,14 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 		this.tension = oldVal;
 		return;
 	}
-	this.fire( 'tension', {
-		'type': 'changed'
-	});
+	line.tension( newVal );
+	selection.attr( 'd', line );
+
 	this.fire( 'changed', {
 		'attr': 'tension',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	line.tension( newVal );
-	selection.attr( 'd', line );
 }; // end METHOD tensionChanged()
 
 /**
@@ -2461,15 +2335,6 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 			return;
 		}
 	}
-	this.fire( 'colors', {
-		'type': 'changed'
-	});
-	// TODO: elaborate on change event (distinguish between new reference and changed array)
-	this.fire( 'changed', {
-		'attr': 'colors',
-		'prev': val,
-		'curr': newVal
-	});
 	this.$.paths.attr( 'color', getColor );
 
 	// Set the color of all symbols...
@@ -2487,6 +2352,18 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 			// Add the new color class:
 			el.classList.add( getColor( null, i ) + '-span' );
 		}
+	}
+	if ( newVal === void 0 ) {
+		this.fire( 'changed', {
+			'attr': 'colors',
+			'data': val[ 0 ]
+		});
+	} else {
+		this.fire( 'changed', {
+			'attr': 'colors',
+			'prev': val,
+			'curr': newVal
+		});
 	}
 }; // end METHOD colorsChanged()
 
@@ -2508,15 +2385,6 @@ Chart.prototype.paddingLeftChanged = function( oldVal, newVal ) {
 		this.paddingLeft = oldVal;
 		return;
 	}
-	this.fire( 'paddingLeft', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'paddingLeft',
-		'prev': oldVal,
-		'curr': newVal
-	});
-
 	width = this.width - newVal - this.paddingRight;
 
 	// [0] Update the xScale:
@@ -2544,6 +2412,12 @@ Chart.prototype.paddingLeftChanged = function( oldVal, newVal ) {
 	// [7] Update the annotations:
 	this.$.annotationMarkers.attr( 'd', this._triangle );
 	this.$.annotationLines.attr( 'd', this._vline );
+
+	this.fire( 'changed', {
+		'attr': 'paddingLeft',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD paddingLeftChanged()
 
 /**
@@ -2564,15 +2438,6 @@ Chart.prototype.paddingRightChanged = function( oldVal, newVal ) {
 		this.paddingRight = oldVal;
 		return;
 	}
-	this.fire( 'paddingRight', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'paddingRight',
-		'prev': oldVal,
-		'curr': newVal
-	});
-
 	width = this.width - this.paddingLeft - newVal;
 
 	// [0] Update the xScale:
@@ -2597,6 +2462,12 @@ Chart.prototype.paddingRightChanged = function( oldVal, newVal ) {
 	// [6] Update the annotations:
 	this.$.annotationMarkers.attr( 'd', this._triangle );
 	this.$.annotationLines.attr( 'd', this._vline );
+
+	this.fire( 'changed', {
+		'attr': 'paddingRight',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD paddingRightChanged()
 
 /**
@@ -2617,15 +2488,6 @@ Chart.prototype.paddingBottomChanged = function( oldVal, newVal ) {
 		this.paddingBottom = oldVal;
 		return;
 	}
-	this.fire( 'paddingBottom', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'paddingBottom',
-		'prev': oldVal,
-		'curr': newVal
-	});
-
 	height = this.height - this.paddingTop - newVal;
 
 	// [0] Update the yScale:
@@ -2653,6 +2515,12 @@ Chart.prototype.paddingBottomChanged = function( oldVal, newVal ) {
 	// [7] Update the annotations:
 	this.$.annotationMarkers.attr( 'd', this._triangle );
 	this.$.annotationLines.attr( 'd', this._vline );
+
+	this.fire( 'changed', {
+		'attr': 'paddingBottom',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD paddingBottomChanged()
 
 /**
@@ -2673,15 +2541,6 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 		this.paddingTop = oldVal;
 		return;
 	}
-	this.fire( 'paddingTop', {
-		'type': 'changed'
-	});
-	this.fire( 'changed', {
-		'attr': 'paddingTop',
-		'prev': oldVal,
-		'curr': newVal
-	});
-
 	height = this.height - newVal - this.paddingBottom;
 
 	// [0] Update the yScale:
@@ -2712,6 +2571,12 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 	// [8] Update the annotations:
 	this.$.annotationMarkers.attr( 'd', this._triangle );
 	this.$.annotationLines.attr( 'd', this._vline );
+
+	this.fire( 'changed', {
+		'attr': 'paddingTop',
+		'prev': oldVal,
+		'curr': newVal
+	});
 }; // end METHOD paddingTopChanged()
 
 /**
@@ -2738,14 +2603,13 @@ Chart.prototype.toggleSeries = function( d, i ) {
 	if ( path ) {
 		path.classed( 'hidden', flg );
 	}
-	this.fire( 'legend', {
-		'type': 'toggled',
-		'value': i
-	});
-	// TODO: determine how UI events should be handled. What data to pass along?
 	this.fire( 'clicked', {
-		'msg': 'Legend entry clicked.',
-		'state': ( flg ? 'hidden' : '' )
+		'el': 'legend',
+		'data': {
+			'idx': i,
+			'state': ( flg ? 'hidden' : '' )
+		},
+		'msg': 'Legend entry clicked.'
 	});
 	return false;
 }; // end METHOD toggleSeries()
@@ -2770,14 +2634,13 @@ Chart.prototype.toggleVLine = function( d, i ) {
 	flg = !path.classed( 'hidden' );
 	path.classed( 'hidden', flg );
 
-	this.fire( 'annotations', {
-		'type': 'toggled',
-		'value': i
-	});
-	// TODO: determine how UI events should be handled. What data to pass along?
 	this.fire( 'clicked', {
-		'msg': 'Annotation marker clicked.',
-		'state': ( flg ? 'hidden' : '' )
+		'el': 'annotationMarker',
+		'data': {
+			'idx': i,
+			'state': ( flg ? 'hidden' : '' )
+		},
+		'msg': 'Annotation marker clicked.'
 	});
 	return false;
 }; // end METHOD toggleVLine()
@@ -2797,15 +2660,12 @@ Chart.prototype.isDraggableChanged = function( oldVal, newVal ) {
 		this.isDraggable = oldVal;
 		return;
 	}
-	this.fire( 'isDraggable', {
-		'type': 'changed'
-	});
+	this.$.legendEntries.attr( 'draggable', newVal );
 	this.fire( 'changed', {
 		'attr': 'isDraggable',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	this.$.legendEntries.attr( 'draggable', newVal );
 }; // end METHOD isDraggableChanged()
 
 /**
@@ -2823,9 +2683,6 @@ Chart.prototype.isDroppableChanged = function( oldVal, newVal ) {
 		this.isDroppable = oldVal;
 		return;
 	}
-	this.fire( 'isDroppable', {
-		'type': 'changed'
-	});
 	this.fire( 'changed', {
 		'attr': 'isDroppable',
 		'prev': oldVal,
@@ -2883,7 +2740,6 @@ Chart.prototype.onDragStart = function( d, i ) {
 	// TODO: define additional behavior
 
 	this.fire( 'dragStart', evt );
-
 	return false;
 }; // end METHOD onDragStart()
 
@@ -2904,7 +2760,6 @@ Chart.prototype.onDragEnter = function( evt ) {
 	// TODO: define additional behavior
 
 	this.fire( 'dragEnter', evt );
-
 	return false;
 }; // end METHOD onDragEnter()
 
@@ -2938,7 +2793,6 @@ Chart.prototype.onDragLeave = function( evt ) {
 	// TODO: define additional behavior
 
 	this.fire( 'dragLeave', evt );
-
 	return false;
 }; // end METHOD onDragLeave()
 
@@ -2981,8 +2835,6 @@ Chart.prototype.onDrop = function( evt ) {
 	// Add the new label:
 	this.labels.push( payload.label );
 
-	this.fire( 'dropped', payload );
-
 	// TODO: define additional behavior (#39)
 
 	if ( evt.preventDefault ) {
@@ -2991,6 +2843,7 @@ Chart.prototype.onDrop = function( evt ) {
 	if ( evt.stopPropagation ) {
 		evt.stopPropagation();
 	}
+	this.fire( 'dropped', payload );
 	return false;
 }; // end METHOD onDrop()
 
@@ -3013,7 +2866,6 @@ Chart.prototype.onDragEnd = function( d, i ) {
 		this.clear();
 	}
 	this.fire( 'dragEnd', this._d3.event );
-
 	return false;
 }; // end METHOD onDragEnd()
 
@@ -3032,19 +2884,16 @@ Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
 		this.autoResize = oldVal;
 		return;
 	}
-	this.fire( 'autoResize', {
-		'type': 'changed'
-	});
+	if ( newVal ) {
+		window.addEventListener( 'resize', this._onResize, false );
+	} else {
+		window.removeEventListener( 'resize', this._onResize );
+	}
 	this.fire( 'changed', {
 		'attr': 'autoResize',
 		'prev': oldVal,
 		'curr': newVal
 	});
-	if ( newVal ) {
-		window.addEventListener( 'resize', this._onResize, false );
-		return;
-	}
-	window.removeEventListener( 'resize', this._onResize );
 }; // end METHOD isDraggableChanged()
 
 /**
@@ -3053,6 +2902,7 @@ Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
 */
 Chart.prototype.onResize = function() {
 	this.fire( 'resized', {
+		'el': 'polymer-timeseries',
 		'msg': 'Received a resize event.'
 	});
 	if ( !this.$.canvas ) {
@@ -3082,9 +2932,6 @@ Chart.prototype.stream = function( options ) {
 	}
 	clbk = onData.bind( this );
 	this._stream = new Stream( clbk, opts );
-	this.fire( 'stream', {
-		'type': 'created'
-	});
 	return this._stream;
 
 	function onData( error, arr ) {
@@ -3094,7 +2941,7 @@ Chart.prototype.stream = function( options ) {
 			return;
 		}
 		// TODO: call update function
-
+		// TODO: change event name
 		this.fire( 'data', arr );
 	}
 }; // end METHOD stream()
