@@ -41,6 +41,7 @@ var // Writable stream constructor:
 // VARIABLES //
 
 var OPTS = {},
+	EVENTS,
 	X1,
 	X2;
 
@@ -161,6 +162,64 @@ OPTS.category20c = [
 	'category20c-18',
 	'category20c-19',
 	'category20c-20'
+];
+
+EVENTS = [
+	'canvas',
+	'graph',
+	'background',
+	'timeseries',
+	'xAxis',
+	'yAxis',
+	'title',
+	'annotations', // multiple meanings
+	'legend',
+
+	'data',
+	'config',
+	'xValue',
+	'yValue',
+	'aValue',
+	'isDefined',
+	'width',
+	'height',
+	'labels',
+	'title',
+	'xLabel',
+	'yLabel',
+	'xMin',
+	'xMax',
+	'yMin',
+	'yMax',
+	'xNumTicks',
+	'yNumTicks',
+	'xAxisOrient',
+	'yAxisOrient',
+	'xTickFormat',
+	'interpolation',
+	'tension',
+	'colors',
+	'paddingLeft',
+	'paddingRight',
+	'paddingTop',
+	'paddingBottom',
+	'isDraggable',
+	'isDroppable',
+	'autoResize',
+
+	'stream',
+
+	'changed',
+	'error',
+	'cleared',
+
+	'resized',
+	'clicked',
+	'dragStart',
+	'dragEnd',
+	'dragEnter',
+	'dragLeave',
+	'dropped'
 ];
 
 
@@ -481,72 +540,6 @@ Chart.prototype.tension = 0.7;
 */
 Chart.prototype.autoResize = true;
 
-// TODO: clean-up events
-/**
-* ATTRIBUTE: events
-*	List of events emitted from the element.
-*
-* @type {Array}
-* @default [...]
-*/
-Chart.prototype.events = [
-	'canvas',
-	'graph',
-	'background',
-	'timeseries',
-	'xAxis',
-	'yAxis',
-	'title',
-	'annotations', // multiple meanings
-	'legend',
-	'clear',
-
-	'data',
-	'config',
-	'xValue',
-	'yValue',
-	'aValue',
-	'isDefined',
-	'width',
-	'height',
-	'labels',
-	'title',
-	'xLabel',
-	'yLabel',
-	'xMin',
-	'xMax',
-	'yMin',
-	'yMax',
-	'xNumTicks',
-	'yNumTicks',
-	'xAxisOrient',
-	'yAxisOrient',
-	'xTickFormat',
-	'interpolation',
-	'tension',
-	'colors',
-	'paddingLeft',
-	'paddingRight',
-	'paddingTop',
-	'paddingBottom',
-	'isDraggable',
-	'isDroppable',
-	'autoResize',
-
-	'stream',
-
-	'changed',
-	'error',
-
-	'resized',
-	'clicked',
-	'dragStart',
-	'dragEnd',
-	'dragEnter',
-	'dragLeave',
-	'dropped'
-];
-
 /**
 * METHOD: created()
 *	Polymer hook that is called when an element is created.
@@ -578,19 +571,22 @@ Chart.prototype.init = function() {
 
 	// Initialize attributes...
 
-	// Config... (hint an object)
+	// Config: (hint an object)
 	this.config = {};
 
-	// Data... (hint an array)
+	// Events: (hint an array)
+	this.events = EVENTS;
+
+	// Data: (hint an array)
 	this.data = [];
 
-	// Annotations... (hint an array)
+	// Annotations: (hint an array)
 	this.annotations = [];
 
-	// Labels... (hint an array)
+	// Labels: (hint an array)
 	this.labels = [];
 
-	// Colors...
+	// Colors:
 	this.colors = 'category10';
 
 	// Private methods...
@@ -764,6 +760,10 @@ Chart.prototype.createBase = function() {
 	// Remove any existing canvas...
 	if ( this.$.canvas ) {
 		this.$.canvas.remove();
+		this.fire( 'canvas', {
+			'type': 'removed',
+			'msg': 'Existing canvas removed'
+		});
 	}
 	// Create the SVG element:
 	canvas = this.$.root.append( 'svg:svg' )
@@ -774,7 +774,7 @@ Chart.prototype.createBase = function() {
 	this.$.canvas = canvas;
 
 	this.fire( 'canvas', {
-		'evt': 'created',
+		'type': 'created',
 		'msg': 'Chart canvas created.'
 	});
 
@@ -795,7 +795,7 @@ Chart.prototype.createBase = function() {
 		.attr( 'transform', 'translate(' + pLeft + ',' + pTop + ')' );
 
 	this.fire( 'graph', {
-		'evt': 'created',
+		'type': 'created',
 		'msg': 'Chart graph created.'
 	});
 
@@ -819,6 +819,10 @@ Chart.prototype.createBackground = function() {
 	// Remove any existing background...
 	if ( this.$.bkgd ) {
 		this.$.bkgd.remove();
+		this.fire( 'background', {
+			'type': 'removed',
+			'msg': 'Existing background removed'
+		});
 	}
 	this.$.bkgd = this.$.graph.append( 'svg:rect' )
 		.attr( 'class', 'background' )
@@ -828,7 +832,7 @@ Chart.prototype.createBackground = function() {
 		.attr( 'height', this.graphHeight() );
 
 	this.fire( 'background', {
-		'evt': 'created',
+		'type': 'created',
 		'msg': 'Graph background created.'
 	});
 
@@ -845,6 +849,10 @@ Chart.prototype.createPaths = function() {
 	// Remove any existing marks...
 	if ( this.$.marks ) {
 		this.$.marks.remove();
+		this.fire( 'marks', {
+			'type': 'removed',
+			'msg': 'Existing marks removed'
+		});
 	}
 	// Create a `marks` group:
 	this.$.marks = this.$.graph.append( 'svg:g' )
@@ -864,7 +872,7 @@ Chart.prototype.createPaths = function() {
 			.attr( 'd', this._line );
 
 	this.fire( 'timeseries', {
-		'evt': 'created',
+		'type': 'created',
 		'msg': 'Graph timeseries created.'
 	});
 
@@ -885,9 +893,17 @@ Chart.prototype.createAxes = function() {
 	// Remove any existing x-axis...
 	if ( this.$.xAxis ) {
 		this.$.xAxis.remove();
+		this.fire( 'xAxis', {
+			'type': 'removed',
+			'msg': 'Existing x-axis removed'
+		});
 	}
 	if ( this.$.yAxis ) {
 		this.$.yAxis.remove();
+		this.fire( 'yAxis', {
+			'type': 'removed',
+			'msg': 'Existing y-axis removed'
+		});
 	}
 	axis = graph.append( 'svg:g' )
 		.attr( 'property', 'axis' )
@@ -911,7 +927,7 @@ Chart.prototype.createAxes = function() {
 		.attr( 'property', 'axis_domain' );
 
 	this.fire( 'xAxis', {
-		'evt': 'created',
+		'type': 'created',
 		'msg': 'Graph x-axis created.'
 	});
 
@@ -937,7 +953,7 @@ Chart.prototype.createAxes = function() {
 		.attr( 'property', 'axis_domain' );
 
 	this.fire( 'yAxis', {
-		'evt': 'created',
+		'type': 'created',
 		'msg': 'Graph y-axis created.'
 	});
 
@@ -953,6 +969,10 @@ Chart.prototype.createAxes = function() {
 Chart.prototype.createTitle = function() {
 	if ( this.$.title ) {
 		this.$.title.remove();
+		this.fire( 'title', {
+			'type': 'removed',
+			'msg': 'Existing chart title removed'
+		});
 	}
 	this.$.title = this.$.meta.append( 'svg:text' )
 		.attr( 'property', 'chart.title' )
@@ -962,7 +982,7 @@ Chart.prototype.createTitle = function() {
 		.text( this.chartTitle );
 
 	this.fire( 'title', {
-		'evt': 'created',
+		'type': 'created',
 		'msg': 'Chart title created.'
 	});
 
@@ -980,6 +1000,10 @@ Chart.prototype.createAnnotations = function() {
 
 	if ( this.$.agroup ) {
 		this.$.agroup.remove();
+		this.fire( 'annotations', {
+			'type': 'removed',
+			'msg': 'Existing annotations removed'
+		});
 	}
 	this.$.agroup = this.$.graph.append( 'svg:g' )
 		.attr( 'class', 'annotations' )
@@ -1003,7 +1027,7 @@ Chart.prototype.createAnnotations = function() {
 		.attr( 'stroke-dasharray', '4,4' );
 
 	this.fire( 'annotations', {
-		'evt': 'created',
+		'type': 'created',
 		'msg': 'Graph annotations created.'
 	});
 
@@ -1030,6 +1054,10 @@ Chart.prototype.createLegend = function() {
 
 	if ( this.$.legend ) {
 		this.$.legend.remove();
+		this.fire( 'legend', {
+			'type': 'removed',
+			'msg': 'Existing legend removed'
+		});
 	}
 	range = this._d3.range( numLabels );
 
@@ -1076,7 +1104,7 @@ Chart.prototype.createLegend = function() {
 		}
 	}
 	this.fire( 'legend', {
-		'evt': 'created',
+		'type': 'created',
 		'msg': 'Chart legend created.'
 	});
 	return this;
@@ -1111,7 +1139,7 @@ Chart.prototype.resetPaths = function() {
 	this.$.paths = paths;
 
 	this.fire( 'timeseries', {
-		'evt': 'reset',
+		'type': 'reset',
 		'msg': 'Graph timeseries reset.'
 	});
 
@@ -1155,7 +1183,7 @@ Chart.prototype.resetAnnotations = function() {
 	this.$.annotationLines = annotations.selectAll( '.vline' );
 
 	this.fire( 'annotations', {
-		'evt': 'reset',
+		'type': 'reset',
 		'msg': 'Graph annotations reset.'
 	});
 	return this;
@@ -1219,7 +1247,7 @@ Chart.prototype.resetLegend = function() {
 	this.$.legendLabels = labels;
 
 	this.fire( 'legend', {
-		'evt': 'reset',
+		'type': 'reset',
 		'msg': 'Chart legend reset.'
 	});
 	return this;
@@ -1247,7 +1275,7 @@ Chart.prototype.clear = function() {
 	this.$.xAxis.call( this._xAxis );
 	this.$.yAxis.call( this._yAxis );
 
-	this.fire( 'clear', {
+	this.fire( 'cleared', {
 		'msg': 'Chart cleared.'
 	});
 	return this;
@@ -1504,7 +1532,7 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 		}
 	}
 	this.fire( 'data', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	// TODO: elaborate on how the attribute changed. e.g., array updated, entirely new array, etc.
 	this.fire( 'changed', {
@@ -1574,7 +1602,7 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 		}
 	}
 	this.fire( 'annotations', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	// TODO: elaborate on how the attribute changed. similar to data.
 	this.fire( 'changed', {
@@ -1634,7 +1662,7 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 	});
 
 	this.fire( 'config', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'config',
@@ -1659,7 +1687,7 @@ Chart.prototype.xValueChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'xValue', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'xValue'
@@ -1682,7 +1710,7 @@ Chart.prototype.yValueChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'yValue', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'yValue'
@@ -1705,7 +1733,7 @@ Chart.prototype.aValueChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'aValue', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'aValue'
@@ -1733,7 +1761,7 @@ Chart.prototype.isDefinedChanged = function( oldVal, newVal ) {
 	selection.attr( 'd', line );
 
 	this.fire( 'isDefined', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'isDefined'
@@ -1758,7 +1786,7 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'width', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'width',
@@ -1816,7 +1844,7 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'height', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'height',
@@ -1890,7 +1918,7 @@ Chart.prototype.labelsChanged = function( val, newVal ) {
 		}
 	}
 	this.fire( 'labels', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	// TODO: elaborate on how the attribute changed.
 	this.fire( 'changed', {
@@ -1921,7 +1949,7 @@ Chart.prototype.chartTitleChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'title', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'title',
@@ -1947,7 +1975,7 @@ Chart.prototype.xLabelChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'xLabel', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'xLabel',
@@ -1973,7 +2001,7 @@ Chart.prototype.yLabelChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'yLabel', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'yLabel',
@@ -2002,7 +2030,7 @@ Chart.prototype.xMinChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'xMin', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'xMin',
@@ -2045,7 +2073,7 @@ Chart.prototype.xMaxChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'xMax', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'xMax',
@@ -2088,7 +2116,7 @@ Chart.prototype.yMinChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'yMin', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'yMin',
@@ -2127,7 +2155,7 @@ Chart.prototype.yMaxChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'yMax', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'yMax',
@@ -2166,7 +2194,7 @@ Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'xNumTicks', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'xNumTicks',
@@ -2196,7 +2224,7 @@ Chart.prototype.yNumTicksChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'yNumTicks', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'yNumTicks',
@@ -2226,7 +2254,7 @@ Chart.prototype.xAxisOrientChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'xAxisOrient', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'xAxisOrient',
@@ -2258,7 +2286,7 @@ Chart.prototype.yAxisOrientChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'yAxisOrient', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'yAxisOrient',
@@ -2290,7 +2318,7 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'xTickFormat', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'xTickFormat',
@@ -2321,7 +2349,7 @@ Chart.prototype.yTickFormatChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'yTickFormat', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'yTickFormat',
@@ -2356,7 +2384,7 @@ Chart.prototype.interpolationChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'interpolation', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'interpolation',
@@ -2386,7 +2414,7 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'tension', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'tension',
@@ -2434,7 +2462,7 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 		}
 	}
 	this.fire( 'colors', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	// TODO: elaborate on change event (distinguish between new reference and changed array)
 	this.fire( 'changed', {
@@ -2481,7 +2509,7 @@ Chart.prototype.paddingLeftChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'paddingLeft', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'paddingLeft',
@@ -2537,7 +2565,7 @@ Chart.prototype.paddingRightChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'paddingRight', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'paddingRight',
@@ -2590,7 +2618,7 @@ Chart.prototype.paddingBottomChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'paddingBottom', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'paddingBottom',
@@ -2646,7 +2674,7 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'paddingTop', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'paddingTop',
@@ -2711,7 +2739,7 @@ Chart.prototype.toggleSeries = function( d, i ) {
 		path.classed( 'hidden', flg );
 	}
 	this.fire( 'legend', {
-		'evt': 'toggled',
+		'type': 'toggled',
 		'value': i
 	});
 	// TODO: determine how UI events should be handled. What data to pass along?
@@ -2743,7 +2771,7 @@ Chart.prototype.toggleVLine = function( d, i ) {
 	path.classed( 'hidden', flg );
 
 	this.fire( 'annotations', {
-		'evt': 'toggled',
+		'type': 'toggled',
 		'value': i
 	});
 	// TODO: determine how UI events should be handled. What data to pass along?
@@ -2770,7 +2798,7 @@ Chart.prototype.isDraggableChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'isDraggable', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'isDraggable',
@@ -2796,7 +2824,7 @@ Chart.prototype.isDroppableChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'isDroppable', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'isDroppable',
@@ -3005,7 +3033,7 @@ Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
 		return;
 	}
 	this.fire( 'autoResize', {
-		'evt': 'changed'
+		'type': 'changed'
 	});
 	this.fire( 'changed', {
 		'attr': 'autoResize',
@@ -3055,7 +3083,7 @@ Chart.prototype.stream = function( options ) {
 	clbk = onData.bind( this );
 	this._stream = new Stream( clbk, opts );
 	this.fire( 'stream', {
-		'evt': 'created'
+		'type': 'created'
 	});
 	return this._stream;
 
