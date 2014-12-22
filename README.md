@@ -46,7 +46,7 @@ The component has the following public attributes and methods...
 
 ##### 'canvas'
 
-The element emits a `canvas` event to mark chart canvas life cycle events; e.g., creation and removal.
+The element emits a `canvas` event to mark chart canvas lifecycle events; e.g., creation and removal.
 
 ``` javascript
 el.addEventListener( 'canvas', function onEvent( evt ) {
@@ -56,7 +56,7 @@ el.addEventListener( 'canvas', function onEvent( evt ) {
 
 ##### 'graph'
 
-The element emits a `graph` event to mark chart graph life cycle events; e.g., creation.
+The element emits a `graph` event to mark graph lifecycle events; e.g., creation.
 
 ``` javascript
 el.addEventListener( 'graph', function onEvent( evt ) {
@@ -66,7 +66,7 @@ el.addEventListener( 'graph', function onEvent( evt ) {
 
 ##### 'background'
 
-The element emits a `background` event to mark graph background life cycle events; e.g., creation and removal.
+The element emits a `background` event to mark graph background lifecycle events; e.g., creation and removal.
 
 ``` javascript
 el.addEventListener( 'background', function onEvent( evt ) {
@@ -76,7 +76,7 @@ el.addEventListener( 'background', function onEvent( evt ) {
 
 ##### 'timeseries'
 
-The element emits a `timeseries` event to mark timeseries life cycle events; e.g., creation and reset.
+The element emits a `timeseries` event to mark timeseries lifecycle events; e.g., creation and reset.
 
 ``` javascript
 el.addEventListener( 'timeseries', function onEvent( evt ) {
@@ -86,7 +86,7 @@ el.addEventListener( 'timeseries', function onEvent( evt ) {
 
 ##### 'xAxis'
 
-The element emits an `xAxis` event to mark x-axis life cycle events; e.g., creation and removal.
+The element emits an `xAxis` event to mark x-axis lifecycle events; e.g., creation and removal.
 
 ``` javascript
 el.addEventListener( 'xAxis', function onEvent( evt ) {
@@ -96,7 +96,7 @@ el.addEventListener( 'xAxis', function onEvent( evt ) {
 
 ##### 'yAxis'
 
-The element emits a `yAxis` event to mark y-axis life cycle events; e.g., creation and removal.
+The element emits a `yAxis` event to mark y-axis lifecycle events; e.g., creation and removal.
 
 ``` javascript
 el.addEventListener( 'yAxis', function onEvent( evt ) {
@@ -106,7 +106,7 @@ el.addEventListener( 'yAxis', function onEvent( evt ) {
 
 ##### 'title'
 
-The element emits a `title` event to mark chart title life cycle events; e.g., creation, removal, and changed (see below).
+The element emits a `title` event to mark chart title lifecycle events; e.g., creation, removal, and changed (see below).
 
 ``` javascript
 el.addEventListener( 'title', function onEvent( evt ) {
@@ -119,7 +119,7 @@ el.addEventListener( 'title', function onEvent( evt ) {
 
 ##### 'annotations'
 
-The element emits an `annotations` event to mark graph annotation life cycle events; e.g., creation, removal, and changed (see below).
+The element emits an `annotations` event to mark graph annotation lifecycle events; e.g., creation, removal, and changed (see below).
 
 ``` javascript
 el.addEventListener( 'annotations', function onEvent( evt ) {
@@ -129,7 +129,7 @@ el.addEventListener( 'annotations', function onEvent( evt ) {
 
 ##### 'legend'
 
-The element emits a `legend` event to mark legend life cycle events; e.g., creation and removal.
+The element emits a `legend` event to mark legend lifecycle events; e.g., creation and removal.
 
 ``` javascript
 el.addEventListener( 'legend', function onEvent( evt ) {
