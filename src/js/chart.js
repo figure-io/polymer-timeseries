@@ -301,24 +301,6 @@ Chart.prototype.width = null;
 Chart.prototype.height = null;
 
 /**
-* ATTRIBUTE: isDraggable
-*	Specifies whether chart components (legend and paths) should be draggable. See [tutorial]{@link http://www.html5rocks.com/en/tutorials/dnd/basics/}.
-*
-* @type {Boolean}
-* @default true
-*/
-Chart.prototype.isDraggable = true;
-
-/**
-* ATTRIBUTE: isDroppable
-*	Specifies whether data can be dropped into the chart. See [tutorial]{@link http://www.html5rocks.com/en/tutorials/dnd/basics/}.
-*
-* @type {Boolean}
-* @default true
-*/
-Chart.prototype.isDroppable = true;
-
-/**
 * ATTRIBUTE: chartTitle
 *	Chart title.
 *
@@ -496,6 +478,24 @@ Chart.prototype.interpolation = 'linear';
 * @default 0.7
 */
 Chart.prototype.tension = 0.7;
+
+/**
+* ATTRIBUTE: isDraggable
+*	Specifies whether chart components (legend entires) should be draggable. See [tutorial]{@link http://www.html5rocks.com/en/tutorials/dnd/basics/}.
+*
+* @type {Boolean}
+* @default true
+*/
+Chart.prototype.isDraggable = true;
+
+/**
+* ATTRIBUTE: isDroppable
+*	Specifies whether data can be dropped into the chart. See [tutorial]{@link http://www.html5rocks.com/en/tutorials/dnd/basics/}.
+*
+* @type {Boolean}
+* @default true
+*/
+Chart.prototype.isDroppable = true;
 
 /**
 * ATTRIBUTE: autoResize
@@ -2593,14 +2593,19 @@ Chart.prototype.toggleSeries = function( d, i ) {
 		path,
 		flg;
 
-	// Get the corresponding path element...
+	// Toggle the legend entry visibility...
 	selection = d3.select( this.$.legendEntries[ 0 ][ i ] );
-	path = d3.select( this.$.paths[ 0 ][ i ] );
 
-	// Toggle the path visibility...
+	if ( !selection.node() ) {
+		return;
+	}
 	flg = !selection.classed( 'hidden' );
 	selection.classed( 'hidden', flg );
-	if ( path ) {
+
+	// Toggle the path visibility...
+	path = d3.select( this.$.paths[ 0 ][ i ] );
+
+	if ( path.node() ) {
 		path.classed( 'hidden', flg );
 	}
 	this.fire( 'clicked', {
@@ -2630,6 +2635,9 @@ Chart.prototype.toggleVLine = function( d, i ) {
 	// Get the vertical line element corresponding to the clicked annotation marker...
 	path = d3.select( this.$.annotationLines[ 0 ][ i ] );
 
+	if ( !path.node() ) {
+		return;
+	}
 	// Toggle the line visibility...
 	flg = !path.classed( 'hidden' );
 	path.classed( 'hidden', flg );
