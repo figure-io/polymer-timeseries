@@ -41,10 +41,11 @@ The component has the following public attributes and methods...
 
 ### Events
 
+The component emits events during chart creation, configuration, and interaction. Listening to events can useful for linked graphics and logging.
 
-#### Elements
+The following events are emitted... 
 
-##### 'canvas'
+#### 'canvas'
 
 The element emits a `canvas` event to mark chart canvas lifecycle events; e.g., creation and removal.
 
@@ -54,7 +55,7 @@ el.addEventListener( 'canvas', function onEvent( evt ) {
 });
 ```
 
-##### 'graph'
+#### 'graph'
 
 The element emits a `graph` event to mark graph lifecycle events; e.g., creation.
 
@@ -64,7 +65,7 @@ el.addEventListener( 'graph', function onEvent( evt ) {
 });
 ```
 
-##### 'background'
+#### 'background'
 
 The element emits a `background` event to mark graph background lifecycle events; e.g., creation and removal.
 
@@ -74,7 +75,7 @@ el.addEventListener( 'background', function onEvent( evt ) {
 });
 ```
 
-##### 'timeseries'
+#### 'timeseries'
 
 The element emits a `timeseries` event to mark timeseries lifecycle events; e.g., creation and reset.
 
@@ -84,7 +85,7 @@ el.addEventListener( 'timeseries', function onEvent( evt ) {
 });
 ```
 
-##### 'xAxis'
+#### 'xAxis'
 
 The element emits an `xAxis` event to mark x-axis lifecycle events; e.g., creation and removal.
 
@@ -94,7 +95,7 @@ el.addEventListener( 'xAxis', function onEvent( evt ) {
 });
 ```
 
-##### 'yAxis'
+#### 'yAxis'
 
 The element emits a `yAxis` event to mark y-axis lifecycle events; e.g., creation and removal.
 
@@ -104,7 +105,7 @@ el.addEventListener( 'yAxis', function onEvent( evt ) {
 });
 ```
 
-##### 'title'
+#### 'title'
 
 The element emits a `title` event to mark chart title lifecycle events; e.g., creation, removal, and changed.
 
@@ -117,7 +118,7 @@ el.addEventListener( 'title', function onEvent( evt ) {
 });
 ```
 
-##### 'annotations'
+#### 'annotations'
 
 The element emits an `annotations` event to mark graph annotation lifecycle events; e.g., creation, removal, and changed.
 
@@ -127,7 +128,7 @@ el.addEventListener( 'annotations', function onEvent( evt ) {
 });
 ```
 
-##### 'legend'
+#### 'legend'
 
 The element emits a `legend` event to mark legend lifecycle events; e.g., creation and removal.
 
@@ -138,9 +139,7 @@ el.addEventListener( 'legend', function onEvent( evt ) {
 ```
 
 
-#### Attributes
-
-##### 'data'
+#### 'data'
 
 The element emits a `data` event when the `data` attribute changes.
 
@@ -150,7 +149,7 @@ el.addEventListener( 'data', function onEvent( evt ) {
 });
 ```
 
-##### 'config'
+#### 'config'
 
 The element emits a `config` event when the `config` attribute changes.
 
@@ -160,7 +159,7 @@ el.addEventListener( 'config', function onEvent( evt ) {
 });
 ```
 
-##### 'width'
+#### 'width'
 
 The element emits a `width` event when the `width` attribute changes.
 
@@ -170,7 +169,7 @@ el.addEventListener( 'width', function onEvent( evt ) {
 });
 ```
 
-##### 'height'
+#### 'height'
 
 The element emits a `height` event when the `height` attribute changes.
 
@@ -180,7 +179,7 @@ el.addEventListener( 'height', function onEvent( evt ) {
 });
 ```
 
-##### 'xValue'
+#### 'xValue'
 
 The element emits an `xValue` event when the `xValue` attribute changes.
 
@@ -190,7 +189,7 @@ el.addEventListener( 'xValue', function onEvent( evt ) {
 });
 ```
 
-##### 'yValue'
+#### 'yValue'
 
 The element emits an `yValue` event when the `yValue` attribute changes.
 
@@ -200,7 +199,7 @@ el.addEventListener( 'yValue', function onEvent( evt ) {
 });
 ```
 
-##### 'aValue'
+#### 'aValue'
 
 The element emits an `aValue` event when the `aValue` attribute changes.
 
@@ -210,7 +209,7 @@ el.addEventListener( 'aValue', function onEvent( evt ) {
 });
 ```
 
-##### 'isDefined'
+#### 'isDefined'
 
 The element emits an `isDefined` event when the `isDefined` attribute changes.
 
@@ -220,7 +219,7 @@ el.addEventListener( 'isDefined', function onEvent( evt ) {
 });
 ```
 
-##### 'labels'
+#### 'labels'
 
 The element emits a `labels` event when the `labels` attribute changes.
 
@@ -230,7 +229,7 @@ el.addEventListener( 'labels', function onEvent( evt ) {
 });
 ```
 
-##### 'xLabel'
+#### 'xLabel'
 
 The element emits an `xLabel` event when the `xLabel` attribute changes.
 
@@ -240,7 +239,7 @@ el.addEventListener( 'xLabel', function onEvent( evt ) {
 });
 ```
 
-##### 'yLabel'
+#### 'yLabel'
 
 The element emits a `yLabel` event when the `yLabel` attribute changes.
 
@@ -250,7 +249,7 @@ el.addEventListener( 'yLabel', function onEvent( evt ) {
 });
 ```
 
-##### 'xMin'
+#### 'xMin'
 
 The element emits an `xMin` event when the `xMin` attribute changes.
 
@@ -260,7 +259,7 @@ el.addEventListener( 'xMin', function onEvent( evt ) {
 });
 ```
 
-##### 'xMax'
+#### 'xMax'
 
 The element emits an `xMax` event when the `xMax` attribute changes.
 
@@ -270,7 +269,7 @@ el.addEventListener( 'xMax', function onEvent( evt ) {
 });
 ```
 
-##### 'yMin'
+#### 'yMin'
 
 The element emits a `yMin` event when the `yMin` attribute changes.
 
@@ -280,7 +279,7 @@ el.addEventListener( 'yMin', function onEvent( evt ) {
 });
 ```
 
-##### 'yMax'
+#### 'yMax'
 
 The element emits a `yMax` event when the `yMax` attribute changes.
 
@@ -290,7 +289,7 @@ el.addEventListener( 'yMax', function onEvent( evt ) {
 });
 ```
 
-##### 'xNumTicks'
+#### 'xNumTicks'
 
 The element emits an `xNumTicks` event when the `xNumTicks` attribute changes.
 
@@ -300,7 +299,7 @@ el.addEventListener( 'xNumTicks', function onEvent( evt ) {
 });
 ```
 
-##### 'yNumTicks'
+#### 'yNumTicks'
 
 The element emits a `yNumTicks` event when the `yNumTicks` attribute changes.
 
@@ -310,7 +309,7 @@ el.addEventListener( 'yNumTicks', function onEvent( evt ) {
 });
 ```
 
-##### 'xAxisOrient'
+#### 'xAxisOrient'
 
 The element emits an `xAxisOrient` event when the `xAxisOrient` attribute changes.
 
@@ -320,7 +319,7 @@ el.addEventListener( 'xAxisOrient', function onEvent( evt ) {
 });
 ```
 
-##### 'yAxisOrient'
+#### 'yAxisOrient'
 
 The element emits a `yAxisOrient` event when the `yAxisOrient` attribute changes.
 
@@ -330,7 +329,7 @@ el.addEventListener( 'yAxisOrient', function onEvent( evt ) {
 });
 ```
 
-##### 'xTickFormat'
+#### 'xTickFormat'
 
 The element emits an `xTickFormat` event when the `xTickFormat` attribute changes.
 
@@ -340,7 +339,7 @@ el.addEventListener( 'xTickFormat', function onEvent( evt ) {
 });
 ```
 
-##### 'interpolation'
+#### 'interpolation'
 
 The element emits an `interpolation` event when the `interpolation` attribute changes.
 
@@ -350,7 +349,7 @@ el.addEventListener( 'interpolation', function onEvent( evt ) {
 });
 ```
 
-##### 'tension'
+#### 'tension'
 
 The element emits a `tension` event when the `tension` attribute changes.
 
@@ -360,7 +359,7 @@ el.addEventListener( 'tension', function onEvent( evt ) {
 });
 ```
 
-##### 'colors'
+#### 'colors'
 
 The element emits a `colors` event when the `colors` attribute changes.
 
@@ -370,7 +369,7 @@ el.addEventListener( 'colors', function onEvent( evt ) {
 });
 ```
 
-##### 'paddingLeft'
+#### 'paddingLeft'
 
 The element emits a `paddingLeft` event when the `paddingLeft` attribute changes.
 
@@ -380,7 +379,7 @@ el.addEventListener( 'paddingLeft', function onEvent( evt ) {
 });
 ```
 
-##### 'paddingRight'
+#### 'paddingRight'
 
 The element emits a `paddingRight` event when the `paddingRight` attribute changes.
 
@@ -390,7 +389,7 @@ el.addEventListener( 'paddingRight', function onEvent( evt ) {
 });
 ```
 
-##### 'paddingBottom'
+#### 'paddingBottom'
 
 The element emits a `paddingBottom` event when the `paddingBottom` attribute changes.
 
@@ -400,7 +399,7 @@ el.addEventListener( 'paddingBottom', function onEvent( evt ) {
 });
 ```
 
-##### 'paddingTop'
+#### 'paddingTop'
 
 The element emits a `paddingTop` event when the `paddingTop` attribute changes.
 
@@ -410,7 +409,7 @@ el.addEventListener( 'paddingTop', function onEvent( evt ) {
 });
 ```
 
-##### 'isDraggable'
+#### 'isDraggable'
 
 The element emits an `isDraggable` event when the `isDraggable` attribute changes.
 
@@ -420,7 +419,7 @@ el.addEventListener( 'isDraggable', function onEvent( evt ) {
 });
 ```
 
-##### 'isDroppable'
+#### 'isDroppable'
 
 The element emits an `isDroppable` event when the `isDroppable` attribute changes.
 
@@ -430,7 +429,7 @@ el.addEventListener( 'isDroppable', function onEvent( evt ) {
 });
 ```
 
-##### 'autoResize'
+#### 'autoResize'
 
 The element emits an `autoResize` event when the `autoResize` attribute changes.
 
@@ -441,9 +440,7 @@ el.addEventListener( 'autoResize', function onEvent( evt ) {
 ```
 
 
-#### Interactions
-
-##### 'resized'
+#### 'resized'
 
 The element emits a `resized` event when the element's resize listener is triggered.
 
@@ -453,7 +450,7 @@ el.addEventListener( 'resized', function onResize( evt ) {
 });
 ```
 
-##### 'clicked'
+#### 'clicked'
 
 The element emits a `clicked` event when a chart element is clicked.
 
@@ -463,7 +460,7 @@ el.addEventListener( 'clicked', function onResize( evt ) {
 });
 ```
 
-##### 'dragStart'
+#### 'dragStart'
 
 The element emits a `dragStart` event when a legend entry is dragged.
 
@@ -473,7 +470,7 @@ el.addEventListener( 'dragStart', function onResize( evt ) {
 });
 ```
 
-##### 'dragEnd'
+#### 'dragEnd'
 
 The element emits a `dragEnd` event when a legend entry stops being dragged.
 
@@ -483,7 +480,7 @@ el.addEventListener( 'dragEnd', function onResize( evt ) {
 });
 ```
 
-##### 'dragEnter'
+#### 'dragEnter'
 
 The element emits a `dragEnter` event when a draggable element enters the chart area.
 
@@ -493,7 +490,7 @@ el.addEventListener( 'dragEnter', function onResize( evt ) {
 });
 ```
 
-##### 'dragLeave'
+#### 'dragLeave'
 
 The element emits a `dragLeave` event when a draggable element leaves the chart area.
 
@@ -503,7 +500,7 @@ el.addEventListener( 'dragLeave', function onResize( evt ) {
 });
 ```
 
-##### 'dropped'
+#### 'dropped'
 
 The element emits a `dropped` event when a draggable element is dropped into the chart area (only when `isDroppable` is `true`).
 
@@ -514,9 +511,7 @@ el.addEventListener( 'dropped', function onResize( evt ) {
 ```
 
 
-#### Other
-
-##### 'changed'
+#### 'changed'
 
 The element emits a `changed` event whenever an attribute changes.
 
@@ -526,7 +521,7 @@ el.addEventListener( 'changed', function onChange( evt ) {
 });
 ```
 
-##### 'error'
+#### 'error'
 
 The element emits an `error` event whenever a error occurs; e.g., improper setting of attributes.
 
@@ -536,7 +531,7 @@ el.addEventListener( 'error', function onError( err ) {
 });
 ```
 
-##### 'cleared'
+#### 'cleared'
 
 The element emits a `cleared` event whenever the chart is cleared.
 
@@ -546,9 +541,9 @@ el.addEventListener( 'cleared', function onChange( evt ) {
 });
 ```
 
-##### 'stream'
+#### 'stream'
 
-The element emits a `stream` event whenever a new stream is created.
+The element emits a `stream` event whenever a new writable chart stream is created.
 
 ``` javascript
 el.addEventListener( 'stream', function onChange( evt ) {
