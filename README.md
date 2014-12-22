@@ -299,7 +299,7 @@ el.xValue = function( d ) {
 	return d[ 0 ];
 };
 
-// Example of object based:
+// Example of object based accessor:
 el.xValue = function( d, i ) {
 	return d.x;
 };
@@ -315,7 +315,7 @@ el.yValue = function( d ) {
 	return d[ 1 ];
 };
 
-// Example of object based:
+// Example of object based accessor:
 el.yValue = function( d, i ) {
 	return d.y;
 };
@@ -331,7 +331,7 @@ el.aValue = function( d ) {
 	return d[ 1 ];
 };
 
-// Object based:
+// Example of object based accessor:
 el.aValue = function( d, i ) {
 	return d.annotation;
 };
@@ -411,7 +411,7 @@ el.clear();
 
 #### el.formatData( data )
 
-Converts data to standard representation. Needed for non-deterministic accessors. Use this method to convert raw data in non-standard format (see `el.data`) to standard format.
+Converts data to standard representation. Needed for non-deterministic accessors. Use this method to convert raw data in non-standard format to standard format (see `el.data`).
 
 ``` javascript
 var data = [
@@ -441,12 +441,12 @@ el.data = el.formatData( data );
 
 #### el.formatAnnotations( annotations )
 
-Converts an `array` of annotations to standard representation. Needed for non-deterministic accessors. Use this method to convert raw annotation data in non-standard format (see `el.annotations`) to standard format.
+Converts an `array` of annotations to standard representation. Needed for non-deterministic accessors. Use this method to convert raw annotation data in non-standard format to standard format (see `el.annotations`).
 
 ``` javascript
 var annotations = [
-	{'time':1417563950959,'msg':alert 1'},
-	{'time':1417563956959,'msg':alert 2'}
+	{'time':1417563950959,'msg':'alert 1'},
+	{'time':1417563956959,'msg':'alert 2'}
 ];
 
 el.xValue = function( d ) {
