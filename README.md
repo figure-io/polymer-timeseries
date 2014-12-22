@@ -350,7 +350,7 @@ el.isDefined = function( d ) {
 
 // Example checking for NaNs:
 el.isDefined = function( d ) {
-	return ( typeof d === 'number' && d !== d );
+	return ( typeof d === 'number' && d === d );
 };
 ```
 
@@ -696,7 +696,7 @@ el.addEventListener( 'annotation', function onClick( evt ) {
 });
 ```
 
-Note: one use case for this event is linking the chart with an external element whose responsibility is displaying and filtering annotations. While an annotation could be displayed over top the graph, this will invariably be suboptimal within the context of an SVG. A more flexible solution would be to display the annotation in a separate UI element which is activated when a corresponding annotation SVG element is activated.
+Note: one use case for this event is linking the chart with an external element whose responsibility is displaying and filtering annotations. While annotation text could be displayed over top the graph, this will invariably be suboptimal within the context of an SVG. A more flexible solution would be to display the annotation text in a separate UI element which is activated when a corresponding SVG element is activated.
 
 
 #### 'dragStart'
