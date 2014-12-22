@@ -106,7 +106,7 @@ el.addEventListener( 'yAxis', function onEvent( evt ) {
 
 ##### 'title'
 
-The element emits a `title` event to mark chart title lifecycle events; e.g., creation, removal, and changed (see below).
+The element emits a `title` event to mark chart title lifecycle events; e.g., creation, removal, and changed.
 
 ``` javascript
 el.addEventListener( 'title', function onEvent( evt ) {
@@ -119,7 +119,7 @@ el.addEventListener( 'title', function onEvent( evt ) {
 
 ##### 'annotations'
 
-The element emits an `annotations` event to mark graph annotation lifecycle events; e.g., creation, removal, and changed (see below).
+The element emits an `annotations` event to mark graph annotation lifecycle events; e.g., creation, removal, and changed.
 
 ``` javascript
 el.addEventListener( 'annotations', function onEvent( evt ) {
@@ -445,7 +445,7 @@ el.addEventListener( 'autoResize', function onEvent( evt ) {
 
 ##### 'resized'
 
-The element emits a 'resized' event when the element's resize listener is triggered.
+The element emits a `resized` event when the element's resize listener is triggered.
 
 ``` javascript
 el.addEventListener( 'resized', function onResize( evt ) {
@@ -455,7 +455,7 @@ el.addEventListener( 'resized', function onResize( evt ) {
 
 ##### 'clicked'
 
-The element emits a 'clicked' event when a chart element is clicked.
+The element emits a `clicked` event when a chart element is clicked.
 
 ``` javascript
 el.addEventListener( 'clicked', function onResize( evt ) {
@@ -465,7 +465,7 @@ el.addEventListener( 'clicked', function onResize( evt ) {
 
 ##### 'dragStart'
 
-The element emits a 'dragStart' event when a legend entry is dragged.
+The element emits a `dragStart` event when a legend entry is dragged.
 
 ``` javascript
 el.addEventListener( 'dragStart', function onResize( evt ) {
@@ -475,7 +475,7 @@ el.addEventListener( 'dragStart', function onResize( evt ) {
 
 ##### 'dragEnd'
 
-The element emits a 'dragEnd' event when a legend entry stops being dragged.
+The element emits a `dragEnd` event when a legend entry stops being dragged.
 
 ``` javascript
 el.addEventListener( 'dragEnd', function onResize( evt ) {
@@ -485,7 +485,7 @@ el.addEventListener( 'dragEnd', function onResize( evt ) {
 
 ##### 'dragEnter'
 
-The element emits a 'dragEnter' event when a draggable element enters a drop area.
+The element emits a `dragEnter` event when a draggable element enters the chart area.
 
 ``` javascript
 el.addEventListener( 'dragEnter', function onResize( evt ) {
@@ -495,7 +495,7 @@ el.addEventListener( 'dragEnter', function onResize( evt ) {
 
 ##### 'dragLeave'
 
-The element emits a 'dragLeave' event when a draggable element leaves a drop area.
+The element emits a `dragLeave` event when a draggable element leaves the chart area.
 
 ``` javascript
 el.addEventListener( 'dragLeave', function onResize( evt ) {
@@ -505,7 +505,7 @@ el.addEventListener( 'dragLeave', function onResize( evt ) {
 
 ##### 'dropped'
 
-The element emits a 'dropped' event when a draggable element is dropped into a drop area.
+The element emits a `dropped` event when a draggable element is dropped into the chart area (only when `isDroppable` is `true`).
 
 ``` javascript
 el.addEventListener( 'dropped', function onResize( evt ) {
@@ -518,7 +518,7 @@ el.addEventListener( 'dropped', function onResize( evt ) {
 
 ##### 'changed'
 
-The element emits a 'changed' event whenever an attribute changes.
+The element emits a `changed` event whenever an attribute changes.
 
 ``` javascript
 el.addEventListener( 'changed', function onChange( evt ) {
@@ -528,7 +528,7 @@ el.addEventListener( 'changed', function onChange( evt ) {
 
 ##### 'error'
 
-The element emits an 'error' event whenever a error occurs; e.g., improper setting of attributes.
+The element emits an `error` event whenever a error occurs; e.g., improper setting of attributes.
 
 ``` javascript
 el.addEventListener( 'error', function onError( err ) {
@@ -538,7 +538,7 @@ el.addEventListener( 'error', function onError( err ) {
 
 ##### 'cleared'
 
-The element emits a 'cleared' event whenever the chart is cleared.
+The element emits a `cleared` event whenever the chart is cleared.
 
 ``` javascript
 el.addEventListener( 'cleared', function onChange( evt ) {
@@ -548,7 +548,7 @@ el.addEventListener( 'cleared', function onChange( evt ) {
 
 ##### 'stream'
 
-The element emits a 'stream' event whenever a new stream is created.
+The element emits a `stream` event whenever a new stream is created.
 
 ``` javascript
 el.addEventListener( 'stream', function onChange( evt ) {
