@@ -192,7 +192,7 @@ el.yLabel = '% utilization';
 
 #### el.xMin
 
-Defines the minimum value of the x-axis domain.
+Defines the minimum value of the x-axis domain. Default is `null`.
 
 ``` javascript
 el.xMin = new Date() - 186000;
@@ -203,7 +203,7 @@ If set to `null`, the `xMin` is dynamically calculated from the data.
 
 #### el.xMax
 
-Defines the maximum value of the x-axis domain.
+Defines the maximum value of the x-axis domain. Default is `null`.
 
 ``` javascript
 el.xMax = new Date();
@@ -214,7 +214,7 @@ If set to `null`, the `xMax` is dynamically calculated from the data.
 
 #### el.yMin
 
-Defines the minimum value of the y-axis domain.
+Defines the minimum value of the y-axis domain. Default is `null`.
 
 ``` javascript
 el.yMin = 0;
@@ -225,7 +225,7 @@ If set to `null`, the `yMin` is dynamically calculated from the data.
 
 #### el.yMax
 
-Defines the maximum value of the y-axis domain.
+Defines the maximum value of the y-axis domain. Default is `null`.
 
 ``` javascript
 el.yMax = 1;
