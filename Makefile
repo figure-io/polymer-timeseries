@@ -55,7 +55,7 @@ ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
 
 # COVERALLS #
 
-COVERALLS ?= ./node_modules/bin/coveralls.js
+COVERALLS ?= ./node_modules/.bin/coveralls
 
 
 # WEB COMPONENT TESTER #
