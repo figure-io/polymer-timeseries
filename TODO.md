@@ -96,7 +96,8 @@ TODO
 40. favicon
 41. 
 42. 
-43. 
+43. drag to copy in addition to drag to move/remove
+	-	if drag series instead of legend entry
 44. 
 45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
 46. 

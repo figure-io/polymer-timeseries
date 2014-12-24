@@ -56,7 +56,6 @@
 
 		// [1] Configure the second figure...
 		el = charts[ 1 ];
-		body = el.formatData( JSON.parse( body ) );
 
 		el.yMin = 0;
 		el.yMax = 1;
@@ -66,10 +65,10 @@
 			'mem.utilization',
 			'disk.utilization'
 		];
-		el.data = body;
+		el.data = el.formatData( JSON.parse( body ) );
 
 		el.annotations = [
-			[ 1417564926959,'beep boop bap foo' ]
+			[ 1417564926959, 'beep boop bap foo' ]
 		];
 	} // end FUNCTION onData()
 

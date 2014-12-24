@@ -53,6 +53,11 @@ ISTANBUL_LCOV_INFO_PATH ?= $(ISTANBUL_OUT)/lcov.info
 ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
 
 
+# COVERALLS #
+
+COVERALLS ?= ./node_modules/bin/coveralls.js
+
+
 # WEB COMPONENT TESTER #
 
 WCT ?= ./node_modules/.bin/wct
@@ -149,6 +154,15 @@ view-cov: view-istanbul-report
 
 view-istanbul-report:
 	open $(ISTANBUL_HTML_REPORT_PATH)
+
+
+
+# REPORTING #
+
+.PHONY: coveralls
+
+coveralls: node_modules test-cov
+	cat $(ISTANBUL_LCOV_INFO_PATH) | $(COVERALLS) && rm -rf $(ISTANBUL_OUT)
 
 
 
