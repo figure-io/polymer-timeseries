@@ -60,7 +60,7 @@ config = {
 
 	// Browsers on which to test:
 	'browsers': [
-		'chrome'
+		'firefox'
 	],
 
 	// Whether the local or remote browsers should be targeted:
