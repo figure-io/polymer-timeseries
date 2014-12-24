@@ -24,30 +24,30 @@ NOTES ?= 'TODO|FIXME|WARNING|HACK|NOTE'
 
 # BOWER #
 
-BOWER ?= ./node_modules/.bin/bower
+BOWER ?= node_modules/.bin/bower
 
 
 # BROWSERIFY #
 
-BROWSERIFY ?= ./node_modules/.bin/browserify
-BROWSERIFY_BUILD_IN ?= ./build/js/polymer.js
-BROWSERIFY_BUILD_OUT ?= ./build/js/script.js
-BROWSERIFY_TEST_IN ?= ./build/js/polymer.js
-BROWSERIFY_TEST_OUT ?= ./build/js/script.js
+BROWSERIFY ?= node_modules/.bin/browserify
+BROWSERIFY_BUILD_IN ?= build/js/polymer.js
+BROWSERIFY_BUILD_OUT ?= build/js/script.js
+BROWSERIFY_TEST_IN ?= build/js/polymer.js
+BROWSERIFY_TEST_OUT ?= build/js/script.js
 
 
 # VULCANIZE #
 
-VULCANIZE ?= ./node_modules/.bin/vulcanize
-VULCANIZE_CONF ?= ./vulcanize.conf.json
-VULCANIZE_BUILD_IN ?= ./build/$(NAME).html
+VULCANIZE ?= node_modules/.bin/vulcanize
+VULCANIZE_CONF ?= vulcanize.conf.json
+VULCANIZE_BUILD_IN ?= build/$(NAME).html
 VULCANIZE_BUILD_OUT ?= $(OUT)
 
 
 # ISTANBUL #
 
-ISTANBUL ?= ./node_modules/.bin/istanbul
-ISTANBUL_OUT ?= ./reports/coverage
+ISTANBUL ?= node_modules/.bin/istanbul
+ISTANBUL_OUT ?= reports/coverage
 ISTANBUL_REPORT ?= lcov
 ISTANBUL_LCOV_INFO_PATH ?= $(ISTANBUL_OUT)/lcov.info
 ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
@@ -55,21 +55,21 @@ ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
 
 # COVERALLS #
 
-COVERALLS ?= ./node_modules/.bin/coveralls
+COVERALLS ?= node_modules/.bin/coveralls
 
 
 # WEB COMPONENT TESTER #
 
-WCT ?= ./node_modules/.bin/wct
-WCT_SRC ?= ./src/
-WCT_TMP ?= ./build
+WCT ?= node_modules/.bin/wct
+WCT_SRC ?= src/
+WCT_TMP ?= build
 WCT_VAR ?= 'window.parent.WCT.share.__coverage__'
 
 
 # JSHINT #
 
-JSHINT ?= ./node_modules/.bin/jshint
-JSHINT_REPORTER ?= ./node_modules/jshint-stylish/stylish.js
+JSHINT ?= node_modules/.bin/jshint
+JSHINT_REPORTER ?= node_modules/jshint-stylish/stylish.js
 
 
 
