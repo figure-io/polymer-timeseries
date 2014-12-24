@@ -115,12 +115,15 @@ test-tmp: clean-test
 	mkdir $(WCT_TMP)
 	cp -r $(WCT_SRC) $(WCT_TMP)
 
+test-check:
+	( test -f $(BROWSERIFY_TEST_IN) && echo "File exists" ) || echo "File does not exist"
+
 test-browserify: node_modules
 	$(BROWSERIFY) \
 		$(BROWSERIFY_TEST_IN) \
 		-o $(BROWSERIFY_TEST_OUT)
 
-test-wct: node_modules test-tmp test-browserify
+test-wct: node_modules test-tmp test-check test-browserify
 	$(WCT)
 
 
