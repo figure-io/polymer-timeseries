@@ -114,22 +114,13 @@ test: test-wct
 test-tmp: clean-test
 	mkdir $(WCT_TMP)
 	cp -a $(WCT_SRC)/. $(WCT_TMP)
-	find . -type f \
-		! -path './node_modules/**' \
-		! -path './.*'
-
-
-test-check:
-	echo ${PWD}
-	( test -d ./build/js && echo "Directory exists" ) || echo "Directory does not exist"
-	( test -f $(BROWSERIFY_TEST_IN) && echo "File exists" ) || echo "File does not exist"
 
 test-browserify: node_modules
 	$(BROWSERIFY) \
 		$(BROWSERIFY_TEST_IN) \
 		-o $(BROWSERIFY_TEST_OUT)
 
-test-wct: node_modules test-tmp test-check test-browserify
+test-wct: node_modules test-tmp test-browserify
 	$(WCT)
 
 
