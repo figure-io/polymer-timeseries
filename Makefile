@@ -115,12 +115,15 @@ test-tmp: clean-test
 	mkdir $(WCT_TMP)
 	cp -a $(WCT_SRC)/. $(WCT_TMP)
 
+test-check:
+	cat /etc/hosts
+
 test-browserify: node_modules
 	$(BROWSERIFY) \
 		$(BROWSERIFY_TEST_IN) \
 		-o $(BROWSERIFY_TEST_OUT)
 
-test-wct: node_modules test-tmp test-browserify
+test-wct: node_modules test-tmp test-check test-browserify
 	$(WCT)
 
 
