@@ -117,7 +117,7 @@ test-tmp: clean-test
 
 test-check:
 	echo ${PWD}
-	( test -d ./build && echo "Directory exists" ) || echo "Directory does not exist"
+	( test -d ./build/js && echo "Directory exists" ) || echo "Directory does not exist"
 	( test -f $(BROWSERIFY_TEST_IN) && echo "File exists" ) || echo "File does not exist"
 
 test-browserify: node_modules
