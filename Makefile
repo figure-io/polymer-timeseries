@@ -114,7 +114,10 @@ test: test-wct
 test-tmp: clean-test
 	mkdir $(WCT_TMP)
 	cp -R $(WCT_SRC) $(WCT_TMP)
-	ls -R
+	find . -type f \
+		! -path './node_modules/**' \
+		! -path './.*'
+
 
 test-check:
 	echo ${PWD}
