@@ -113,7 +113,7 @@ test: test-wct
 
 test-tmp: clean-test
 	mkdir $(WCT_TMP)
-	cp -r $(WCT_SRC) $(WCT_TMP)
+	cp -R $(WCT_SRC) $(WCT_TMP)
 
 test-check:
 	echo ${PWD}
