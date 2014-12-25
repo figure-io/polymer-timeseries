@@ -61,7 +61,7 @@ COVERALLS ?= ./node_modules/.bin/coveralls
 # WEB COMPONENT TESTER #
 
 WCT ?= ./node_modules/.bin/wct
-WCT_SRC ?= ./src/
+WCT_SRC ?= ./src
 WCT_TMP ?= ./build
 WCT_VAR ?= 'window.parent.WCT.share.__coverage__'
 
@@ -113,7 +113,7 @@ test: test-wct
 
 test-tmp: clean-test
 	mkdir $(WCT_TMP)
-	cp -R $(WCT_SRC) $(WCT_TMP)
+	cp -a $(WCT_SRC)/. $(WCT_TMP)
 	find . -type f \
 		! -path './node_modules/**' \
 		! -path './.*'
@@ -212,7 +212,7 @@ build: node_modules build-tmp browserify vulcanize
 
 build-tmp: clean-build
 	mkdir build
-	cp -r $(WCT_SRC) build
+	cp -a $(WCT_SRC)/. build
 
 
 # BROWSERIFY #
