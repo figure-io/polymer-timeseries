@@ -4,7 +4,7 @@ node_js:
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-  - "sed 's/localhost.localdomain localhost/localhost localhost.localdomain/p' /etc/hosts | sudo tee /etc/hosts"
+  - "sed 's/localhost.localdomain localhost/localhost localhost.localdomain/' /etc/hosts > /tmp/etchoststmp && cat /tmp/etchoststmp | sudo tee /etc/hosts"
 before_script:
   - npm install -g bower
   - bower install
