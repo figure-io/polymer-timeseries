@@ -552,15 +552,17 @@ TODO: define. Options. Behavior.
 The component emits events during both chart configuration and interaction. The following events are emitted... 
 
 
-#### 'error'
+#### 'err'
 
-The element emits an `error` event whenever a error occurs; e.g., improper setting of attributes.
+The element emits an `err` event whenever a error occurs; e.g., improper setting of attributes.
 
 ``` javascript
-el.addEventListener( 'error', function onError( err ) {
+el.addEventListener( 'err', function onError( err ) {
 	console.log( err );	
 });
 ```
+
+__NOTE__: the event name will change to `error` once issue [#138](https://github.com/webcomponents/webcomponentsjs/issues/138) is resolved. The preferred name is `error`.
 
 
 #### 'changed'

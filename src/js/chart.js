@@ -177,7 +177,7 @@ EVENTS = [
 	'yMax',
 
 	'changed',
-	'error',
+	'err',
 
 	'resized',
 	'clicked',
@@ -1175,7 +1175,7 @@ Chart.prototype.formatData = function( data ) {
 
 	if ( !Array.isArray( data ) ) {
 		err = new TypeError( 'formatData()::invalid input argument. Must provide an array. Value: `' + data + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		return;
 	}
 	out = new Array( len );
@@ -1183,7 +1183,7 @@ Chart.prototype.formatData = function( data ) {
 		dataset = data[ i ];
 		if ( !Array.isArray( dataset ) ) {
 			err = new TypeError( 'formatData()::invalid input argument. Must provide an array of arrays. Value: `' + data + '`.' );
-			this.fire( 'error', err );
+			this.fire( 'err', err );
 			return;
 		}
 		n = dataset.length;
@@ -1215,7 +1215,7 @@ Chart.prototype.formatAnnotations = function( arr ) {
 
 	if ( !Array.isArray( arr ) ) {
 		err = new TypeError( 'formatAnnotations()::invalid input argument. Must provide an array. Value: `' + arr + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		return;
 	}
 	out = new Array( len );
@@ -1309,12 +1309,12 @@ Chart.prototype.xDomain = function( min, max ) {
 
 	if ( min !== null && !( min instanceof Date ) ) {
 		err = new TypeError( 'xDomain()::invalid input argument. Must be a `Date` object or `null`. Value: `' + min + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		return;
 	}
 	if ( max !== null && !( max instanceof Date ) ) {
 		err = new TypeError( 'xDomain()::invalid input argument. Must be a `Date` object or `null`. Value: `' + max + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		return;
 	}
 	if ( min === null ) {
@@ -1349,12 +1349,12 @@ Chart.prototype.yDomain = function( min, max ) {
 
 	if ( min !== null && ( typeof min !== 'number' || min !== min ) ) {
 		err = new TypeError( 'yDomain()::invalid input argument. Must be numeric or `null`. Value: `' + min + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		return;
 	}
 	if ( max !== null && ( typeof max !== 'number' || max !== max ) ) {
 		err = new TypeError( 'yDomain()::invalid input argument. Must be numeric or `null`. Value: `' + max + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		return;
 	}
 	if ( min === null ) {
@@ -1391,7 +1391,7 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 	// Determine if we have a new data array...
 	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'data::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.data = val;
 		return;
 	}
@@ -1401,7 +1401,7 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 		if ( !Array.isArray( data[ i ] ) ) {
 			val = data.splice( i, 1 );
 			err = new TypeError( 'data::invalid assignment. Data must be an array of arrays. Invalid array element: `' + val + '`.' );
-			this.fire( 'error', err );
+			this.fire( 'err', err );
 			return;
 		}
 	}
@@ -1470,7 +1470,7 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 	// Determine if we have a new annotations array...
 	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'annotations::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.annotations = val;
 		return;
 	}
@@ -1480,7 +1480,7 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 		if ( !Array.isArray( arr[ i ] ) ) {
 			val = arr.splice( i, 1 );
 			err = new TypeError( 'annotations::invalid assignment. Must be an array of arrays. Invalid array element: `' + val + '`.' );
-			this.fire( 'error', err );
+			this.fire( 'err', err );
 			return;
 		}
 	}
@@ -1521,7 +1521,7 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 	var err;
 	if ( typeof newConfig !== 'object' || newConfig === null || Array.isArray( newConfig) ) {
 		err = new TypeError( 'config::invalid assignment. Must be an `object`. Value: `' + newConfig + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.config = oldConfig;
 		return;
 	}
@@ -1571,7 +1571,7 @@ Chart.prototype.xValueChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'function' ) {
 		err = new TypeError( 'xValue::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.xValue = oldVal;
 		return;
 	}
@@ -1615,7 +1615,7 @@ Chart.prototype.aValueChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'function' ) {
 		err = new TypeError( 'aValue::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.aValue = oldVal;
 		return;
 	}
@@ -1639,7 +1639,7 @@ Chart.prototype.isDefinedChanged = function( oldVal, newVal ) {
 		err;
 	if ( typeof newVal !== 'function' ) {
 		err = new TypeError( 'isDefined::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.isDefined = oldVal;
 		return;
 	}
@@ -1666,7 +1666,7 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 		err;
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal <= 0 ) {
 		err = new TypeError( 'width::invalid assignment. Must be a number greater than 0. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.width = oldVal;
 		return;
 	}
@@ -1724,7 +1724,7 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 		err;
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal <= 0 ) {
 		err = new TypeError( 'height::invalid assignment. Must be a number greater than 0. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.height = oldVal;
 		return;
 	}
@@ -1788,7 +1788,7 @@ Chart.prototype.labelsChanged = function( val, newVal ) {
 	// Determine if we have a new label array...
 	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'labels::invalid assignment. Must be an array. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.labels = val;
 		return;
 	}
@@ -1798,7 +1798,7 @@ Chart.prototype.labelsChanged = function( val, newVal ) {
 		if ( typeof labels[ i ] !== 'string' ) {
 			val = this.labels.splice( i, 1 );
 			err = new TypeError( 'labels::invalid assignment. Labels must be an array of strings. Invalid label: `' + val + '`.' );
-			this.fire( 'error', err );
+			this.fire( 'err', err );
 			return;
 		}
 	}
@@ -1836,7 +1836,7 @@ Chart.prototype.chartTitleChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'string' ) {
 		err = new TypeError( 'charTitle::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.chartTitle = oldVal;
 		return;
 	}
@@ -1860,7 +1860,7 @@ Chart.prototype.xLabelChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'string' ) {
 		err = new TypeError( 'xlabel::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.xLabel = oldVal;
 		return;
 	}
@@ -1884,7 +1884,7 @@ Chart.prototype.yLabelChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'string' ) {
 		err = new TypeError( 'yLabel::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.yLabel = oldVal;
 		return;
 	}
@@ -1911,7 +1911,7 @@ Chart.prototype.xMinChanged = function( oldVal, newVal ) {
 
 	if ( newVal !== null && !( newVal instanceof Date ) ) {
 		err = new TypeError( 'xMin::invalid assignment. Must be a `Date` object or `null`. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.xMin = oldVal;
 		return;
 	}
@@ -1955,7 +1955,7 @@ Chart.prototype.xMaxChanged = function( oldVal, newVal ) {
 
 	if ( newVal !== null && !( newVal instanceof Date ) ) {
 		err = new TypeError( 'xMax::invalid assignment. Must be a `Date` object or `null`. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.xMax = oldVal;
 		return;
 	}
@@ -1999,7 +1999,7 @@ Chart.prototype.yMinChanged = function( oldVal, newVal ) {
 
 	if ( newVal !== null && (typeof newVal !== 'number' || newVal !== newVal) ) {
 		err = new TypeError( 'yMin::invalid assignment. Must be a numeric or `null`. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.yMin = oldVal;
 		return;
 	}
@@ -2039,7 +2039,7 @@ Chart.prototype.yMaxChanged = function( oldVal, newVal ) {
 
 	if ( newVal !== null && (typeof newVal !== 'number' || newVal !== newVal) ) {
 		err = new TypeError( 'yMax::invalid assignment. Must be numeric or `null`. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.yMax = oldVal;
 		return;
 	}
@@ -2079,7 +2079,7 @@ Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
 		err = new TypeError( 'xNumTicks::invalid assignment. Must be a positive integer. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.xNumTicks = oldVal;
 		return;
 	}
@@ -2107,7 +2107,7 @@ Chart.prototype.yNumTicksChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
 		err = new TypeError( 'yNumTicks::invalid assignment. Must be a positive integer. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.yNumTicks = oldVal;
 		return;
 	}
@@ -2135,7 +2135,7 @@ Chart.prototype.xAxisOrientChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'string' || OPTS.xAxisOrient.indexOf( newVal ) === -1 ) {
 		err = new TypeError( 'xAxisOrient::invalid assignment. Must be one of the following: `' + OPTS.xAxisOrient.join( ',' ) + '`. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.xAxisOrient = oldVal;
 		return;
 	}
@@ -2165,7 +2165,7 @@ Chart.prototype.yAxisOrientChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'string' || OPTS.yAxisOrient.indexOf( newVal ) === -1 ) {
 		err = new TypeError( 'yAxisOrient::invalid assignment. Must be one of the following: `' + OPTS.yAxisOrient.join( ',' ) + '`. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.yAxisOrient = oldVal;
 		return;
 	}
@@ -2195,7 +2195,7 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'string' ) {
 		err = new TypeError( 'xTickFormat::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.xTickFormat = oldVal;
 		return;
 	}
@@ -2224,7 +2224,7 @@ Chart.prototype.yTickFormatChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'string' && newVal !== null ) {
 		err = new TypeError( 'yTickFormat::invalid assignment. Must be either a string specifier or null. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.yTickFormat = oldVal;
 		return;
 	}
@@ -2257,7 +2257,7 @@ Chart.prototype.interpolationChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'string' || OPTS.interpolation.indexOf( newVal ) === -1 ) {
 		err = new TypeError( 'intepolation::invalid assignment. Must be one of the following: `' + OPTS.interpolation.join( ',' ) + '`. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.interpolation = oldVal;
 		return;
 	}
@@ -2285,7 +2285,7 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'number' ) {
 		err = new TypeError( 'tension::invalid assignment. Must be numeric. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.tension = oldVal;
 		return;
 	}
@@ -2319,7 +2319,7 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 		if ( typeof newVal === 'string' ) {
 			if ( OPTS.colors.indexOf( newVal ) === -1 ) {
 				err = new TypeError( 'colors::invalid assignement. Unrecognized color set. Value: `' + newVal + '`.' );
-				this.fire( 'error', err );
+				this.fire( 'err', err );
 				this.colors = val;
 				return;
 			}
@@ -2330,7 +2330,7 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 		}
 		else {
 			err = new TypeError( 'colors::invalid assignment. Must be an `array` of classes or a recognized color set. Value: `' + newVal + '`.' );
-			this.fire( 'error', err );
+			this.fire( 'err', err );
 			this.colors = val;
 			return;
 		}
@@ -2381,7 +2381,7 @@ Chart.prototype.paddingLeftChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
 		err = new TypeError( 'paddingLeft::invalid assignment. Must be an integer greater than or equal to 0. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.paddingLeft = oldVal;
 		return;
 	}
@@ -2434,7 +2434,7 @@ Chart.prototype.paddingRightChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
 		err = new TypeError( 'paddingRight::invalid assignment. Must be an integer greater than or equal to 0. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.paddingRight = oldVal;
 		return;
 	}
@@ -2484,7 +2484,7 @@ Chart.prototype.paddingBottomChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
 		err = new TypeError( 'paddingBottom::invalid assignment. Must be an integer greater than or equal to 0. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.paddingBottom = oldVal;
 		return;
 	}
@@ -2537,7 +2537,7 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 
 	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
 		err = new TypeError( 'paddingTop::invalid assignment. Must be an integer greater than or equal to 0.  Value: `' + newVal + '.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.paddingTop = oldVal;
 		return;
 	}
@@ -2670,7 +2670,7 @@ Chart.prototype.isDraggableChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'boolean' ) {
 		err = new TypeError( 'isDraggable::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.isDraggable = oldVal;
 		return;
 	}
@@ -2693,7 +2693,7 @@ Chart.prototype.isDroppableChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'boolean' ) {
 		err = new TypeError( 'isDroppable::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.isDroppable = oldVal;
 		return;
 	}
@@ -2894,7 +2894,7 @@ Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'boolean' ) {
 		err = new TypeError( 'autoResize::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.autoResize = oldVal;
 		return;
 	}
@@ -2939,7 +2939,7 @@ Chart.prototype.stream = function( options ) {
 	if ( arguments.length ) {
 		if ( typeof options !== 'object' || options === null || Array.isArray( options ) ) {
 			err = new TypeError( 'stream()::invalid input argument. Options must be an object.' );
-			this.fire( 'error', err );
+			this.fire( 'err', err );
 			return;
 		}
 		opts = options;
@@ -2951,7 +2951,7 @@ Chart.prototype.stream = function( options ) {
 	function onData( error, arr ) {
 		/* jshint validthis: true */
 		if ( error ) {
-			this.fire( 'error', error );
+			this.fire( 'err', error );
 			return;
 		}
 		// TODO: call update function
