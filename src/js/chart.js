@@ -385,7 +385,7 @@ Chart.prototype.yTickFormat = null;
 * ATTRIBUTE: xNumTicks
 *	Number of tick marks on the x-axis. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Axes#ticks}.
 *
-* @type {Number}
+* @type {Number|null}
 * @default null
 */
 Chart.prototype.xNumTicks = null;
@@ -394,7 +394,7 @@ Chart.prototype.xNumTicks = null;
 * ATTRIBUTE: yNumTicks
 *	Number of tick marks on the y-axis. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Axes#ticks}.
 *
-* @type {Number}
+* @type {Number|null}
 * @default null
 */
 Chart.prototype.yNumTicks = null;
@@ -2069,16 +2069,16 @@ Chart.prototype.yMaxChanged = function( oldVal, newVal ) {
 * METHOD: xNumTicksChanged( oldVal, newVal )
 *	Event handler invoked when the `xNumTicks` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {Number|null} oldVal - old value
+* @param {Number|null} newVal - new value
 */
 Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 	var selection = this.$.xAxis,
 		xAxis = this._xAxis,
 		err;
 
-	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		err = new TypeError( 'xNumTicks::invalid assignment. Must be a positive integer. Value: `' + newVal + '`.' );
+	if ( newVal !== null && ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) ) {
+		err = new TypeError( 'xNumTicks::invalid assignment. Must be a positive integer or null. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.xNumTicks = oldVal;
 		return;
@@ -2097,16 +2097,16 @@ Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 * METHOD: yNumTicksChanged( oldVal, newVal )
 *	Event handler invoked when the `yNumTicks` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {Number|null} oldVal - old value
+* @param {Number|null} newVal - new value
 */
 Chart.prototype.yNumTicksChanged = function( oldVal, newVal ) {
 	var selection = this.$.yAxis,
 		yAxis = this._yAxis,
 		err;
 
-	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		err = new TypeError( 'yNumTicks::invalid assignment. Must be a positive integer. Value: `' + newVal + '`.' );
+	if ( newVal !== null && ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) ) {
+		err = new TypeError( 'yNumTicks::invalid assignment. Must be a positive integer or null. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.yNumTicks = oldVal;
 		return;

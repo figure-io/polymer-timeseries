@@ -79,7 +79,7 @@ JSHINT_REPORTER ?= ./node_modules/jshint-stylish/stylish.js
 SOURCES ?= src/*.js src/**/*.js
 
 # Test files:
-TESTS ?= test/*.js
+TESTS ?= test/*.js test/**/*.js
 
 
 
