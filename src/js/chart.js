@@ -1593,7 +1593,7 @@ Chart.prototype.yValueChanged = function( oldVal, newVal ) {
 	var err;
 	if ( typeof newVal !== 'function' ) {
 		err = new TypeError( 'yValue::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
-		this.fire( 'error', err );
+		this.fire( 'err', err );
 		this.yValue = oldVal;
 		return;
 	}

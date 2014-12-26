@@ -1,13 +1,13 @@
-/* global suite, test, assert, expect */
+/* global describe, it, assert, expect */
 'use strict';
 
 // TESTS //
 
-suite( 'polymer-timeseries', function tests() {
+describe( '', function tests() {
 
 	var el = document.querySelector( '#fixture' );
 
-	test( 'should do something', function test() {
+	it( 'should do something', function test() {
 		assert.ok( el );
 	});
 
