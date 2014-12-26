@@ -3,16 +3,16 @@
 
 // TESTS //
 
-describe( 'yValue', function tests() {
+describe( 'aValue', function tests() {
 
 	var el = document.querySelector( '#fixture' );
 
-	it( 'should expose a y-value accessor', function test() {
-		expect( el.yValue ).to.be.a( 'function' );
+	it( 'should expose an annotation-value accessor', function test() {
+		expect( el.aValue ).to.be.a( 'function' );
 	});
 
 	it( 'should emit an `error` if set to a non-function', function test( done ) {
-		var yValue = el.yValue,
+		var aValue = el.aValue,
 			values;
 
 		values = [
@@ -31,7 +31,7 @@ describe( 'yValue', function tests() {
 		next();
 
 		function next() {
-			el.yValue = values.shift();
+			el.aValue = values.shift();
 		}
 		function onError( evt ) {
 			assert.instanceOf( evt.detail, TypeError );
@@ -42,7 +42,7 @@ describe( 'yValue', function tests() {
 			setTimeout( end, 0 );
 		}
 		function end() {
-			assert.strictEqual( el.yValue, yValue );
+			assert.strictEqual( el.aValue, aValue );
 			el.removeEventListener( 'err', onError );
 			done();
 		}
@@ -51,7 +51,7 @@ describe( 'yValue', function tests() {
 	it( 'should emit a `changed` event when set to a new value', function test( done ) {
 		el.addEventListener( 'changed', onChange );
 
-		el.yValue = noop;
+		el.aValue = noop;
 
 		function noop(){
 			// nothing...

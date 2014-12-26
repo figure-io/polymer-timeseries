@@ -840,7 +840,7 @@ Chart.prototype.createAxes = function() {
 
 	this.$.xLabel = axis.append( 'svg:text' )
 		.attr( 'y', 45 )
-		.attr( 'x', ( this.graphWidth() ) / 2 )
+		.attr( 'x', this.graphWidth() / 2 )
 		.attr( 'text-anchor', 'middle' )
 		.attr( 'property', 'axis_label' )
 		.attr( 'class', 'label noselect' )

@@ -3,16 +3,16 @@
 
 // TESTS //
 
-describe( 'yValue', function tests() {
+describe( 'isDefined', function tests() {
 
 	var el = document.querySelector( '#fixture' );
 
-	it( 'should expose a y-value accessor', function test() {
-		expect( el.yValue ).to.be.a( 'function' );
+	it( 'should expose a method for specifying missing value encoding', function test() {
+		expect( el.isDefined ).to.be.a( 'function' );
 	});
 
 	it( 'should emit an `error` if set to a non-function', function test( done ) {
-		var yValue = el.yValue,
+		var isDefined = el.isDefined,
 			values;
 
 		values = [
@@ -31,7 +31,7 @@ describe( 'yValue', function tests() {
 		next();
 
 		function next() {
-			el.yValue = values.shift();
+			el.isDefined = values.shift();
 		}
 		function onError( evt ) {
 			assert.instanceOf( evt.detail, TypeError );
@@ -42,7 +42,7 @@ describe( 'yValue', function tests() {
 			setTimeout( end, 0 );
 		}
 		function end() {
-			assert.strictEqual( el.yValue, yValue );
+			assert.strictEqual( el.isDefined, isDefined );
 			el.removeEventListener( 'err', onError );
 			done();
 		}
@@ -51,7 +51,7 @@ describe( 'yValue', function tests() {
 	it( 'should emit a `changed` event when set to a new value', function test( done ) {
 		el.addEventListener( 'changed', onChange );
 
-		el.yValue = noop;
+		el.isDefined = noop;
 
 		function noop(){
 			// nothing...
@@ -62,5 +62,7 @@ describe( 'yValue', function tests() {
 			done();
 		}
 	});
+
+	it( 'should update the timeseries path elements' );
 
 });
