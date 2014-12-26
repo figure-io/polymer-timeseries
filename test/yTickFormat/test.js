@@ -3,28 +3,26 @@
 
 // TESTS //
 
-describe( 'yNumTicks', function tests() {
+describe( 'yTickFormat', function tests() {
 
 	var el = document.querySelector( '#fixture' );
 
-	it( 'should expose an attribute for specifying the y-axis tick number', function test() {
-		assert.isNull( el.yNumTicks );
+	it( 'should expose an attribute for specifying the y-axis tick format', function test() {
+		assert.isNull( el.yTickFormat );
 	});
 
-	it( 'should emit an `error` if not set to a positive integer or null', function test( done ) {
-		var num = el.yNumTicks,
+	it( 'should emit an `error` if not set to a string or `null`', function test( done ) {
+		var fmt = el.yTickFormat,
 			values;
 
 		values = [
-			function(){},
-			'5',
-			-1,
-			3.14,
+			5,
 			NaN,
 			// undefined, // TODO: enable once https://github.com/Polymer/polymer/issues/1053 is resolved
 			true,
 			[],
-			{}
+			{},
+			function(){}
 		];
 
 		el.addEventListener( 'err', onError );
@@ -32,7 +30,7 @@ describe( 'yNumTicks', function tests() {
 		next();
 
 		function next() {
-			el.yNumTicks = values.shift();
+			el.yTickFormat = values.shift();
 		}
 		function onError( evt ) {
 			assert.instanceOf( evt.detail, TypeError );
@@ -43,7 +41,7 @@ describe( 'yNumTicks', function tests() {
 			setTimeout( end, 0 );
 		}
 		function end() {
-			assert.strictEqual( el.yNumTicks, num );
+			assert.strictEqual( el.yTickFormat, fmt );
 			el.removeEventListener( 'err', onError );
 			done();
 		}
@@ -52,17 +50,18 @@ describe( 'yNumTicks', function tests() {
 	it( 'should emit a `changed` event when set to a new value', function test( done ) {
 		el.addEventListener( 'changed', onChange );
 
-		el.yNumTicks = 5;
+		el.yTickFormat = '%%';
 
 		function onChange( evt ) {
 			assert.isObject( evt.detail );
-			assert.strictEqual( evt.detail.attr, 'yNumTicks' );
+			assert.strictEqual( evt.detail.attr, 'yTickFormat' );
 			el.removeEventListener( 'changed', onChange );
 			done();
 		}
 	});
 
-	// Note: this is not straightforward as D3 takes the tick number as a recommendation, not an absolute. Hence, updating the y-axis may do nothing. Could just spy the selection.call(), but this seems a bit intrusive. Would rather just test against an updated DOM. We should not care how the DOM gets updated (implementation details).
 	it( 'should update the y-axis' );
+
+	it( 'should update to the default y-axis tick format is set to `null`' );
 
 });

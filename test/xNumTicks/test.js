@@ -11,7 +11,7 @@ describe( 'xNumTicks', function tests() {
 		assert.isNull( el.xNumTicks );
 	});
 
-	it( 'should emit an `error` if set to a non-positive integer or null', function test( done ) {
+	it( 'should emit an `error` if not set to a positive integer or null', function test( done ) {
 		var num = el.xNumTicks,
 			values;
 

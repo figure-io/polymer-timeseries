@@ -376,7 +376,7 @@ Chart.prototype.xTickFormat = '%H:%M';
 * ATTRIBUTE: yTickFormat
 *	y-axis tick format. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/Formatting}.
 *
-* @type {String}
+* @type {String|null}
 * @default null
 */
 Chart.prototype.yTickFormat = null;
