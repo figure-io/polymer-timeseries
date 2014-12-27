@@ -113,6 +113,8 @@ TODO
 #### Tests
 
 1. 	Auto-build `test/index.html` such that suites do not have to be manually included; they should be discovered
+	- 	find all directories
+		-	check for `test.html`
 2. 	Suite generator
 3. 	Bash script to run a particular suite, as opposed to having to run all suites all the time (this ties into #1, as the `index.html` can be built to just include a particular suite, or a subset of suites)
 
