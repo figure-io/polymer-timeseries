@@ -928,6 +928,7 @@ EVENTS = [
 	'data',
 	'annotations',
 	'labels',
+	'colors',
 
 	'width',
 	'height',
@@ -1136,7 +1137,7 @@ Chart.prototype.xTickFormat = '%H:%M';
 * ATTRIBUTE: yTickFormat
 *	y-axis tick format. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/Formatting}.
 *
-* @type {String}
+* @type {String|Null}
 * @default null
 */
 Chart.prototype.yTickFormat = null;
@@ -1145,7 +1146,7 @@ Chart.prototype.yTickFormat = null;
 * ATTRIBUTE: xNumTicks
 *	Number of tick marks on the x-axis. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Axes#ticks}.
 *
-* @type {Number}
+* @type {Number|Null}
 * @default null
 */
 Chart.prototype.xNumTicks = null;
@@ -1154,7 +1155,7 @@ Chart.prototype.xNumTicks = null;
 * ATTRIBUTE: yNumTicks
 *	Number of tick marks on the y-axis. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Axes#ticks}.
 *
-* @type {Number}
+* @type {Number|Null}
 * @default null
 */
 Chart.prototype.yNumTicks = null;
@@ -1600,7 +1601,7 @@ Chart.prototype.createAxes = function() {
 
 	this.$.xLabel = axis.append( 'svg:text' )
 		.attr( 'y', 45 )
-		.attr( 'x', ( this.graphWidth() ) / 2 )
+		.attr( 'x', this.graphWidth() / 2 )
 		.attr( 'text-anchor', 'middle' )
 		.attr( 'property', 'axis_label' )
 		.attr( 'class', 'label noselect' )
@@ -1925,7 +1926,7 @@ Chart.prototype.clear = function() {
 Chart.prototype.formatData = function( data ) {
 	var xValue = this.xValue,
 		yValue = this.yValue,
-		len = data.length,
+		len,
 		dataset,
 		tmp,
 		n,
@@ -1938,6 +1939,7 @@ Chart.prototype.formatData = function( data ) {
 		this.fire( 'err', err );
 		return;
 	}
+	len = data.length;
 	out = new Array( len );
 	for ( i = 0; i < len; i++ ) {
 		dataset = data[ i ];
@@ -1969,7 +1971,7 @@ Chart.prototype.formatData = function( data ) {
 Chart.prototype.formatAnnotations = function( arr ) {
 	var xValue = this.xValue,
 		aValue = this.aValue,
-		len = arr.length,
+		len,
 		out,
 		err;
 
@@ -1978,6 +1980,7 @@ Chart.prototype.formatAnnotations = function( arr ) {
 		this.fire( 'err', err );
 		return;
 	}
+	len = arr.length;
 	out = new Array( len );
 	for ( var i = 0; i < len; i++ ) {
 		out[ i ] = [
@@ -2149,7 +2152,7 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 		i;
 
 	// Determine if we have a new data array...
-	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
+	if ( arguments.length > 1 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'data::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.data = val;
@@ -2228,7 +2231,7 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 		i;
 
 	// Determine if we have a new annotations array...
-	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
+	if ( arguments.length > 1 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'annotations::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.annotations = val;
@@ -2546,7 +2549,7 @@ Chart.prototype.labelsChanged = function( val, newVal ) {
 		i;
 
 	// Determine if we have a new label array...
-	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
+	if ( arguments.length > 1 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'labels::invalid assignment. Must be an array. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.labels = val;
@@ -2829,16 +2832,16 @@ Chart.prototype.yMaxChanged = function( oldVal, newVal ) {
 * METHOD: xNumTicksChanged( oldVal, newVal )
 *	Event handler invoked when the `xNumTicks` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {Number|Null} oldVal - old value
+* @param {Number|Null} newVal - new value
 */
 Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 	var selection = this.$.xAxis,
 		xAxis = this._xAxis,
 		err;
 
-	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		err = new TypeError( 'xNumTicks::invalid assignment. Must be a positive integer. Value: `' + newVal + '`.' );
+	if ( newVal !== null && ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) ) {
+		err = new TypeError( 'xNumTicks::invalid assignment. Must be a positive integer or null. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.xNumTicks = oldVal;
 		return;
@@ -2857,16 +2860,16 @@ Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 * METHOD: yNumTicksChanged( oldVal, newVal )
 *	Event handler invoked when the `yNumTicks` attribute changes.
 *
-* @param {Number} oldVal - old value
-* @param {Number} newVal - new value
+* @param {Number|Null} oldVal - old value
+* @param {Number|Null} newVal - new value
 */
 Chart.prototype.yNumTicksChanged = function( oldVal, newVal ) {
 	var selection = this.$.yAxis,
 		yAxis = this._yAxis,
 		err;
 
-	if ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) {
-		err = new TypeError( 'yNumTicks::invalid assignment. Must be a positive integer. Value: `' + newVal + '`.' );
+	if ( newVal !== null && ( typeof newVal !== 'number' || newVal !== newVal || newVal%1 !== 0 || newVal < 0 ) ) {
+		err = new TypeError( 'yNumTicks::invalid assignment. Must be a positive integer or null. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.yNumTicks = oldVal;
 		return;
@@ -3043,7 +3046,7 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 		line = this._line,
 		err;
 
-	if ( typeof newVal !== 'number' ) {
+	if ( typeof newVal !== 'number' || newVal !== newVal ) {
 		err = new TypeError( 'tension::invalid assignment. Must be numeric. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.tension = oldVal;
@@ -3068,14 +3071,15 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 */
 Chart.prototype.colorsChanged = function( val, newVal ) {
 	var getColor = this._getColor,
-		re = /^category\d{2}[a-z]{0,1}-\d+-span$/,
+		oldColors = this._colors,
 		list,
 		symbols,
 		el,
 		err,
+		color,
 		i, j;
 
-	if ( newVal !== void 0 ) {
+	if ( arguments.length > 1 ) {
 		if ( typeof newVal === 'string' ) {
 			if ( OPTS.colors.indexOf( newVal ) === -1 ) {
 				err = new TypeError( 'colors::invalid assignement. Unrecognized color set. Value: `' + newVal + '`.' );
@@ -3101,11 +3105,12 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 	symbols = this.$.legendSymbols;
 	for ( i = 0; i < symbols.length; i++ ) {
 		el = symbols[ i ][ 0 ];
+		color = oldColors[ i ];
 		if ( el ) {
 			// Remove any existing color class...
 			list = el.classList;
 			for ( j = 0; j < list.length; j++ ) {
-				if ( re.test( list[j] ) ) {
+				if ( list[j] === color ) {
 					el.classList.remove( list[j] );
 				}
 			}
@@ -3113,6 +3118,9 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 			el.classList.add( getColor( null, i ) + '-span' );
 		}
 	}
+	this.fire( 'colors', {
+		'type': 'changed'
+	});
 	if ( newVal === void 0 ) {
 		this.fire( 'changed', {
 			'attr': 'colors',
@@ -3668,7 +3676,7 @@ Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
 		'prev': oldVal,
 		'curr': newVal
 	});
-}; // end METHOD isDraggableChanged()
+}; // end METHOD autoResizeChanged()
 
 /**
 * METHOD: onResize()
