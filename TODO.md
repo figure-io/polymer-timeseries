@@ -107,6 +107,14 @@ TODO
 	-	Maybe more trouble than it is worth.
 49. should attributes like `xNumTicks`, `yNumTicks`, etc be allowed to equal `null` to resume, say, special resize behavior (details on demand)?
 	- 	yes
+50. x/y axis top and bottom orientations will require that these axes be updated on padding changes! Currently, e.g., with paddingLeft, assume do not need to update the y-axis.
+
+
+#### Tests
+
+1. 	Auto-build `test/index.html` such that suites do not have to be manually included; they should be discovered
+2. 	Suite generator
+3. 	Bash script to run a particular suite, as opposed to having to run all suites all the time (this ties into #1, as the `index.html` can be built to just include a particular suite, or a subset of suites)
 
 
 #### Notes
