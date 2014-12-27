@@ -2308,11 +2308,12 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 */
 Chart.prototype.colorsChanged = function( val, newVal ) {
 	var getColor = this._getColor,
-		re = /^category\d{2}[a-z]{0,1}-\d+-span$/,
+		oldColors = this._colors,
 		list,
 		symbols,
 		el,
 		err,
+		color,
 		i, j;
 
 	if ( arguments.length > 1 ) {
@@ -2341,11 +2342,12 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 	symbols = this.$.legendSymbols;
 	for ( i = 0; i < symbols.length; i++ ) {
 		el = symbols[ i ][ 0 ];
+		color = oldColors[ i ];
 		if ( el ) {
 			// Remove any existing color class...
 			list = el.classList;
 			for ( j = 0; j < list.length; j++ ) {
-				if ( re.test( list[j] ) ) {
+				if ( list[j] === color ) {
 					el.classList.remove( list[j] );
 				}
 			}
@@ -2353,6 +2355,9 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 			el.classList.add( getColor( null, i ) + '-span' );
 		}
 	}
+	this.fire( 'colors', {
+		'type': 'changed'
+	});
 	if ( newVal === void 0 ) {
 		this.fire( 'changed', {
 			'attr': 'colors',

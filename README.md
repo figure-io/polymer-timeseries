@@ -105,6 +105,9 @@ el.colors = [
 ];
 ```
 
+TODO: note the convention of class/color attribute for SVG elements and `<class>-span` for HTML elements (symbols) in order to set the background color.
+
+
 #### el.config
 
 Configuration `object` containing parameters corresponding to known attributes, as defined below.
@@ -602,6 +605,16 @@ The element emits a `labels` event when the `labels` attribute changes.
 ``` javascript
 el.addEventListener( 'labels', function onEvent( evt ) {
 	console.log( this.labels );
+});
+```
+
+#### 'colors'
+
+The element emits a `colors` event when the `colors` attribute changes.
+
+``` javascript
+el.addEventListener( 'colors', function onEvent( evt ) {
+	console.log( this.colors );
 });
 ```
 
