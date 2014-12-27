@@ -8,7 +8,19 @@ describe( 'xValue', function tests() {
 	var el = document.querySelector( '#fixture' );
 
 	it( 'should expose an x-value accessor', function test() {
-		expect( el.yValue ).to.be.a( 'function' );
+		expect( el.xValue ).to.be.a( 'function' );
+	});
+
+	it( 'should default to an array accessor', function test() {
+		var time, data, expected, actual;
+
+		time = new Date();
+
+		data = [ time, 1234 ];
+		expected = time;
+		actual = el.xValue( data );
+
+		assert.strictEqual( actual, expected );
 	});
 
 	it( 'should emit an `error` if set to a non-function', function test( done ) {

@@ -110,6 +110,9 @@ TODO
 50. x/y axis top and bottom orientations will require that these axes be updated on padding changes! Currently, e.g., with paddingLeft, assume do not need to update the y-axis.
 51. displaying a legend should be optional
 	-	will affect changed callbacks which reset the legend
+52. include notes about inheritance
+	- 	descendant will need to call `chart` and `addListeners` in `attached` and call `removeListeners` in `detached`
+	-	etc
 
 
 #### Tests

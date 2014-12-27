@@ -168,6 +168,7 @@ EVENTS = [
 	'data',
 	'annotations',
 	'labels',
+	'colors',
 
 	'width',
 	'height',

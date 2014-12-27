@@ -11,6 +11,16 @@ describe( 'yValue', function tests() {
 		expect( el.yValue ).to.be.a( 'function' );
 	});
 
+	it( 'should default to an array accessor', function test() {
+		var data, expected, actual;
+
+		data = [ new Date(), 1234 ];
+		expected = 1234;
+		actual = el.yValue( data );
+
+		assert.strictEqual( actual, expected );
+	});
+
 	it( 'should emit an `error` if set to a non-function', function test( done ) {
 		var yValue = el.yValue,
 			values;
