@@ -2283,7 +2283,7 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 		line = this._line,
 		err;
 
-	if ( typeof newVal !== 'number' ) {
+	if ( typeof newVal !== 'number' || newVal !== newVal ) {
 		err = new TypeError( 'tension::invalid assignment. Must be numeric. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.tension = oldVal;
@@ -2908,7 +2908,7 @@ Chart.prototype.autoResizeChanged = function( oldVal, newVal ) {
 		'prev': oldVal,
 		'curr': newVal
 	});
-}; // end METHOD isDraggableChanged()
+}; // end METHOD autoResizeChanged()
 
 /**
 * METHOD: onResize()

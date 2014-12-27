@@ -50,6 +50,7 @@ TODO
 21. should padding be public?
 	- 	if do not expose, do not have to honor any settings and can auto-update as see fit. e.g., when provide title, can increase top padding, etc. Remove axis, can expand graph area
 	-	autopad attribute ???
+	-	no autopad; allow paddings to equal `null`. If `null`, the use internal padding values, which may be auto-calculated/dynamically adjusted
 22. legend position
 	-	`top`, `bottom`, `left`, `right`
 23. 
@@ -105,6 +106,7 @@ TODO
 48. Should an option be provided to enforce an aspect ratio?
 	-	Maybe more trouble than it is worth.
 49. should attributes like `xNumTicks`, `yNumTicks`, etc be allowed to equal `null` to resume, say, special resize behavior (details on demand)?
+	- 	yes
 
 
 #### Notes
