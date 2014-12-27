@@ -1166,7 +1166,7 @@ Chart.prototype.clear = function() {
 Chart.prototype.formatData = function( data ) {
 	var xValue = this.xValue,
 		yValue = this.yValue,
-		len = data.length,
+		len,
 		dataset,
 		tmp,
 		n,
@@ -1179,6 +1179,7 @@ Chart.prototype.formatData = function( data ) {
 		this.fire( 'err', err );
 		return;
 	}
+	len = data.length;
 	out = new Array( len );
 	for ( i = 0; i < len; i++ ) {
 		dataset = data[ i ];
@@ -1210,7 +1211,7 @@ Chart.prototype.formatData = function( data ) {
 Chart.prototype.formatAnnotations = function( arr ) {
 	var xValue = this.xValue,
 		aValue = this.aValue,
-		len = arr.length,
+		len,
 		out,
 		err;
 
@@ -1219,6 +1220,7 @@ Chart.prototype.formatAnnotations = function( arr ) {
 		this.fire( 'err', err );
 		return;
 	}
+	len = arr.length;
 	out = new Array( len );
 	for ( var i = 0; i < len; i++ ) {
 		out[ i ] = [
