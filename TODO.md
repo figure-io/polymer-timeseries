@@ -108,6 +108,8 @@ TODO
 49. should attributes like `xNumTicks`, `yNumTicks`, etc be allowed to equal `null` to resume, say, special resize behavior (details on demand)?
 	- 	yes
 50. x/y axis top and bottom orientations will require that these axes be updated on padding changes! Currently, e.g., with paddingLeft, assume do not need to update the y-axis.
+51. displaying a legend should be optional
+	-	will affect changed callbacks which reset the legend
 
 
 #### Tests

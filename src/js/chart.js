@@ -1389,7 +1389,7 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 		i;
 
 	// Determine if we have a new data array...
-	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
+	if ( arguments.length > 1 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'data::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.data = val;
@@ -1468,7 +1468,7 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 		i;
 
 	// Determine if we have a new annotations array...
-	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
+	if ( arguments.length > 1 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'annotations::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.annotations = val;
@@ -1786,7 +1786,7 @@ Chart.prototype.labelsChanged = function( val, newVal ) {
 		i;
 
 	// Determine if we have a new label array...
-	if ( newVal !== void 0 && !Array.isArray( newVal ) ) {
+	if ( arguments.length > 1 && !Array.isArray( newVal ) ) {
 		err = new TypeError( 'labels::invalid assignment. Must be an array. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.labels = val;
@@ -2315,7 +2315,7 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 		err,
 		i, j;
 
-	if ( newVal !== void 0 ) {
+	if ( arguments.length > 1 ) {
 		if ( typeof newVal === 'string' ) {
 			if ( OPTS.colors.indexOf( newVal ) === -1 ) {
 				err = new TypeError( 'colors::invalid assignement. Unrecognized color set. Value: `' + newVal + '`.' );
