@@ -122,6 +122,23 @@ TODO
 		-	check for `test.html`
 2. 	Suite generator
 3. 	Bash script to run a particular suite, as opposed to having to run all suites all the time (this ties into #1, as the `index.html` can be built to just include a particular suite, or a subset of suites)
+4. 	`graphWidth()`
+5. 	`graphHeight()`
+6. 	`x()`
+7. 	`y()`
+8. 	`getColor()`
+9. 	`getLabel()`
+10. `clear()`
+11. any test which updates DOM elements
+	-	need to validate that the DOM elements were actually updated (regardless of implementation; D3 or otherwise)
+12. `resetAnnotations`
+13. `resetLegend`
+14. `resetPaths`
+15. `createLegend`
+16. `createAnnotations`
+17. `createTitle`
+18. `createAxes`
+19. `
 
 
 #### Notes
