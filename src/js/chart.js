@@ -2608,6 +2608,7 @@ Chart.prototype.toggleSeries = function( d, i ) {
 	// Toggle the legend entry visibility...
 	selection = d3.select( this.$.legendEntries[ 0 ][ i ] );
 
+	// NOTE: catch case where method may be invoked with an out-of-bounds index; e.g., 3rd party code.
 	if ( !selection.node() ) {
 		return;
 	}
@@ -2620,6 +2621,8 @@ Chart.prototype.toggleSeries = function( d, i ) {
 	if ( path.node() ) {
 		path.classed( 'hidden', flg );
 	}
+
+	// FIXME: this should not be in this function. The function should be kept general. Move to separate click handler. Bind two listeners to the legend entry. Instead, here, emit a toggled event (???).
 	this.fire( 'clicked', {
 		'el': 'legend',
 		'data': {

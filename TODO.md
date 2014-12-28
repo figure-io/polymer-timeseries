@@ -113,6 +113,9 @@ TODO
 52. include notes about inheritance
 	- 	descendant will need to call `chart` and `addListeners` in `attached` and call `removeListeners` in `detached`
 	-	etc
+53. See `toggleSeries`; need to move `clicked` event to separate handler
+	- 	method should be a general method
+	-	dido for `toggleVLine`
 
 
 #### Tests
@@ -138,10 +141,14 @@ TODO
 16. `createAnnotations`
 17. `createTitle`
 18. `createAxes`
-19. all drag events
+19. `onDragStart' and `onDragEnd`
 20. `stream`
 21. `Chart` instance
 	- 	how to do this?
+22. 
+23. `toggleVLine`
+24. xDomain
+	-	should `true`/`false` be permitted??? See tests.
 
 
 #### Notes
