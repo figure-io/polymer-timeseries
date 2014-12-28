@@ -138,7 +138,10 @@ TODO
 16. `createAnnotations`
 17. `createTitle`
 18. `createAxes`
-19. `
+19. all drag events
+20. `stream`
+21. `Chart` instance
+	- 	how to do this?
 
 
 #### Notes
