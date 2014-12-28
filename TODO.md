@@ -149,6 +149,8 @@ TODO
 23. `toggleVLine`
 24. xDomain
 	-	should `true`/`false` be permitted??? See tests.
+25. all emitted events are contracts!!!
+	-	create tests which explicitly test for event data structure
 
 
 #### Notes

@@ -1039,10 +1039,12 @@ Chart.prototype.resetPaths = function() {
 * @returns {DOMElement} element instance
 */
 Chart.prototype.resetAnnotations = function() {
-	var annotations, gEnter;
+	var group, annotations, gEnter;
+
+	group = this.$.agroup;
 
 	// Bind the data and update existing annotations:
-	annotations = this.$.agroup.selectAll( '.annotation' )
+	annotations = group.selectAll( '.annotation' )
 		.data( this.annotations );
 
 	// Remove any old annotations:
@@ -1065,8 +1067,8 @@ Chart.prototype.resetAnnotations = function() {
 
 	// Cache a reference to the annotations:
 	this.$.annotations = annotations;
-	this.$.annotationMarkers = annotations.selectAll( '.marker' );
-	this.$.annotationLines = annotations.selectAll( '.vline' );
+	this.$.annotationMarkers = group.selectAll( '.marker' );
+	this.$.annotationLines = group.selectAll( '.vline' );
 
 	return this;
 }; // end METHOD resetAnnotations()
@@ -2622,7 +2624,7 @@ Chart.prototype.toggleSeries = function( d, i ) {
 		path.classed( 'hidden', flg );
 	}
 
-	// FIXME: this should not be in this function. The function should be kept general. Move to separate click handler. Bind two listeners to the legend entry. Instead, here, emit a toggled event (???).
+	// FIXME: this should not be in this function. The function should be kept general. Move to separate click handler. Bind two listeners to the legend entry --> no, click handler should simply invoke the toggleSeries method with `(null, i)`. Here, emit a toggled event (???).
 	this.fire( 'clicked', {
 		'el': 'legend',
 		'data': {
@@ -2650,6 +2652,7 @@ Chart.prototype.toggleVLine = function( d, i ) {
 	// Get the vertical line element corresponding to the clicked annotation marker...
 	path = d3.select( this.$.annotationLines[ 0 ][ i ] );
 
+	// NOTE: catch case where method may be invoked with an out-of-bounds index; e.g., 3rd party code.
 	if ( !path.node() ) {
 		return;
 	}
@@ -2657,6 +2660,7 @@ Chart.prototype.toggleVLine = function( d, i ) {
 	flg = !path.classed( 'hidden' );
 	path.classed( 'hidden', flg );
 
+	// FIXME: clicked event should be moved to click handler
 	this.fire( 'clicked', {
 		'el': 'annotationMarker',
 		'data': {

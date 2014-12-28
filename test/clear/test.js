@@ -16,7 +16,7 @@ describe( 'clear', function tests() {
 		el.annotations = [
 			[ new Date(), 'red alert' ]
 		];
-		setTimeout( done, 100 );
+		setTimeout( done, 200 );
 	});
 
 	it( 'should provide a method to clear the chart and reset axes', function test() {
@@ -47,7 +47,7 @@ describe( 'clear', function tests() {
 
 		el.clear();
 
-		setTimeout( onTimeout, 100 );
+		setTimeout( onTimeout, 200 );
 
 		function onTimeout() {
 			selection = el.$.chart.querySelectorAll( '.marks .line' );
@@ -66,7 +66,7 @@ describe( 'clear', function tests() {
 
 		el.clear();
 
-		setTimeout( onTimeout, 100 );
+		setTimeout( onTimeout, 200 );
 
 		function onTimeout() {
 			selection = el.$.chart.querySelectorAll( '.annotation' );
@@ -85,7 +85,7 @@ describe( 'clear', function tests() {
 
 		el.clear();
 
-		setTimeout( onTimeout, 100 );
+		setTimeout( onTimeout, 200 );
 
 		function onTimeout() {
 			selection = el.$.chart.querySelectorAll( '.legend .label' );
