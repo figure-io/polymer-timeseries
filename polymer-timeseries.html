@@ -2061,8 +2061,8 @@ Chart.prototype.graphHeight = function() {
 * METHOD: xDomain( min, max )
 *	Computes the x-domain.
 *
-* @param {Null|Date} min - minimum value
-* @param {Null|Date} max - maximum value
+* @param {Null|String|Number|Date} min - minimum value
+* @param {Null|String|Number|Date} max - maximum value
 * @returns {Array} domain
 */
 Chart.prototype.xDomain = function( min, max ) {
@@ -2070,24 +2070,28 @@ Chart.prototype.xDomain = function( min, max ) {
 		data = this.data,
 		err;
 
-	if ( min !== null && !( min instanceof Date ) ) {
-		err = new TypeError( 'xDomain()::invalid input argument. Must be a `Date` object or `null`. Value: `' + min + '`.' );
-		this.fire( 'err', err );
-		return;
-	}
-	if ( max !== null && !( max instanceof Date ) ) {
-		err = new TypeError( 'xDomain()::invalid input argument. Must be a `Date` object or `null`. Value: `' + max + '`.' );
-		this.fire( 'err', err );
-		return;
-	}
-	if ( min === null ) {
+	if ( min !== null ) {
+		min = new Date( min ).getTime();
+		if ( min !== min ) {
+			err = new TypeError( 'xDomain()::invalid input argument. Must be a valid `Date` object, string, or number, or `null`. Value: `' + min + '`.' );
+			this.fire( 'err', err );
+			return;
+		}
+	} else {
 		min = d3.min( data, function onDataset( dataset ) {
 			return d3.min( dataset, function onDatum( d ) {
 				return d[ 0 ];
 			});
 		});
 	}
-	if ( max === null ) {
+	if ( max !== null ) {
+		max = new Date( max ).getTime();
+		if ( max !== max ) {
+			err = new TypeError( 'xDomain()::invalid input argument. Must be a valid `Date` object, string, or number, or `null`. Value: `' + max + '`.' );
+			this.fire( 'err', err );
+			return;
+		}
+	} else {
 		max = d3.max( data, function onDataset( dataset ) {
 			return d3.max( dataset, function onDatum( d ) {
 				return d[ 0 ];
@@ -3723,7 +3727,7 @@ Chart.prototype.stream = function( options ) {
 			return;
 		}
 		// TODO: call update function
-		// TODO: change event name
+		// TODO: change event name to something other than 'data'; 'data' is already used.
 		this.fire( 'data', arr );
 	}
 }; // end METHOD stream()
