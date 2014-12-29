@@ -36,17 +36,16 @@
     "web-component-tester": "~2.0.5"
   },
   "ignore": [
-    "TODO.md",
-    ".*",
     "test",
     "node_modules",
     "bower",
     "src",
+    "etc",
+    "TODO.md",
+    ".*",
     "Makefile",
-    "vulcanize.conf.js",
-    "wct.conf.js",
-    "sauce-browsers.json",
-    "package.json"
+    "package.json",
+    "wct.conf.js"
   ],
   "license": "MIT"
 }

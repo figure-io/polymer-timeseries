@@ -94,8 +94,11 @@ TODO
 		-	min/max abide by new chart convention
 		-	conflicting y-labels is a problem
 40. 
-41. 
-42. 
+41. move `/wct.conf.js` to `/etc`
+	-	requires resolved [issue](https://github.com/Polymer/web-component-tester/issues/98)
+	-	update Makefile
+42. xinv/yinv
+	-	pixel value to data value
 43. drag to copy in addition to drag to move/remove
 	-	if drag series instead of legend entry
 44. polymer-editor

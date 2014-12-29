@@ -39,7 +39,7 @@ BROWSERIFY_TEST_OUT ?= ./build/js/script.js
 # VULCANIZE #
 
 VULCANIZE ?= ./node_modules/.bin/vulcanize
-VULCANIZE_CONF ?= ./vulcanize.conf.json
+VULCANIZE_CONF ?= ./etc/vulcanize.conf.json
 VULCANIZE_BUILD_IN ?= ./build/$(NAME).html
 VULCANIZE_BUILD_OUT ?= $(OUT)
 
@@ -61,6 +61,8 @@ COVERALLS ?= ./node_modules/.bin/coveralls
 # WEB COMPONENT TESTER #
 
 WCT ?= ./node_modules/.bin/wct
+# TODO: move WCT config file to /etc once issue https://github.com/Polymer/web-component-tester/issues/98 is resolved
+WCT_CONF ?= ./wct.conf.js
 WCT_SRC ?= ./src
 WCT_TMP ?= ./build
 WCT_VAR ?= 'window.parent.WCT.share.__coverage__'

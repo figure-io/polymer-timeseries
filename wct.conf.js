@@ -31,7 +31,7 @@
 // MODULES //
 
 var path = require( 'path' ),
-	browsers = require( './sauce-browsers.json' );
+	browsers = require( './etc/sauce-browsers.json' );
 
 
 // CONFIG //

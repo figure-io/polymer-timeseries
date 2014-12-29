@@ -5,6 +5,7 @@ Makefile
 README.md
 TODO.md
 .coveralls.yml
+wct.conf.js
 
 # Directories #
 ###############
@@ -15,6 +16,7 @@ reports/
 support/
 test/
 benchmark/
+etc/
 
 # Node.js #
 ###########
@@ -52,9 +54,6 @@ Desktop.ini
 
 # Utilities #
 #############
-.jshintrc
-.jshintignore
+.jshint*
 .travis.yml
 .editorconfig
-vulcanize.conf.json
-wct.conf.js
