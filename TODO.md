@@ -131,7 +131,7 @@ TODO
 7. 	`y()`
 8. 	`getColor()`
 9. 	`getLabel()`
-10. `clear()`
+10. 
 11. any test which updates DOM elements
 	-	need to validate that the DOM elements were actually updated (regardless of implementation; D3 or otherwise)
 12. `resetAnnotations`
@@ -146,7 +146,7 @@ TODO
 21. `Chart` instance
 	- 	how to do this?
 22. 
-23. `toggleVLine`
+23. 
 24. xDomain
 	-	should `true`/`false` be permitted??? See tests.
 25. all emitted events are contracts!!!

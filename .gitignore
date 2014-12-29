@@ -4,6 +4,10 @@
 reports/
 build/
 
+# Files #
+#########
+.coveralls.yml
+
 # Compiled source #
 ###################
 *.com

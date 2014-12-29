@@ -4,6 +4,7 @@
 Makefile
 README.md
 TODO.md
+.coveralls.yml
 
 # Directories #
 ###############
