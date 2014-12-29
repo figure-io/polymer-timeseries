@@ -37,6 +37,7 @@ TODO
 	- 	I opt for choosing. In which case, `getConfig.marks = [{}]` is a single element `array`.
 15. See how plottable does their time x-axis to improve formatting 
 16. timeseries stream as separate module (see stream.js and string parsing)
+	-	Date string parsing!
 17. move stream to flow
 18. FIXME: stream currently assumes `objectMode`!!!!
 	-	e.g., that a chunk is not a partial datum! (half a stringified array, etc)
@@ -61,10 +62,8 @@ TODO
 25. 
 26. noselect for ticklabels
 	-	could be relatively expensive, as need to set the class every time an axis is updated
-27. update `package.json` scripts
-	- 	place coveralls command in Makefile
-28. for Travis, fire up firefox browser as before script and call it a day
-	- 	integrate saucelabs at later time
+27. 
+28. integrate saucelabs with Travis-ci
 29. 
 30. 
 31. `changed` callbacks for `objects` (e.g., config)
@@ -94,7 +93,7 @@ TODO
 	-	existing chart
 		-	min/max abide by new chart convention
 		-	conflicting y-labels is a problem
-40. favicon
+40. 
 41. 
 42. 
 43. drag to copy in addition to drag to move/remove
@@ -106,7 +105,7 @@ TODO
 48. Should an option be provided to enforce an aspect ratio?
 	-	Maybe more trouble than it is worth.
 49. should attributes like `xNumTicks`, `yNumTicks`, etc be allowed to equal `null` to resume, say, special resize behavior (details on demand)?
-	- 	yes
+	- 	yes (See #11)
 50. x/y axis top and bottom orientations will require that these axes be updated on padding changes! Currently, e.g., with paddingLeft, assume do not need to update the y-axis.
 51. displaying a legend should be optional
 	-	will affect changed callbacks which reset the legend

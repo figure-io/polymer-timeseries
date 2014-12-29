@@ -237,6 +237,8 @@ Stream.prototype._write = function( chunk, encoding, clbk ) {
 		ts = parseInt( ts, 10 ) * 1000;
 	} else if ( isTimestamp.test( ts ) ) {
 		ts = parseInt( ts, 10 );
+	} else {
+		// TODO: allow for parseable Date string. new Date( ts ).getTime(). Check if NaN. Have to worry about ts being a boolean.
 	}
 	for ( i = 0; i < N; i++ ) {
 		// Force type conversion via `+` operator:
@@ -249,6 +251,8 @@ Stream.prototype._write = function( chunk, encoding, clbk ) {
 			ts = parseInt( ts, 10 ) * 1000;
 		} else if ( isTimestamp.test( ts ) ) {
 			ts = parseInt( ts, 10 );
+		} else {
+			// TODO: see above and parseable Date string.
 		}
 		for ( i = 0; i < N; i++ ) {
 			arr[ i ][ j ] = [ ts, +val[i+1] ];
