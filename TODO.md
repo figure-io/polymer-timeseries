@@ -98,9 +98,12 @@ TODO
 42. 
 43. drag to copy in addition to drag to move/remove
 	-	if drag series instead of legend entry
-44. 
+44. polymer-editor
+	-	matlab plot editor, datgui, tangle
 45. responsive --> [`window.matchmedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window.matchMedia)
-46. 
+46. visual downsampling
+	-	mult algos
+	-	on resize, resample
 47. 
 48. Should an option be provided to enforce an aspect ratio?
 	-	Maybe more trouble than it is worth.
