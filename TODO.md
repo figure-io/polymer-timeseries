@@ -2,7 +2,18 @@ TODO
 ====
 
 1. 	Include note about the distributed version being a vulcanized version (see core-component-page polymer element)
-2. 	
+2. 	figure-io schemas
+	-	timeseries
+	-	histogram
+	-	kde
+	-	sparkline
+	-	scatter
+	-	line
+	-	area
+	-	brushable ""
+	-	gauge
+	- 	...
+	-	(validator and examples)
 3. 	Fix `core-component-page`. Currently, has hard-coded assumptions about `demo.html`, etc.
 4. 	jsdoc events/fires
 5. 	config method
@@ -78,6 +89,8 @@ TODO
 36. create absolute and relative time components as part of component
 	-	hide until needed
 	- 	see datgui
+	-	once configured, ability to export configuration
+		-	config can then be provided to `el.config( config )` for auto-config
 37. el.plot( data )
 	-	assuming a selection has been set (else default to body), append a new `polymer-chart-timeseries` element and plot the data.
 	-	else returns the new chart element
@@ -94,7 +107,7 @@ TODO
 		-	min/max abide by new chart convention
 		-	conflicting y-labels is a problem
 40. 
-41. move `/wct.conf.js` to `/etc`
+41. move `wct.conf.js` to `/etc`
 	-	requires resolved [issue](https://github.com/Polymer/web-component-tester/issues/98)
 	-	update Makefile
 42. xinv/yinv

@@ -499,6 +499,15 @@ Chart.prototype.isDraggable = true;
 Chart.prototype.isDroppable = true;
 
 /**
+* ATTRIBUTE: autoUpdate
+*	Boolean flag indicating whether a chart should auto update DOM elements whenever an attribute changes.
+*
+* @type {Boolean}
+* @default true
+*/
+Chart.prototype.autoUpdate = true;
+
+/**
 * ATTRIBUTE: autoResize
 *	Boolean flag indicating whether a chart should auto resize when the window resizes.
 *
@@ -1384,6 +1393,28 @@ Chart.prototype.yDomain = function( min, max ) {
 }; // end METHOD yDomain()
 
 /**
+* METHOD: autoUpdateChanged( oldVal, newVal )
+*	Event handler invoked when the `autoUpdate` attribute changes.
+*
+* @param {Boolean} oldVal - old value
+* @param {Boolean} newVal - new value
+*/
+Chart.prototype.autoUpdateChanged = function( oldVal, newVal ) {
+	var err;
+	if ( typeof newVal !== 'boolean' ) {
+		err = new TypeError( 'autoUpdate::invalid assignment. Must be a boolean.  Value: `' + newVal + '.' );
+		this.fire( 'err', err );
+		this.autoUpdate = oldVal;
+		return;
+	}
+	this.fire( 'changed', {
+		'attr': 'autoUpdate',
+		'prev': oldVal,
+		'curr': newVal
+	});
+}; // end METHOD autoUpdateChanged()
+
+/**
 * METHOD: dataChanged( val[, newVal] )
 *	Event handler invoked when the `data` attribute changes.
 *
@@ -1427,25 +1458,26 @@ Chart.prototype.dataChanged = function( val, newVal ) {
 	// [1] Update the xScale:
 	this._xScale.domain( domain );
 
-	// [2] Update the xAxis:
-	this.$.xAxis.call( this._xAxis );
-
-	// [3] Update the yDomain:
+	// [2] Update the yDomain:
 	domain = this.yDomain( this.yMin, this.yMax );
 
-	// [4] Update the yScale:
+	// [3] Update the yScale:
 	this._yScale.domain( domain );
 
-	// [5] Update the yAxis:
-	this.$.yAxis.call( this._yAxis );
+	if ( this.autoUpdate ) {
+		// [4] Update the xAxis:
+		this.$.xAxis.call( this._xAxis );
 
-	// [6] Update annotations: (TODO: this is not always necessary. Only when updating data such that the xMin and/or xMax changes.)
-	this.$.annotationMarkers.attr( 'd', this._triangle );
-	this.$.annotationLines.attr( 'd', this._vline );
+		// [5] Update the yAxis:
+		this.$.yAxis.call( this._yAxis );
 
-	// [7] Create new paths:
-	this.resetPaths();
+		// [6] Update annotations: (TODO: this is not always necessary. Only when updating data such that the xMin and/or xMax changes.)
+		this.$.annotationMarkers.attr( 'd', this._triangle );
+		this.$.annotationLines.attr( 'd', this._vline );
 
+		// [7] Create new paths:
+		this.resetPaths();
+	}
 	this.fire( 'data', {
 		'type': 'changed'
 	});
@@ -1500,8 +1532,9 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 		}
 		return;
 	}
-	this.resetAnnotations();
-
+	if ( this.autoUpdate ) {
+		this.resetAnnotations();
+	}
 	this.fire( 'annotations', {
 		'type': 'changed'
 	});
@@ -1527,7 +1560,9 @@ Chart.prototype.annotationsChanged = function( val, newVal ) {
 * @param {Object} newConfig - new config
 */
 Chart.prototype.configChanged = function( oldConfig, newConfig ) {
-	var err;
+	var bool,
+		err;
+
 	if ( typeof newConfig !== 'object' || newConfig === null || Array.isArray( newConfig) ) {
 		err = new TypeError( 'config::invalid assignment. Must be an `object`. Value: `' + newConfig + '`.' );
 		this.fire( 'err', err );
@@ -1536,7 +1571,9 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 	}
 	// TODO: schema validator
 
-	// TODO: want a way to update everything after setting all params; not constantly updating. Recall: this._init = false. Something more semantic?
+	// Turn off auto-update:
+	bool = this.autoUpdate;
+	this.autoUpdate = false;
 
 	this.width = newConfig.canvas.width;
 	this.height = newConfig.canvas.height;
@@ -1567,6 +1604,9 @@ Chart.prototype.configChanged = function( oldConfig, newConfig ) {
 		'prev': oldConfig,
 		'curr': newConfig
 	});
+
+	// Reset the auto update flag to its original value:
+	this.autoUpdate = bool;
 }; // end METHOD configChanged()
 
 /**
@@ -1653,8 +1693,10 @@ Chart.prototype.isDefinedChanged = function( oldVal, newVal ) {
 		return;
 	}
 	line.defined( newVal );
-	selection.attr( 'd', line );
 
+	if ( this.autoUpdate ) {
+		selection.attr( 'd', line );
+	}
 	this.fire( 'changed', {
 		'attr': 'isDefined',
 		'prev': oldVal,
@@ -1688,28 +1730,29 @@ Chart.prototype.widthChanged = function( oldVal, newVal ) {
 	if ( !this.$.canvas ) {
 		return;
 	}
-	// [1] Update the SVG canvas:
-	this.$.canvas.attr( 'width', newVal );
+	if ( this.autoUpdate ) {
+		// [1] Update the SVG canvas:
+		this.$.canvas.attr( 'width', newVal );
 
-	// [2] Update the background:
-	this.$.bkgd.attr( 'width', width );
+		// [2] Update the background:
+		this.$.bkgd.attr( 'width', width );
 
-	// [3] Update the clipPath:
-	this.$.clipPath.attr( 'width', width );
+		// [3] Update the clipPath:
+		this.$.clipPath.attr( 'width', width );
 
-	// [4] Update the x-axis:
-	this.$.xAxis.call( this._xAxis );
+		// [4] Update the x-axis:
+		this.$.xAxis.call( this._xAxis );
 
-	// [5] Update the x-label position:
-	this.$.xLabel.attr( 'x', width / 2 );
+		// [5] Update the x-label position:
+		this.$.xLabel.attr( 'x', width / 2 );
 
-	// [6] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [6] Update the paths:
+		this.$.paths.attr( 'd', this._line );
 
-	// [7] Update the annotations:
-	this.$.annotationMarkers.attr( 'd', this._triangle );
-	this.$.annotationLines.attr( 'd', this._vline );
-
+		// [7] Update the annotations:
+		this.$.annotationMarkers.attr( 'd', this._triangle );
+		this.$.annotationLines.attr( 'd', this._vline );
+	}
 	this.fire( 'width', {
 		'type': 'changed'
 	});
@@ -1746,31 +1789,32 @@ Chart.prototype.heightChanged = function( oldVal, newVal ) {
 	if ( !this.$.canvas ) {
 		return;
 	}
-	// [1] Update the SVG canvas:
-	this.$.canvas.attr( 'height', newVal );
+	if ( this.autoUpdate ) {
+		// [1] Update the SVG canvas:
+		this.$.canvas.attr( 'height', newVal );
 
-	// [2] Update the background:
-	this.$.bkgd.attr( 'height', height );
+		// [2] Update the background:
+		this.$.bkgd.attr( 'height', height );
 
-	// [3] Update the clipPath:
-	this.$.clipPath.attr( 'height', height );
+		// [3] Update the clipPath:
+		this.$.clipPath.attr( 'height', height );
 
-	// [4] Update the x-axis:
-	this.$.xAxis.attr( 'transform', 'translate(0,' + height + ')' );
+		// [4] Update the x-axis:
+		this.$.xAxis.attr( 'transform', 'translate(0,' + height + ')' );
 
-	// [5] Update the y-axis:
-	this.$.yAxis.call( this._yAxis );
+		// [5] Update the y-axis:
+		this.$.yAxis.call( this._yAxis );
 
-	// [6] Update the y-label position:
-	this.$.yLabel.attr( 'x', -height / 2 );
+		// [6] Update the y-label position:
+		this.$.yLabel.attr( 'x', -height / 2 );
 
-	// [7] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [7] Update the paths:
+		this.$.paths.attr( 'd', this._line );
 
-	// [8] Update the annotations:
-	this.$.annotationMarkers.attr( 'd', this._triangle );
-	this.$.annotationLines.attr( 'd', this._vline );
-
+		// [8] Update the annotations:
+		this.$.annotationMarkers.attr( 'd', this._triangle );
+		this.$.annotationLines.attr( 'd', this._vline );
+	}
 	this.fire( 'height', {
 		'type': 'changed'
 	});
@@ -1811,12 +1855,13 @@ Chart.prototype.labelsChanged = function( val, newVal ) {
 			return;
 		}
 	}
-	// [0] Reset the data labels:
-	this.$.paths.attr( 'data-label', this._getLabel );
+	if ( this.autoUpdate ) {
+		// [0] Reset the data labels:
+		this.$.paths.attr( 'data-label', this._getLabel );
 
-	// [1] Reset the chart legend:
-	this.resetLegend();
-
+		// [1] Reset the chart legend:
+		this.resetLegend();
+	}
 	this.fire( 'labels', {
 		'type': 'changed'
 	});
@@ -1849,8 +1894,9 @@ Chart.prototype.chartTitleChanged = function( oldVal, newVal ) {
 		this.chartTitle = oldVal;
 		return;
 	}
-	this.$.title.text( newVal );
-
+	if ( this.autoUpdate ) {
+		this.$.title.text( newVal );
+	}
 	this.fire( 'changed', {
 		'attr': 'chartTitle',
 		'prev': oldVal,
@@ -1873,8 +1919,9 @@ Chart.prototype.xLabelChanged = function( oldVal, newVal ) {
 		this.xLabel = oldVal;
 		return;
 	}
-	this.$.xLabel.text( newVal );
-
+	if ( this.autoUpdate ) {
+		this.$.xLabel.text( newVal );
+	}
 	this.fire( 'changed', {
 		'attr': 'xLabel',
 		'prev': oldVal,
@@ -1897,8 +1944,9 @@ Chart.prototype.yLabelChanged = function( oldVal, newVal ) {
 		this.yLabel = oldVal;
 		return;
 	}
-	this.$.yLabel.text( newVal );
-
+	if ( this.autoUpdate ) {
+		this.$.yLabel.text( newVal );
+	}
 	this.fire( 'changed', {
 		'attr': 'yLabel',
 		'prev': oldVal,
@@ -1930,16 +1978,17 @@ Chart.prototype.xMinChanged = function( oldVal, newVal ) {
 	// [1] Update the xScale:
 	xScale.domain( domain );
 
-	// [2] Update the xAxis:
-	this.$.xAxis.call( this._xAxis );
+	if ( this.autoUpdate ) {
+		// [2] Update the xAxis:
+		this.$.xAxis.call( this._xAxis );
 
-	// [3] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [3] Update the paths:
+		this.$.paths.attr( 'd', this._line );
 
-	// [4] Update the annotations:
-	this.$.annotationMarkers.attr( 'd', this._triangle );
-	this.$.annotationLines.attr( 'd', this._vline );
-
+		// [4] Update the annotations:
+		this.$.annotationMarkers.attr( 'd', this._triangle );
+		this.$.annotationLines.attr( 'd', this._vline );
+	}
 	this.fire( 'xMin', {
 		'type': 'changed'
 	});
@@ -1974,15 +2023,17 @@ Chart.prototype.xMaxChanged = function( oldVal, newVal ) {
 	// [1] Update the xScale:
 	xScale.domain( domain );
 
-	// [2] Update the xAxis:
-	this.$.xAxis.call( this._xAxis );
+	if ( this.autoUpdate ) {
+		// [2] Update the xAxis:
+		this.$.xAxis.call( this._xAxis );
 
-	// [3] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [3] Update the paths:
+		this.$.paths.attr( 'd', this._line );
 
-	// [4] Update the annotations:
-	this.$.annotationMarkers.attr( 'd', this._triangle );
-	this.$.annotationLines.attr( 'd', this._vline );
+		// [4] Update the annotations:
+		this.$.annotationMarkers.attr( 'd', this._triangle );
+		this.$.annotationLines.attr( 'd', this._vline );
+	}
 
 	this.fire( 'xMax', {
 		'type': 'changed'
@@ -2018,11 +2069,13 @@ Chart.prototype.yMinChanged = function( oldVal, newVal ) {
 	// [1] Update the yScale:
 	yScale.domain( domain );
 
-	// [2] Update the yAxis:
-	this.$.yAxis.call( this._yAxis );
+	if ( this.autoUpdate ) {
+		// [2] Update the yAxis:
+		this.$.yAxis.call( this._yAxis );
 
-	// [3] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [3] Update the paths:
+		this.$.paths.attr( 'd', this._line );
+	}
 
 	this.fire( 'yMin', {
 		'type': 'changed'
@@ -2058,11 +2111,13 @@ Chart.prototype.yMaxChanged = function( oldVal, newVal ) {
 	// [1] Update the yScale:
 	yScale.domain( domain );
 
-	// [2] Update the yAxis:
-	this.$.yAxis.call( this._yAxis );
+	if ( this.autoUpdate ) {
+		// [2] Update the yAxis:
+		this.$.yAxis.call( this._yAxis );
 
-	// [3] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [3] Update the paths:
+		this.$.paths.attr( 'd', this._line );
+	}
 
 	this.fire( 'yMax', {
 		'type': 'changed'
@@ -2093,8 +2148,9 @@ Chart.prototype.xNumTicksChanged = function( oldVal, newVal ) {
 		return;
 	}
 	xAxis.ticks( newVal );
-	selection.call( xAxis );
-
+	if ( this.autoUpdate ) {
+		selection.call( xAxis );
+	}
 	this.fire( 'changed', {
 		'attr': 'xNumTicks',
 		'prev': oldVal,
@@ -2121,8 +2177,9 @@ Chart.prototype.yNumTicksChanged = function( oldVal, newVal ) {
 		return;
 	}
 	yAxis.ticks( newVal );
-	selection.call( yAxis );
-
+	if ( this.autoUpdate ) {
+		selection.call( yAxis );
+	}
 	this.fire( 'changed', {
 		'attr': 'yNumTicks',
 		'prev': oldVal,
@@ -2149,7 +2206,9 @@ Chart.prototype.xAxisOrientChanged = function( oldVal, newVal ) {
 		return;
 	}
 	xAxis.orient( newVal );
-	selection.call( xAxis );
+	if ( this.autoUpdate ) {
+		selection.call( xAxis );
+	}
 
 	// TODO: this is subtle. As labels, etc may need to change.
 
@@ -2179,7 +2238,9 @@ Chart.prototype.yAxisOrientChanged = function( oldVal, newVal ) {
 		return;
 	}
 	yAxis.orient( newVal );
-	selection.call( yAxis );
+	if ( this.autoUpdate ) {
+		selection.call( yAxis );
+	}
 
 	// TODO: this is subtle. As labels, etc may need to change.
 
@@ -2210,8 +2271,10 @@ Chart.prototype.xTickFormatChanged = function( oldVal, newVal ) {
 	}
 	this._xTickFormat = this._d3.time.format( newVal );
 	xAxis.tickFormat( this._xTickFormat );
-	selection.call( xAxis );
 
+	if ( this.autoUpdate ) {
+		selection.call( xAxis );
+	}
 	this.fire( 'changed', {
 		'attr': 'xTickFormat',
 		'prev': oldVal,
@@ -2243,8 +2306,9 @@ Chart.prototype.yTickFormatChanged = function( oldVal, newVal ) {
 		this._yTickFormat = null;
 	}
 	yAxis.tickFormat( this._yTickFormat );
-	selection.call( yAxis );
-
+	if ( this.autoUpdate ) {
+		selection.call( yAxis );
+	}
 	this.fire( 'changed', {
 		'attr': 'yTickFormat',
 		'prev': oldVal,
@@ -2271,8 +2335,9 @@ Chart.prototype.interpolationChanged = function( oldVal, newVal ) {
 		return;
 	}
 	line.interpolate( newVal );
-	selection.attr( 'd', line );
-
+	if ( this.autoUpdate ) {
+		selection.attr( 'd', line );
+	}
 	this.fire( 'changed', {
 		'attr': 'interpolation',
 		'prev': oldVal,
@@ -2299,8 +2364,9 @@ Chart.prototype.tensionChanged = function( oldVal, newVal ) {
 		return;
 	}
 	line.tension( newVal );
-	selection.attr( 'd', line );
-
+	if ( this.autoUpdate ) {
+		selection.attr( 'd', line );
+	}
 	this.fire( 'changed', {
 		'attr': 'tension',
 		'prev': oldVal,
@@ -2345,14 +2411,18 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 			return;
 		}
 	}
-	this.$.paths.attr( 'color', getColor );
+	if ( this.autoUpdate ) {
+		this.$.paths.attr( 'color', getColor );
 
-	// Set the color of all symbols...
-	symbols = this.$.legendSymbols;
-	for ( i = 0; i < symbols.length; i++ ) {
-		el = symbols[ i ][ 0 ];
-		color = oldColors[ i ];
-		if ( el ) {
+		// Set the color of all symbols...
+		symbols = this.$.legendSymbols;
+		for ( i = 0; i < symbols.length; i++ ) {
+			el = symbols[ i ][ 0 ];
+			if ( !el ) {
+				continue;
+			}
+			color = oldColors[ i ];
+
 			// Remove any existing color class...
 			list = el.classList;
 			for ( j = 0; j < list.length; j++ ) {
@@ -2405,28 +2475,29 @@ Chart.prototype.paddingLeftChanged = function( oldVal, newVal ) {
 	range = [ 0, width ];
 	this._xScale.range( range );
 
-	// [1] Update the background:
-	this.$.bkgd.attr( 'width', width );
+	if ( this.autoUpdate ) {
+		// [1] Update the background:
+		this.$.bkgd.attr( 'width', width );
 
-	// [2] Update the clipPath:
-	this.$.clipPath.attr( 'width', width );
+		// [2] Update the clipPath:
+		this.$.clipPath.attr( 'width', width );
 
-	// [3] Update the graph:
-	this.$.graph.attr( 'transform', 'translate(' + newVal + ',' + this.paddingTop + ')' );
+		// [3] Update the graph:
+		this.$.graph.attr( 'transform', 'translate(' + newVal + ',' + this.paddingTop + ')' );
 
-	// [4] Update the x-axis:
-	this.$.xAxis.call( this._xAxis );
+		// [4] Update the x-axis:
+		this.$.xAxis.call( this._xAxis );
 
-	// [5] Update the x-label position:
-	this.$.xLabel.attr( 'x', width / 2 );
+		// [5] Update the x-label position:
+		this.$.xLabel.attr( 'x', width / 2 );
 
-	// [6] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [6] Update the paths:
+		this.$.paths.attr( 'd', this._line );
 
-	// [7] Update the annotations:
-	this.$.annotationMarkers.attr( 'd', this._triangle );
-	this.$.annotationLines.attr( 'd', this._vline );
-
+		// [7] Update the annotations:
+		this.$.annotationMarkers.attr( 'd', this._triangle );
+		this.$.annotationLines.attr( 'd', this._vline );
+	}
 	this.fire( 'changed', {
 		'attr': 'paddingLeft',
 		'prev': oldVal,
@@ -2458,25 +2529,26 @@ Chart.prototype.paddingRightChanged = function( oldVal, newVal ) {
 	range = [ 0, width ];
 	this._xScale.range( range );
 
-	// [1] Update the background:
-	this.$.bkgd.attr( 'width', width );
+	if ( this.autoUpdate ) {
+		// [1] Update the background:
+		this.$.bkgd.attr( 'width', width );
 
-	// [2] Update the clipPath:
-	this.$.clipPath.attr( 'width', width );
+		// [2] Update the clipPath:
+		this.$.clipPath.attr( 'width', width );
 
-	// [3] Update the x-axis:
-	this.$.xAxis.call( this._xAxis );
+		// [3] Update the x-axis:
+		this.$.xAxis.call( this._xAxis );
 
-	// [4] Update the x-label position:
-	this.$.xLabel.attr( 'x', width / 2 );
+		// [4] Update the x-label position:
+		this.$.xLabel.attr( 'x', width / 2 );
 
-	// [5] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [5] Update the paths:
+		this.$.paths.attr( 'd', this._line );
 
-	// [6] Update the annotations:
-	this.$.annotationMarkers.attr( 'd', this._triangle );
-	this.$.annotationLines.attr( 'd', this._vline );
-
+		// [6] Update the annotations:
+		this.$.annotationMarkers.attr( 'd', this._triangle );
+		this.$.annotationLines.attr( 'd', this._vline );
+	}
 	this.fire( 'changed', {
 		'attr': 'paddingRight',
 		'prev': oldVal,
@@ -2508,28 +2580,29 @@ Chart.prototype.paddingBottomChanged = function( oldVal, newVal ) {
 	range = [ height, 0 ];
 	this._yScale.range( range );
 
-	// [1] Update the background:
-	this.$.bkgd.attr( 'height', height );
+	if ( this.autoUpdate ) {
+		// [1] Update the background:
+		this.$.bkgd.attr( 'height', height );
 
-	// [2] Update the clipPath:
-	this.$.clipPath.attr( 'height', height );
+		// [2] Update the clipPath:
+		this.$.clipPath.attr( 'height', height );
 
-	// [3] Update the x-axis:
-	this.$.xAxis.attr( 'transform', 'translate(0,' + height + ')' );
+		// [3] Update the x-axis:
+		this.$.xAxis.attr( 'transform', 'translate(0,' + height + ')' );
 
-	// [4] Update the y-axis:
-	this.$.yAxis.call( this._yAxis );
+		// [4] Update the y-axis:
+		this.$.yAxis.call( this._yAxis );
 
-	// [5] Update the y-label position:
-	this.$.yLabel.attr( 'x', -height / 2 );
+		// [5] Update the y-label position:
+		this.$.yLabel.attr( 'x', -height / 2 );
 
-	// [6] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [6] Update the paths:
+		this.$.paths.attr( 'd', this._line );
 
-	// [7] Update the annotations:
-	this.$.annotationMarkers.attr( 'd', this._triangle );
-	this.$.annotationLines.attr( 'd', this._vline );
-
+		// [7] Update the annotations:
+		this.$.annotationMarkers.attr( 'd', this._triangle );
+		this.$.annotationLines.attr( 'd', this._vline );
+	}
 	this.fire( 'changed', {
 		'attr': 'paddingBottom',
 		'prev': oldVal,
@@ -2561,31 +2634,32 @@ Chart.prototype.paddingTopChanged = function( oldVal, newVal ) {
 	range = [ height, 0 ];
 	this._yScale.range( range );
 
-	// [1] Update the background:
-	this.$.bkgd.attr( 'height', height );
+	if ( this.autoUpdate ) {
+		// [1] Update the background:
+		this.$.bkgd.attr( 'height', height );
 
-	// [2] Update the clipPath:
-	this.$.clipPath.attr( 'height', height );
+		// [2] Update the clipPath:
+		this.$.clipPath.attr( 'height', height );
 
-	// [3] Update the graph:
-	this.$.graph.attr( 'transform', 'translate(' + this.paddingLeft + ',' + newVal + ')' );
+		// [3] Update the graph:
+		this.$.graph.attr( 'transform', 'translate(' + this.paddingLeft + ',' + newVal + ')' );
 
-	// [4] Update the x-axis:
-	this.$.xAxis.attr( 'transform', 'translate(0,' + height + ')' );
+		// [4] Update the x-axis:
+		this.$.xAxis.attr( 'transform', 'translate(0,' + height + ')' );
 
-	// [5] Update the y-axis:
-	this.$.yAxis.call( this._yAxis );
+		// [5] Update the y-axis:
+		this.$.yAxis.call( this._yAxis );
 
-	// [6] Update the y-label position:
-	this.$.yLabel.attr( 'x', -height / 2 );
+		// [6] Update the y-label position:
+		this.$.yLabel.attr( 'x', -height / 2 );
 
-	// [7] Update the paths:
-	this.$.paths.attr( 'd', this._line );
+		// [7] Update the paths:
+		this.$.paths.attr( 'd', this._line );
 
-	// [8] Update the annotations:
-	this.$.annotationMarkers.attr( 'd', this._triangle );
-	this.$.annotationLines.attr( 'd', this._vline );
-
+		// [8] Update the annotations:
+		this.$.annotationMarkers.attr( 'd', this._triangle );
+		this.$.annotationLines.attr( 'd', this._vline );
+	}
 	this.fire( 'changed', {
 		'attr': 'paddingTop',
 		'prev': oldVal,
