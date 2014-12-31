@@ -531,7 +531,8 @@ Chart.prototype.created = function() {
 Chart.prototype.init = function() {
 	var create = document.createElement.bind( document ),
 		d3,
-		el;
+		el,
+		$;
 
 	// Create a new D3 element to access the library dependency:
 	el = create( 'polymer-d3' );
@@ -627,29 +628,41 @@ Chart.prototype.init = function() {
 	this._onResize = delayed( this.onResize.bind( this ), 400 );
 
 	// Elements...
-	this.$ = {
-		'root': null,
-		'canvas': null,
-		'clipPath': null,
-		'graph': null,
-		'xAxis': null,
-		'yAxis': null,
-		'xLabel': null,
-		'yLabel': null,
-		'meta': null,
-		'title': null,
-		'legend': null,
-		'legendEntries': null,
-		'legendSymbols': null,
-		'legendLabels': null,
-		'bkgd': null,
-		'marks': null,
-		'paths': null,
-		'agroup': null,
-		'annotations': null,
-		'annotationMarkers': null,
-		'annotationLines': null
-	};
+	$ = this.$;
+
+	// Base elements...
+	$.root = null;
+	$.canvas = null;
+	$.clipPath = null;
+	$.graph = null;
+	$.bkgd = null;
+
+	// Axis elements...
+	$.xAxis = null;
+	$.yAxis = null;
+	$.xLabel = null;
+	$.yLabel = null;
+
+	// Meta elements...
+	$.meta = null;
+	$.title = null;
+
+	// Legend elements...
+	$.legend = null;
+	$.legendEntries = null;
+	$.legendSymbols = null;
+	$.legendLabels = null;
+
+	// Data elements...
+	$.marks = null;
+	$.paths = null;
+
+	// Annotation elements...
+	$.agroup = null;
+	$.annotations = null;
+	$.annotationMarks = null;
+	$.annotationLines = null;
+
 	this._clipPathID = this._uuid.v4();
 }; // end METHOD init()
 
@@ -658,7 +671,7 @@ Chart.prototype.init = function() {
 *	Polymer hook that is called when the element is inserted in the DOM.
 */
 Chart.prototype.attached = function() {
-	this.chart().addListeners();
+	this.create().addListeners();
 }; // end METHOD attached()
 
 /**
@@ -695,12 +708,12 @@ Chart.prototype.removeListeners = function() {
 }; // end METHOD removeListeners()
 
 /**
-* METHOD: chart()
+* METHOD: create()
 *	Creates a chart.
 *
 * @returns {DOMElement} element instance
 */
-Chart.prototype.chart = function() {
+Chart.prototype.create = function() {
 	// Ensure that the width and height are set before creating a chart...
 	this.width = this.width || this.clientWidth || this.parentNode.clientWidth || 600;
 	this.height = this.height || this.clientHeight || this.parentNode.clientHeight || 400;
@@ -716,7 +729,7 @@ Chart.prototype.chart = function() {
 		.createLegend();
 
 	return this;
-}; // end METHOD chart()
+}; // end METHOD create()
 
 /**
 * METHOD: createBase()

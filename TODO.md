@@ -134,6 +134,7 @@ TODO
 53. See `toggleSeries`; need to move `clicked` event to separate handler
 	- 	method should be a general method
 	-	dido for `toggleVLine`
+54. README TOC
 
 
 #### Tests
