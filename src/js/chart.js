@@ -627,8 +627,8 @@ Chart.prototype.init = function() {
 
 	this._onResize = delayed( this.onResize.bind( this ), 400 );
 
-	// Elements...
-	$ = this.$;
+	// Element cache...
+	this.$ = $ = {};
 
 	// Base elements...
 	$.root = null;
@@ -663,6 +663,7 @@ Chart.prototype.init = function() {
 	$.annotationMarks = null;
 	$.annotationLines = null;
 
+	// Clip path...
 	this._clipPathID = this._uuid.v4();
 }; // end METHOD init()
 
@@ -744,9 +745,9 @@ Chart.prototype.createBase = function() {
 		pTop = this.paddingTop,
 		canvas;
 
-	this.$.root = this._d3.select( this.$.chart );
-
-	// Remove any existing canvas...
+	if ( !this.$.root ) {
+		this.$.root = this._d3.select( this.$.chart );
+	}
 	if ( this.$.canvas ) {
 		this.$.canvas.remove();
 	}
@@ -948,7 +949,7 @@ Chart.prototype.createAnnotations = function() {
 		.on( 'click', this._toggleVLine );
 
 	this.$.annotationLines = gEnter.append( 'svg:path' )
-		.attr( 'class', 'vline' )
+		.attr( 'class', 'vline hidden' )
 		.attr( 'd', this._vline )
 		.attr( 'stroke-dasharray', '4,4' );
 
@@ -998,28 +999,28 @@ Chart.prototype.createLegend = function() {
 	this.$.legendEntries = entries;
 
 	// Each entry should include a color-coded symbol and a label:
-	symbols = entries.append( 'xhtml:span' )
-		.attr( 'class', 'symbol' );
-	this.$.legendSymbols = symbols;
+	entries.append( 'xhtml:span' )
+		.attr( 'class', 'symbol' )
+		.html( '&nbsp;' );
 
-	labels = entries.append( 'xhtml:span' )
+	entries.append( 'xhtml:span' )
 		.attr( 'class', 'label' );
-	this.$.legendLabels = labels;
 
 	// Set the color of all symbols...
+	symbols = entries.selectAll( '.symbol' );
 	for ( i = 0; i < symbols.length; i++ ) {
 		el = symbols[ i ][ 0 ];
-		if ( el ) {
-			el.classList.add( getColor( null, i ) + '-span' );
-		}
+		el.classList.add( getColor( null, i ) + '-span' );
 	}
+	this.$.legendSymbols = symbols;
+
 	// Set the text of all labels...
+	labels = entries.selectAll( '.label' );
 	for ( i = 0; i < labels.length; i++ ) {
 		el = labels[ i ][ 0 ];
-		if ( el ) {
-			el.innerHTML = getLabel( null, i );
-		}
+		el.innerHTML = getLabel( null, i );
 	}
+	this.$.legendLabels = labels;
 	return this;
 }; // end METHOD createLegend()
 
