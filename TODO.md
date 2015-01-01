@@ -85,6 +85,15 @@ TODO
 		*	WARNING: not particularly generalizable between chart types (e.g., from timeseries to histogram; the labels will not match; I suppose, however, that each chart can decide whether and how to use label information)
 33. 
 34. demo socket/sse server
+	-	stdin
+	-	auto assign port
+	-	generate client-side script
+	-	open browser and url
+	-	run client-side script
+		-	establish ws connection
+	-	once established, stream data to browser
+	-	update
+	-	may want to create a separate repo just for this demo
 35. are transitions needed? I am skeptical.
 36. create absolute and relative time components as part of component
 	-	hide until needed

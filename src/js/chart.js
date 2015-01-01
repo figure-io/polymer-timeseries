@@ -745,9 +745,11 @@ Chart.prototype.createBase = function() {
 		pTop = this.paddingTop,
 		canvas;
 
+	// Only cache the root element once (should not change)...
 	if ( !this.$.root ) {
 		this.$.root = this._d3.select( this.$.chart );
 	}
+	// Remove any existing canvas...
 	if ( this.$.canvas ) {
 		this.$.canvas.remove();
 	}
@@ -848,7 +850,7 @@ Chart.prototype.createAxes = function() {
 		height = this.graphHeight(),
 		axis;
 
-	// Remove any existing x-axis...
+	// Remove any existing axes...
 	if ( this.$.xAxis ) {
 		this.$.xAxis.remove();
 	}
@@ -971,7 +973,6 @@ Chart.prototype.createLegend = function() {
 		entries,
 		symbols,
 		labels,
-		el,
 		i;
 
 	if ( this.$.legend ) {
@@ -1009,16 +1010,14 @@ Chart.prototype.createLegend = function() {
 	// Set the color of all symbols...
 	symbols = entries.selectAll( '.symbol' );
 	for ( i = 0; i < symbols.length; i++ ) {
-		el = symbols[ i ][ 0 ];
-		el.classList.add( getColor( null, i ) + '-span' );
+		symbols[ i ][ 0 ].classList.add( getColor( null, i ) + '-span' );
 	}
 	this.$.legendSymbols = symbols;
 
 	// Set the text of all labels...
 	labels = entries.selectAll( '.label' );
 	for ( i = 0; i < labels.length; i++ ) {
-		el = labels[ i ][ 0 ];
-		el.innerHTML = getLabel( null, i );
+		labels[ i ][ 0 ].innerHTML = getLabel( null, i );
 	}
 	this.$.legendLabels = labels;
 	return this;
