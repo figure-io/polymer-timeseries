@@ -55,6 +55,7 @@ TODO
 	-	See how jsonstream parses incoming binary chunks
 19. replace d3 min/max with compute-min/max
 	- 	Not so simple, as would require extracting desired values into separate array, etc. D3 has advantage of using accessors.
+	-	(in progress)
 20. title positioning
 	- 	currently disregarded in favor of legend entries
 	- 	if set title, then should auto-update the padding
@@ -129,6 +130,7 @@ TODO
 46. visual downsampling
 	-	mult algos
 	-	on resize, resample
+	-	flag to turn on downsampling (e.g., `autoDownsample`, or `downsampling`)
 47. 
 48. Should an option be provided to enforce an aspect ratio?
 	-	Maybe more trouble than it is worth.
