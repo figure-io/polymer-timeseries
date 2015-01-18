@@ -195,6 +195,7 @@ Stream.prototype._write = function( chunk, encoding, clbk ) {
 	}
 	// [1] Stringified array...
 	if ( isArray.test( chunk ) ) {
+		// TODO: move to separate fcn, else V8 cannot optimize!!!!
 		try {
 			chunk = JSON.parse( chunk );
 			this._clbk( null, chunk );

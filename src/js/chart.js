@@ -833,7 +833,7 @@ Chart.prototype.createPaths = function() {
 			.attr( 'property', 'line timeseries' )
 			.attr( 'class', 'line' )
 			.attr( 'data-label', this._getLabel )
-			.attr( 'color', this._getColor )
+			.attr( 'data-color', this._getColor )
 			.attr( 'd', this._line );
 
 	return this;
@@ -1045,7 +1045,7 @@ Chart.prototype.resetPaths = function() {
 		.attr( 'property', 'line timeseries' )
 		.attr( 'class', 'line' )
 		.attr( 'data-label', this._getLabel )
-		.attr( 'color', this._getColor )
+		.attr( 'data-color', this._getColor )
 		.attr( 'd', this._line );
 
 	// Cache a reference to the paths:
@@ -2430,7 +2430,7 @@ Chart.prototype.colorsChanged = function( val, newVal ) {
 		}
 	}
 	if ( this.autoUpdate ) {
-		this.$.paths.attr( 'color', getColor );
+		this.$.paths.attr( 'data-color', getColor );
 
 		// Set the color of all symbols...
 		symbols = this.$.legendSymbols;

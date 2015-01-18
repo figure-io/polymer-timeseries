@@ -1,6 +1,6 @@
 Timeseries
 ===
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
+[![NPM version][npm-image]][npm-url] [![Bower version][bower-image]][bower-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
 > A [Polymer](https://www.polymer-project.org/) web component for displaying timeseries graphs.
 
@@ -566,7 +566,7 @@ The component emits events during both chart configuration and interaction. The 
 
 #### 'err'
 
-The element emits an `err` event whenever a error occurs; e.g., improper setting of attributes.
+The element emits an `err` event whenever an error occurs; e.g., improper setting of attributes.
 
 ``` javascript
 el.addEventListener( 'err', function onError( err ) {
@@ -863,6 +863,9 @@ Copyright &copy; 2014. Athan Reines.
 
 [npm-image]: http://img.shields.io/npm/v/.svg
 [npm-url]: https://npmjs.org/package/
+
+[bower-image]: https://img.shields.io/bower/v/polymer-timeseries.svg
+[bower-url]: https://github.com/figure-io/polymer-timeseries
 
 [travis-image]: http://img.shields.io/travis/figure-io/polymer-timeseries/master.svg
 [travis-url]: https://travis-ci.org/figure-io/polymer-timeseries
