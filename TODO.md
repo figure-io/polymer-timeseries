@@ -151,7 +151,7 @@ TODO
 57. move try/catch in stream write method to separate fcn.
 58. probably do not want `if ( !this.$.canvas ) {}`, as this prevents events from firing due to early return. Rather, you want, say, `if ( this.$.canvas && this.autoUpdate ) {}`.
 59. currently, only width and height changes actually check that a canvas exists before updating chart elements; should the same not happen for other attribute changes??? Is checking for a canvas needed????
-60. 
+60. BUG: `dataChanged` does not emit a changed event when set to an empty array due to early return.
 
 
 #### Tests
