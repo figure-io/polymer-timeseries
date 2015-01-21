@@ -665,6 +665,8 @@ Chart.prototype.init = function() {
 
 	// Clip path...
 	this._clipPathID = this._uuid.v4();
+
+	return this;
 }; // end METHOD init()
 
 /**
