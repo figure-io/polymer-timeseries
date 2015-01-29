@@ -153,6 +153,8 @@ TODO
 59. currently, only width and height changes actually check that a canvas exists before updating chart elements; should the same not happen for other attribute changes??? Is checking for a canvas needed????
 60. BUG: `dataChanged` does not emit a changed event when set to an empty array due to early return.
 61. include screenshot in README
+62. update to polymer 0.5.4
+	- 	requires updating web-component-tester-istanbul plugin and using new configuration setup
 
 
 #### Tests
