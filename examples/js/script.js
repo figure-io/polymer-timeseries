@@ -76,9 +76,8 @@
 	// SCRIPT //
 
 	// Get the template for a figure configuration:
-	// FIXME: addresses differences in lifecycle behavior between Chrome and Firefox.
-	setTimeout( function() {
+	window.addEventListener( 'polymer-ready', function onReady() {
 		getResource( './../examples/data/timeseries.json', onData );
-	}, 500 );
+	});
 
 })();
