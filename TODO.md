@@ -145,13 +145,14 @@ TODO
 53. See `toggleSeries`; need to move `clicked` event to separate handler
 	- 	method should be a general method
 	-	dido for `toggleVLine`
-54. README TOC
+54. README TOC / Wiki
 55. 
 56. Update year from 2014 to 2015 (2014-2015).
 57. move try/catch in stream write method to separate fcn.
 58. probably do not want `if ( !this.$.canvas ) {}`, as this prevents events from firing due to early return. Rather, you want, say, `if ( this.$.canvas && this.autoUpdate ) {}`.
 59. currently, only width and height changes actually check that a canvas exists before updating chart elements; should the same not happen for other attribute changes??? Is checking for a canvas needed????
 60. BUG: `dataChanged` does not emit a changed event when set to an empty array due to early return.
+61. include screenshot in README
 
 
 #### Tests

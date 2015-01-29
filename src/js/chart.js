@@ -1339,7 +1339,7 @@ Chart.prototype.xDomain = function( min, max ) {
 	if ( min !== null ) {
 		min = new Date( min ).getTime();
 		if ( min !== min ) {
-			err = new TypeError( 'xDomain()::invalid input argument. Must be a valid `Date` object, string, or number, or `null`. Value: `' + min + '`.' );
+			err = new TypeError( 'xDomain()::invalid input argument. Minimum value must be a valid `Date` object, string, or number, or `null`. Value: `' + min + '`.' );
 			this.fire( 'err', err );
 			return;
 		}
@@ -1353,7 +1353,7 @@ Chart.prototype.xDomain = function( min, max ) {
 	if ( max !== null ) {
 		max = new Date( max ).getTime();
 		if ( max !== max ) {
-			err = new TypeError( 'xDomain()::invalid input argument. Must be a valid `Date` object, string, or number, or `null`. Value: `' + max + '`.' );
+			err = new TypeError( 'xDomain()::invalid input argument. Maximum value must be a valid `Date` object, string, or number, or `null`. Value: `' + max + '`.' );
 			this.fire( 'err', err );
 			return;
 		}
@@ -1381,12 +1381,12 @@ Chart.prototype.yDomain = function( min, max ) {
 		err;
 
 	if ( min !== null && ( typeof min !== 'number' || min !== min ) ) {
-		err = new TypeError( 'yDomain()::invalid input argument. Must be numeric or `null`. Value: `' + min + '`.' );
+		err = new TypeError( 'yDomain()::invalid input argument. Minimum value must be numeric or `null`. Value: `' + min + '`.' );
 		this.fire( 'err', err );
 		return;
 	}
 	if ( max !== null && ( typeof max !== 'number' || max !== max ) ) {
-		err = new TypeError( 'yDomain()::invalid input argument. Must be numeric or `null`. Value: `' + max + '`.' );
+		err = new TypeError( 'yDomain()::invalid input argument. Maximum value must be numeric or `null`. Value: `' + max + '`.' );
 		this.fire( 'err', err );
 		return;
 	}

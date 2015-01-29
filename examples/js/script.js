@@ -76,6 +76,9 @@
 	// SCRIPT //
 
 	// Get the template for a figure configuration:
-	getResource( './../examples/data/timeseries.json', onData );
+	// FIXME: addresses differences in lifecycle behavior between Chrome and Firefox.
+	setTimeout( function() {
+		getResource( './../examples/data/timeseries.json', onData );
+	}, 500 );
 
 })();
