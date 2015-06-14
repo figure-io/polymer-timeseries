@@ -1,6 +1,15 @@
 TODO
 ====
 
+#### Post-migration
+
+1. Consider name change
+	-	e.g., `figure-io-timeseries`
+2. 
+
+
+#### Pre-migration
+
 1. 	Include note about the distributed version being a vulcanized version (see core-component-page polymer element)
 2. 	figure-io schemas
 	-	timeseries

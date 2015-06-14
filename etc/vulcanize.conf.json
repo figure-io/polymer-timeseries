@@ -1,9 +1,0 @@
-{
-	"excludes": {
-		"imports": [
-			"polymer.html$",
-			"d3.html$",
-			"uuid.html$"
-		]
-	}
-}

@@ -45,6 +45,8 @@
 			el,
 			i;
 
+		return;
+
 		// [0] Grab chart elements...
 		figs = document.querySelectorAll( '.figure' );
 

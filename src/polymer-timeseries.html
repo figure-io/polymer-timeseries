@@ -1,44 +1,30 @@
+<link rel="import" href="../../polymer/polymer.html">
+
 <!--
-	POLYMER-TIMESERIES
+	Element for displaying timeseries.
 
-	DESCRIPTION:
-		- `polymer-timeseries` is a UI element for displaying timeseries graphs.
-
-	EXAMPLE:
+	Example:
 		<polymer-timeseries id="chart"></polymer-timeseries>
-		...
-		var chart = this.$.chart;
 
 	@element polymer-timeseries
 	@status unstable
 -->
+<dom-module id="polymer-timeseries">
 
-<!-- POLYMER -->
-<link rel="import" href="../../polymer/polymer.html">
+	<!-- STYLESHEETS -->
+	<link rel="stylesheet" href="./css/reset.css">
+	<link rel="stylesheet" href="./css/colors.css">
+	<link rel="stylesheet" href="./css/styles.css">
+	<link rel="stylesheet" href="./css/chart.css">
+	<link rel="stylesheet" href="./css/legend.css">
+	<link rel="stylesheet" href="./css/media-queries.css">
 
-<!-- DEPENDENCIES -->
-<link rel="import" href="../../polymer-uuid/polymer-uuid.html">
-<link rel="import" href="../../polymer-d3/polymer-d3.html">
-
-<!-- ELEMENT -->
-<polymer-element name="polymer-timeseries" attributes="data config width height labels chartTitle xLabel yLabel xMin xMax yMin yMax xNumTicks yNumTicks xAxisOrient yAxisOrient xTickFormat yTickFormat interpolation tension paddingLeft paddingRight paddingBottom paddingTop xValue yValue aValue isDefined isDraggable isDroppable autoUpdate autoResize" on-dragenter="{{ onDragEnter }}" on-dragover="{{ onDragOver }}" on-dragleave="{{ onDragLeave }}" on-drop="{{ onDrop }}">
-
+	<!-- PRESENTATION CONTENT -->
 	<template>
-
-		<!-- STYLESHEETS -->
-		<link rel="stylesheet" href="./css/reset.css">
-		<link rel="stylesheet" href="./css/colors.css">
-		<link rel="stylesheet" href="./css/styles.css">
-		<link rel="stylesheet" href="./css/chart.css">
-		<link rel="stylesheet" href="./css/legend.css">
-		<link rel="stylesheet" href="./css/media-queries.css">
-
-		<!-- PRESENTATION CONTENT -->
-		<div class="chart" id="chart"></div>
-
+		<div id="chart">Hello, World!</div>
 	</template>
 
 	<!-- REGISTRATION -->
 	<script src="./js/script.js"></script>
 
-</polymer-element>
+</dom-module>

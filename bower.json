@@ -8,32 +8,38 @@
       "email": "kgryte@gmail.com"
     }
   ],
-  "main": "./polymer-timeseries.html",
+  "main": [
+    "polymer-timeseries.html"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/figure-io/polymer-timeseries"
   },
   "keywords": [
     "polymer",
-  	"web component",
+    "web-components",
+    "web",
+    "component",
     "visualization",
     "viz",
     "ui",
     "figure",
+    "fig",
     "chart",
     "graph",
     "data",
     "metrics",
     "timeseries",
-    "d3"
+    "d3",
+    "svg"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.5.1",
-    "polymer-d3": "figure-io/polymer-d3#~0.0.1",
-    "polymer-uuid": "kgryte/polymer-uuid#~0.0.0"
+    "polymer": "Polymer/polymer#^1.0.3"
   },
   "devDependencies": {
-    "web-component-tester": "~2.0.5"
+    "web-component-tester": "*",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.3",
+    "test-fixture": "polymerelements/test-fixture#^1.0.0"
   },
   "ignore": [
     "test",

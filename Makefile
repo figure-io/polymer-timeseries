@@ -11,6 +11,15 @@ OUT ?= $(NAME).html
 # Set the node.js environment to test:
 NODE_ENV ?= test
 
+# Kernel name:
+KERNEL ?= $(shell uname -s)
+
+ifeq ($(KERNEL), Darwin)
+	OPEN ?= open
+else
+	OPEN ?= xdg-open
+endif
+
 
 # NOTES #
 
@@ -39,7 +48,6 @@ BROWSERIFY_TEST_OUT ?= ./build/js/script.js
 # VULCANIZE #
 
 VULCANIZE ?= ./node_modules/.bin/vulcanize
-VULCANIZE_CONF ?= ./etc/vulcanize.conf.json
 VULCANIZE_BUILD_IN ?= ./build/$(NAME).html
 VULCANIZE_BUILD_OUT ?= $(OUT)
 
@@ -71,7 +79,7 @@ WCT_VAR ?= 'window.parent.WCT.share.__coverage__'
 # JSHINT #
 
 JSHINT ?= ./node_modules/.bin/jshint
-JSHINT_REPORTER ?= ./node_modules/jshint-stylish/stylish.js
+JSHINT_REPORTER ?= ./node_modules/jshint-stylish
 
 
 
@@ -123,7 +131,8 @@ test-browserify: node_modules
 		-o $(BROWSERIFY_TEST_OUT)
 
 test-wct: node_modules test-tmp test-browserify
-	$(WCT)
+	$(WCT) \
+		--plugin local
 
 
 
@@ -144,7 +153,8 @@ test-istanbul-instrument: node_modules
 		--variable $(WCT_VAR)
 
 test-istanbul-wct: node_modules test-tmp test-instrument test-browserify
-	$(WCT)
+	$(WCT) \
+		--plugin local
 
 
 
@@ -155,7 +165,7 @@ test-istanbul-wct: node_modules test-tmp test-instrument test-browserify
 view-cov: view-istanbul-report
 
 view-istanbul-report:
-	open $(ISTANBUL_HTML_REPORT_PATH)
+	$(OPEN) $(ISTANBUL_HTML_REPORT_PATH)
 
 
 
@@ -225,10 +235,11 @@ browserify: node_modules
 vulcanize: node_modules
 	$(VULCANIZE) \
 		$(VULCANIZE_BUILD_IN) \
-		--config $(VULCANIZE_CONF) \
-		-o $(VULCANIZE_BUILD_OUT) \
-		--inline \
-		--no-strip-excludes
+		--inline-css \
+		--inline-scripts \
+		--strip-comments \
+		> $(VULCANIZE_BUILD_OUT)
+
 
 
 # CLEAN #
