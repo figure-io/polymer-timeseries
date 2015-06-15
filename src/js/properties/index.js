@@ -126,7 +126,7 @@ props.colors = {
 * @default null
 */
 props.width = {
-	'observer': '',
+	'observer': '_widthChanged',
 	'type': Number,
 	'value': null
 };
@@ -138,7 +138,7 @@ props.width = {
 * @default null
 */
 props.height = {
-	'observer': '',
+	'observer': '_heightChanged',
 	'type': Number,
 	'value': null
 };
@@ -150,7 +150,7 @@ props.height = {
 * @default 90px
 */
 props.paddingLeft = {
-	'observer': '',
+	'observer': '_paddingLeftChanged',
 	'type': Number,
 	'value': 90
 };
@@ -162,7 +162,7 @@ props.paddingLeft = {
 * @default 20px
 */
 props.paddingRight = {
-	'observer': '',
+	'observer': '_paddingRightChanged',
 	'type': Number,
 	'value': 20
 };
@@ -174,7 +174,7 @@ props.paddingRight = {
 * @default 80px
 */
 props.paddingTop = {
-	'observer': '',
+	'observer': '_paddingTopChanged',
 	'type': Number,
 	'value': 80
 };
@@ -186,7 +186,7 @@ props.paddingTop = {
 * @default 80px
 */
 props.paddingBottom = {
-	'observer': '',
+	'observer': '_paddingBottomChanged',
 	'type': Number,
 	'value': 80
 };
@@ -198,7 +198,7 @@ props.paddingBottom = {
 * @default ''
 */
 props.title = {
-	'observer': '',
+	'observer': '_titleChanged',
 	'type': String,
 	'value': ''
 };
@@ -210,7 +210,7 @@ props.title = {
 * @default 'time'
 */
 props.xLabel = {
-	'observer': '',
+	'observer': '_xLabelChanged',
 	'type': String,
 	'value': 'time'
 };
@@ -222,7 +222,7 @@ props.xLabel = {
 * @default 'y'
 */
 props.yLabel = {
-	'observer': '',
+	'observer': '_yLabelChanged',
 	'type': String,
 	'value': 'y'
 };
@@ -234,7 +234,7 @@ props.yLabel = {
 * @default null
 */
 props.xMin = {
-	'observer': '',
+	'observer': '_xMinChanged',
 	'type': Date,
 	'value': null
 };
@@ -246,7 +246,7 @@ props.xMin = {
 * @default null
 */
 props.xMax = {
-	'observer': '',
+	'observer': '_xMaxChanged',
 	'type': Date,
 	'value': null
 };
@@ -258,7 +258,7 @@ props.xMax = {
 * @default null
 */
 props.yMin = {
-	'observer': '',
+	'observer': '_yMinChanged',
 	'type': Number,
 	'value': null
 };
@@ -270,7 +270,7 @@ props.yMin = {
 * @default null
 */
 props.yMax = {
-	'observer': '',
+	'observer': '_yMaxChanged',
 	'type': Number,
 	'value': null
 };
@@ -282,7 +282,7 @@ props.yMax = {
 * @default '%H:%M' (hours:minutes)
 */
 props.xTickFormat = {
-	'observer': '',
+	'observer': '_xTickFormatChanged',
 	'type': String,
 	'value': '%H:%M'
 };
@@ -294,7 +294,7 @@ props.xTickFormat = {
 * @default null
 */
 props.yTickFormat = {
-	'observer': '',
+	'observer': '_yTickFormatChanged',
 	'type': String,
 	'value': null
 };
@@ -306,7 +306,7 @@ props.yTickFormat = {
 * @default null
 */
 props.xNumTicks = {
-	'observer': '',
+	'observer': '_xNumTicksChanged',
 	'type': Number,
 	'value': null
 };
@@ -318,7 +318,7 @@ props.xNumTicks = {
 * @default null
 */
 props.yNumTicks = {
-	'observer': '',
+	'observer': '_yNumTicksChanged',
 	'type': Number,
 	'value': null
 };
@@ -330,7 +330,7 @@ props.yNumTicks = {
 * @default 'bottom'
 */
 props.xAxisOrient = {
-	'observer': '',
+	'observer': '_xAxisOrientChanged',
 	'type': String,
 	'value': 'bottom'
 };
@@ -342,7 +342,7 @@ props.xAxisOrient = {
 * @default 'left'
 */
 props.yAxisOrient = {
-	'observer': '',
+	'observer': '_yAxisOrientChanged',
 	'type': String,
 	'value': 'left'
 };
@@ -354,7 +354,7 @@ props.yAxisOrient = {
 * @default 'linear'
 */
 props.interpolation = {
-	'observer': '',
+	'observer': '_interpolationChanged',
 	'type': String,
 	'value': 'linear'
 };
@@ -366,7 +366,7 @@ props.interpolation = {
 * @default 0.7
 */
 props.tension = {
-	'observer': '',
+	'observer': '_tensionChanged',
 	'type': Number,
 	'value': 0.7
 };
@@ -378,7 +378,7 @@ props.tension = {
 * @default true
 */
 props.isDraggable = {
-	'observer': '',
+	'observer': '_isDraggableChanged',
 	'type': Boolean,
 	'value': true
 };
@@ -390,7 +390,7 @@ props.isDraggable = {
 * @default true
 */
 props.isDroppable = {
-	'observer': '',
+	'observer': '_isDroppableChanged',
 	'type': Boolean,
 	'value': true
 };
@@ -402,7 +402,7 @@ props.isDroppable = {
 * @default true
 */
 props.autoUpdate = {
-	'observer': '',
+	'observer': '_autoUpdateChanged',
 	'type': Boolean,
 	'value': true
 };
@@ -414,7 +414,7 @@ props.autoUpdate = {
 * @default true
 */
 props.autoResize = {
-	'observer': '',
+	'observer': '_autoResizeChanged',
 	'type': Boolean,
 	'value': true
 };
