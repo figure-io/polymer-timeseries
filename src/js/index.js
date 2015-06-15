@@ -30,7 +30,21 @@ element.onDrop = require( './listeners/drop.js' );
 
 element._dataChanged = require( './observers/data.js' );
 
+element._labelsChanged = require( './observers/labels.js' );
+
+element._annotationsChanged = require( './observers/annotations.js' );
+
+element._xValueChanged = require( './observers/xValue.js' );
+
+element._yValueChanged = require( './observers/yValue.js' );
+
+element._aValueChanged = require( './observers/aValue.js' );
+
+element._isDefinedChanged = require( './observers/isDefined.js' );
+
 element._colorsChanged = require( './observers/colors.js' );
+
+element._configChanged = require( './observers/config.js' );
 
 element._widthChanged = require( './observers/width.js' );
 

@@ -7,9 +7,11 @@ TODO
 	-	e.g., `figure-io-timeseries`
 2. accept `x` as a vector and `y` as a `matrix`
 3. see how arrays are deep watched
-	-	e.g., colors, labels, etc.
+	-	e.g., colors, labels, data, annotations, etc.
 	-	what is the argument order for the listener?
-4. 
+4. schema validator
+	-	configChanged
+5. 
 
 
 #### Pre-migration

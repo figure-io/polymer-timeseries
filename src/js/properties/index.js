@@ -14,7 +14,7 @@ props.data = {
 	'observer': '_dataChanged',
 	'type': Array,
 	'value': function data() {
-		return [];
+		return [[]];
 	}
 };
 
@@ -25,7 +25,7 @@ props.data = {
 * @default []
 */
 props.labels = {
-	'observer': '',
+	'observer': '_labelsChanged',
 	'type': Array,
 	'value': function labels() {
 		return [];
@@ -39,10 +39,10 @@ props.labels = {
 * @default []
 */
 props.annotations = {
-	'observer': '',
+	'observer': '_annotationsChanged',
 	'type': Array,
 	'value': function annotations() {
-		return [];
+		return [[]];
 	}
 };
 
@@ -53,7 +53,7 @@ props.annotations = {
 * @default null
 */
 props.xValue = {
-	'observer': '',
+	'observer': '_xValueChanged',
 	'type': Function,
 	'value': null
 };
@@ -65,7 +65,7 @@ props.xValue = {
 * @default null
 */
 props.yValue = {
-	'observer': '',
+	'observer': '_yValueChanged',
 	'type': Function,
 	'value': null
 };
@@ -77,7 +77,7 @@ props.yValue = {
 * @default null
 */
 props.aValue = {
-	'observer': '',
+	'observer': '_aValueChanged',
 	'type': Function,
 	'value': null
 };
@@ -89,7 +89,7 @@ props.aValue = {
 * @default null
 */
 props.isDefined = {
-	'observer': '',
+	'observer': '_isDefinedChanged',
 	'type': Function,
 	'value': null
 };
@@ -101,7 +101,7 @@ props.isDefined = {
 * @default {}
 */
 props.config = {
-	'observer': '',
+	'observer': '_configChanged',
 	'type': Object,
 	'value': function config() {
 		return {};
