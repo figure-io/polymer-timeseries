@@ -28,6 +28,10 @@ element.onDrop = require( './listeners/drop.js' );
 
 // OBSERVERS //
 
+element._dataChanged = require( './observers/data.js' );
+
+element._colorsChanged = require( './observers/colors.js' );
+
 element._widthChanged = require( './observers/width.js' );
 
 element._heightChanged = require( './observers/height.js' );
@@ -69,6 +73,12 @@ element._yAxisOrientChanged = require( './observers/yAxisOrient.js' );
 element._interpolationChanged = require( './observers/interpolation.js' );
 
 element._tensionChanged = require( './observers/tension.js' );
+
+element._isDraggableChanged = require( './observers/isDraggable.js' );
+
+element._isDroppableChanged = require( './observers/isDroppable.js' );
+
+element._autoResizeChanged = require( './observers/autoResize.js' );
 
 
 // EXPORTS //

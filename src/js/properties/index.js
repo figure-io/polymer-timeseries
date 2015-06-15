@@ -11,7 +11,7 @@ var props = {};
 * @default []
 */
 props.data = {
-	'observer': '',
+	'observer': '_dataChanged',
 	'type': Array,
 	'value': function data() {
 		return [];
@@ -115,7 +115,7 @@ props.config = {
 * @default 'category10'
 */
 props.colors = {
-	'observer': '',
+	'observer': '_colorsChanged',
 	'value': 'category10'
 };
 
