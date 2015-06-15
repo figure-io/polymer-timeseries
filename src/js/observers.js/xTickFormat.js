@@ -21,7 +21,7 @@ function xTickFormatChanged( newVal, oldVal ) {
 		err;
 
 	if ( !isString( newVal ) ) {
-		err = new TypeError( 'xTickFormat::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
+		err = new TypeError( 'xTickFormat::invalid assignment. Must be a string primitive. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.xTickFormat = oldVal;
 		return;

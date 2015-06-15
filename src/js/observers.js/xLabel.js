@@ -18,7 +18,7 @@ function xLabelChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
 	if ( !isString( newVal ) ) {
-		err = new TypeError( 'xlabel::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
+		err = new TypeError( 'xlabel::invalid assignment. Must be a string primitive. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.xLabel = oldVal;
 		return;

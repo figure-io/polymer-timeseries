@@ -20,7 +20,7 @@ function heightChanged( newVal, oldVal ) {
 		height,
 		err;
 	if ( !isPositive( newVal ) ) {
-		err = new TypeError( 'height::invalid assignment. Must be a number greater than 0. Value: `' + newVal + '`.' );
+		err = new TypeError( 'height::invalid assignment. Must be a positive number. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.height = oldVal;
 		return;

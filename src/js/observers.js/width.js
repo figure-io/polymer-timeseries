@@ -20,7 +20,7 @@ function widthChanged( newVal, oldVal ) {
 		range,
 		err;
 	if ( !isPositive( newVal ) ) {
-		err = new TypeError( 'width::invalid assignment. Must be a number greater than 0. Value: `' + newVal + '`.' );
+		err = new TypeError( 'width::invalid assignment. Must be a positive number. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.width = oldVal;
 		return;

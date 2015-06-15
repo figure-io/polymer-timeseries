@@ -21,7 +21,7 @@ function yTickFormatChanged( newVal, oldVal ) {
 		err;
 
 	if ( !isString( newVal ) && newVal !== null ) {
-		err = new TypeError( 'yTickFormat::invalid assignment. Must be either a string specifier or null. Value: `' + newVal + '`.' );
+		err = new TypeError( 'yTickFormat::invalid assignment. Must be either a string or null. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.yTickFormat = oldVal;
 		return;

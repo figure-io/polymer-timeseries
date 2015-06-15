@@ -5,7 +5,8 @@ TODO
 
 1. Consider name change
 	-	e.g., `figure-io-timeseries`
-2. 
+2. accept `x` as a vector and `y` as a `matrix`
+3. 
 
 
 #### Pre-migration
@@ -63,8 +64,6 @@ TODO
 	-	e.g., that a chunk is not a partial datum! (half a stringified array, etc)
 	-	See how jsonstream parses incoming binary chunks
 19. replace d3 min/max with compute-min/max
-	- 	Not so simple, as would require extracting desired values into separate array, etc. D3 has advantage of using accessors.
-	-	(in progress)
 20. title positioning
 	- 	currently disregarded in favor of legend entries
 	- 	if set title, then should auto-update the padding

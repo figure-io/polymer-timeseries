@@ -18,7 +18,7 @@ function yLabelChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
 	if ( !isString( newVal ) ) {
-		err = new TypeError( 'yLabel::invalid assignment. Must be a string. Value: `' + newVal + '`.' );
+		err = new TypeError( 'yLabel::invalid assignment. Must be a string primitive. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.yLabel = oldVal;
 		return;

@@ -21,7 +21,7 @@ function paddingBottomChanged( newVal, oldVal ) {
 		err;
 
 	if ( !isNonNegativeInteger( newVal ) ) {
-		err = new TypeError( 'paddingBottom::invalid assignment. Must be an integer greater than or equal to 0. Value: `' + newVal + '`.' );
+		err = new TypeError( 'paddingBottom::invalid assignment. Must be a nonnegative integer. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.paddingBottom = oldVal;
 		return;

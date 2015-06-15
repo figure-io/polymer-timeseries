@@ -58,6 +58,18 @@ element._xTickFormatChanged = require( './observers/xTickFormat.js' );
 
 element._yTickFormatChanged = require( './observers/yTickFormat.js' );
 
+element._xNumTicksChanged = require( './observers/xNumTicks.js' );
+
+element._yNumTicksChanged = require( './observers/yNumTicks.js' );
+
+element._xAxisOrientChanged = require( './observers/xAxisOrient.js' );
+
+element._yAxisOrientChanged = require( './observers/yAxisOrient.js' );
+
+element._interpolationChanged = require( './observers/interpolation.js' );
+
+element._tensionChanged = require( './observers/tension.js' );
+
 
 // EXPORTS //
 
