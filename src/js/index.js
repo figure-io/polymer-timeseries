@@ -15,7 +15,20 @@ element.is = require( './name' );
 element.properties = require( './properties' );
 
 
+// LIFECYCLE //
+
+element.created = require( './lifecycle/created.js' );
+
+element.attached = require( './lifecycle/attached.js' );
+
+element.detached = require( './lifecycle/detached.js' );
+
+
 // LISTENERS //
+
+element._addListeners = require( './listeners/add.js' );
+
+element._removeListeners = require( './listeners/remove.js' );
 
 element.onDragEnter = require( './listeners/dragEnter.js' );
 
@@ -93,6 +106,13 @@ element._isDraggableChanged = require( './observers/isDraggable.js' );
 element._isDroppableChanged = require( './observers/isDroppable.js' );
 
 element._autoResizeChanged = require( './observers/autoResize.js' );
+
+
+// UTILS //
+
+element._graphWidth = require( './utils/graphWidth.js' );
+
+element._graphHeight = require( './utils/graphHeight.js' );
 
 
 // EXPORTS //

@@ -40,6 +40,8 @@ function onDrop( evt ) {
 	// Add the new label:
 	this.labels.push( payload.label );
 
+	// TODO: reassign data and labels
+
 	// TODO: define additional behavior (#39)
 
 	if ( evt.preventDefault ) {

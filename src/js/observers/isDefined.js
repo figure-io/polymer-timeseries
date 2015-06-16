@@ -9,19 +9,16 @@
 */
 function isDefinedChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
-	var selection = this.$.paths,
-		line = this._line,
-		err;
+	var err;
 	if ( typeof newVal !== 'function' ) {
 		err = new TypeError( 'isDefined::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.isDefined = oldVal;
 		return;
 	}
-	line.defined( newVal );
-
+	this._line.defined( newVal );
 	if ( this.autoUpdate ) {
-		selection.attr( 'd', line );
+		this.$.paths.attr( 'd', this._line );
 	}
 	this.fire( 'changed', {
 		'attr': 'isDefined',

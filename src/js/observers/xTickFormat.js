@@ -16,10 +16,7 @@ var isString = require( 'validate.io-string-primitive' );
 */
 function xTickFormatChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
-	var selection = this.$.xAxis,
-		xAxis = this._xAxis,
-		err;
-
+	var err;
 	if ( !isString( newVal ) ) {
 		err = new TypeError( 'xTickFormat::invalid assignment. Must be a string primitive. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
@@ -27,10 +24,9 @@ function xTickFormatChanged( newVal, oldVal ) {
 		return;
 	}
 	this._xTickFormat = this._d3.time.format( newVal );
-	xAxis.tickFormat( this._xTickFormat );
-
+	this._xAxis.tickFormat( this._xTickFormat );
 	if ( this.autoUpdate ) {
-		selection.call( xAxis );
+		this.$.xAxis.call( this._xAxis );
 	}
 	this.fire( 'changed', {
 		'attr': 'xTickFormat',

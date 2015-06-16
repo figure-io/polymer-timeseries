@@ -16,10 +16,7 @@ var isString = require( 'validate.io-string-primitive' );
 */
 function yTickFormatChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
-	var selection = this.$.yAxis,
-		yAxis = this._yAxis,
-		err;
-
+	var err;
 	if ( !isString( newVal ) && newVal !== null ) {
 		err = new TypeError( 'yTickFormat::invalid assignment. Must be either a string or null. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
@@ -31,9 +28,9 @@ function yTickFormatChanged( newVal, oldVal ) {
 	} else {
 		this._yTickFormat = null;
 	}
-	yAxis.tickFormat( this._yTickFormat );
+	this._yAxis.tickFormat( this._yTickFormat );
 	if ( this.autoUpdate ) {
-		selection.call( yAxis );
+		this.$.yAxis.call( this._yAxis );
 	}
 	this.fire( 'changed', {
 		'attr': 'yTickFormat',

@@ -1,5 +1,10 @@
 'use strict';
 
+// MODULES //
+
+var EVENTS = require( './../events' );
+
+
 // PROPERTIES //
 
 var props = {};
@@ -417,6 +422,18 @@ props.autoResize = {
 	'observer': '_autoResizeChanged',
 	'type': Boolean,
 	'value': true
+};
+
+/**
+* Public event names.
+*
+* @type {String[]}
+*/
+props.events = {
+	'readOnly': true,
+	'value': function events() {
+		return EVENTS.slice();
+	}
 };
 
 

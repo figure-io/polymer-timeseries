@@ -36,19 +36,16 @@ var OPTS = [
 */
 function interpolationChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
-	var selection = this.$.paths,
-		line = this._line,
-		err;
-
+	var err;
 	if ( !isString( newVal ) || !contains( OPTS, newVal ) ) {
 		err = new TypeError( 'intepolation::invalid assignment. Must be one of the following: `' + OPTS.join( ',' ) + '`. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.interpolation = oldVal;
 		return;
 	}
-	line.interpolate( newVal );
+	this._line.interpolate( newVal );
 	if ( this.autoUpdate ) {
-		selection.attr( 'd', line );
+		this.$.paths.attr( 'd', this._line );
 	}
 	this.fire( 'changed', {
 		'attr': 'interpolation',

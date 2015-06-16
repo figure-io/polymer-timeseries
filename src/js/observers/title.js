@@ -9,7 +9,7 @@ var isString = require( 'validate.io-string-primitive' );
 
 /**
 * FUNCTION: titleChanged( newVal, oldVal )
-*	Event handler invoked when the `chartTitle` property changes.
+*	Event handler invoked when the `title` property changes.
 *
 * @param {String} newVal - new value
 * @param {String} oldVal - old value

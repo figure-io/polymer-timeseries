@@ -17,6 +17,8 @@ function onDragEnd( d, i ) {
 	// Remove the dragged timeseries:
 	this.data.splice( i, 1 );
 
+	// TODO: reassign data and labels!
+
 	if ( !this.data.length && !this.labels.length ) {
 		this.clear();
 	}

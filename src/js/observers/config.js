@@ -66,7 +66,7 @@ function configChanged( newConfig, oldConfig ) {
 
 	// Only if auto update is enabled, redraw the chart...
 	if ( bool ) {
-		this.create();
+		this._create();
 	}
 } // end FUNCTION configChanged()
 

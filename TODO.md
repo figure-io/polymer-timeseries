@@ -7,11 +7,14 @@ TODO
 	-	e.g., `figure-io-timeseries`
 2. accept `x` as a vector and `y` as a `matrix`
 3. see how arrays are deep watched
-	-	e.g., colors, labels, data, annotations, etc.
-	-	what is the argument order for the listener?
+	-	deep observation no longer works as in 0.5. Will need to require users to rebind after they have mutated the respective property.
+		-	this means that any observers/listeners (e.g., dragEnd) which mutate an `array` property need to rebind
 4. schema validator
 	-	configChanged
-5. 
+5. cross-check all methods with matrix-diagram
+6. confirm that a `title` property name is allowed
+	-	otherwise, use `chartTitle` (or `ctitle`)
+7. 
 
 
 #### Pre-migration

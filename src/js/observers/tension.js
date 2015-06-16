@@ -16,19 +16,16 @@ var isNumber = require( 'validate.io-number-primitive' );
 */
 function tensionChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
-	var selection = this.$.paths,
-		line = this._line,
-		err;
-
+	var err;
 	if ( !isNumber( newVal ) ) {
 		err = new TypeError( 'tension::invalid assignment. Must be a number primitive. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
 		this.tension = oldVal;
 		return;
 	}
-	line.tension( newVal );
+	this._line.tension( newVal );
 	if ( this.autoUpdate ) {
-		selection.attr( 'd', line );
+		this.$.paths.attr( 'd', this._line );
 	}
 	this.fire( 'changed', {
 		'attr': 'tension',

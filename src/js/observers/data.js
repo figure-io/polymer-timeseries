@@ -9,35 +9,23 @@ var isArray = require( 'validate.io-array' ),
 // OBSERVER //
 
 /**
-* FUNCTION: dataChanged( val[, newVal] )
+* FUNCTION: dataChanged( newVal, oldVal )
 *	Event handler invoked when the `data` property changes.
 *
-* @param {Array} val - change event value
-* @param {Array} [newVal] - new value
+* @param {Array[]} newVal - new value
+* @param {Array[]} oldVal - old value
 */
-function dataChanged( val, newVal ) {
+function dataChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
-	var data = this.data,
-		len,
-		domain,
+	var domain,
 		err;
-
-	// Determine if we have a new data array...
-	if ( arguments.length > 1 && !isArray( newVal ) ) {
-		err = new TypeError( 'data::invalid assignment. Must provide an array. Value: `' + newVal + '`.' );
-		this.fire( 'err', err );
-		this.data = val;
-		return;
-	}
-	len = data.length;
-	// Validate that all array elements are arrays...
-	if ( !isArrayArray( data ) ) {
+	if ( !isArrayArray( newVal ) ) {
 		err = new TypeError( 'data::invalid assignment. Data must be an array of arrays.' );
 		this.fire( 'err', err );
 		return;
 	}
 	// Do we even have any data arrays?
-	if ( !len ) {
+	if ( !newVal.length ) {
 		if ( this.$.paths ) {
 			this.$.paths.remove();
 		}
@@ -67,23 +55,16 @@ function dataChanged( val, newVal ) {
 		this.$.annotationLines.attr( 'd', this._vline );
 
 		// [7] Create new paths:
-		this.resetPaths();
+		this._resetPaths();
 	}
 	this.fire( 'data', {
 		'type': 'changed'
 	});
-	if ( newVal === void 0 ) {
-		this.fire( 'changed', {
-			'attr': 'data',
-			'data': val[ 0 ]
-		});
-	} else {
-		this.fire( 'changed', {
-			'attr': 'data',
-			'prev': val,
-			'curr': newVal
-		});
-	}
+	this.fire( 'changed', {
+		'attr': 'data',
+		'prev': oldVal,
+		'curr': newVal
+	});
 } // end FUNCTION dataChanged()
 
 
