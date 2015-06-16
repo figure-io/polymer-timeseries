@@ -3,12 +3,20 @@
 // MODULES //
 
 var uuid = require( 'node-uuid' ),
-	delayed = require( './../utils/delayed.js' );
+	delayed = require( './../utils/delayed.js' ),
+	triangle = require( './../utils/triangle.js' ),
+	vline = require( './../utils/vline.js' ),
+	getColor = require( './../utils/getColor.js' ),
+	getLabel = require( './../utils/getLabel.js' ),
+	x = require( './../utils/x.js' ),
+	y = require( './../utils/y.js' ),
+	cache = require( './cache.js' );
 
 
 // VARIABLES //
 
-var X2 = new Date(),
+var COLORS = require( './../colors' ),
+	X2 = new Date(),
 	X1 = new Date( X2.getTime() - 3600000 );
 
 
@@ -20,20 +28,16 @@ var X2 = new Date(),
 */
 function init() {
 	/* jshint validthis:true */
-	var create = document.createElement.bind( document ),
-		d3,
-		el,
-		$;
+	var d3,
+		el;
 
 	// Create a new D3 element to access the library dependency:
-	el = create( 'polymer-d3' );
+	el = document.createElement( 'polymer-d3' );
 	d3 = el.d3;
 	this._d3 = d3;
 
 	// Assign the chart a private uuid:
 	this.__uid__ = uuid.v4();
-
-	// Private methods...
 
 	// Scales...
 	this._xScale = d3.time.scale();
@@ -63,8 +67,8 @@ function init() {
 		.ticks( this.yNumTicks || 5 );
 
 	// Paths...
-	this._x = this.x.bind( this );
-	this._y = this.y.bind( this );
+	this._x = x( this._xScale );
+	this._y = y( this._yScale );
 	this._line = d3.svg.line()
 		.x( this._x )
 		.y( this._y )
@@ -72,15 +76,15 @@ function init() {
 		.interpolate( this.interpolation )
 		.tension( this.tension );
 
-	this._triangle = triangle.bind( this );
-	this._vline = vline.bind( this );
+	this._triangle = triangle( this._x );
+	this._vline = vline( this._x, this._graphHeight );
 
 	// Colors...
-	this._colors = OPTS.category10;
-	this._getColor = this.getColor.bind( this );
+	this._colors = COLORS.category10.slice();
+	this._getColor = getColor( this );
 
 	// Legend...
-	this._getLabel = this.getLabel.bind( this );
+	this._getLabel = getLabel( this );
 
 	// Stream...
 	this._stream = null;
@@ -94,41 +98,8 @@ function init() {
 
 	this._onResize = delayed( this.onResize.bind( this ), 400 );
 
-	// Element cache...
-	this.$ = $ = {};
-
-	// Base elements...
-	$.root = null;
-	$.canvas = null;
-	$.clipPath = null;
-	$.graph = null;
-	$.bkgd = null;
-
-	// Axis elements...
-	$.xAxis = null;
-	$.yAxis = null;
-	$.xLabel = null;
-	$.yLabel = null;
-
-	// Meta elements...
-	$.meta = null;
-	$.title = null;
-
-	// Legend elements...
-	$.legend = null;
-	$.legendEntries = null;
-	$.legendSymbols = null;
-	$.legendLabels = null;
-
-	// Data elements...
-	$.marks = null;
-	$.paths = null;
-
-	// Annotation elements...
-	$.agroup = null;
-	$.annotations = null;
-	$.annotationMarks = null;
-	$.annotationLines = null;
+	// Create a new element cache...
+	this.$ = cache();
 
 	// Clip path...
 	this._clipPathID = uuid.v4();

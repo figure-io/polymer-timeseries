@@ -1,15 +1,24 @@
 'use strict';
 
 /**
-* FUNCTION: y( d )
-*	Maps an y-value to a pixel value.
+* FUNCTION: y( yScale )
+*	Wraps a scale and returns a function.
 *
-* @param {Array} d - datum
-* @returns {Number} pixel value
+* @param {Function} yScale - y-scale
+* @returns {Function} function which maps a y-value to a pixel value
 */
-function y( d ) {
-	/* jshint validthis:true */
-	return this._yScale( d[ 1 ] );
+function y( yScale ) {
+	/**
+	* FUNCTION: y( d )
+	*	Maps a y-value to a pixel value.
+	*
+	* @param {Array} d - datum
+	* @returns {Number} pixel value
+	*/
+	return function y( d ) {
+		/* jshint validthis:true */
+		return yScale( d[ 1 ] );
+	}; // end FUNCTION y()
 } // end FUNCTION y()
 
 

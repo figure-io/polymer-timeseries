@@ -1,15 +1,24 @@
 'use strict';
 
 /**
-* FUNCTION: x( d )
-*	Maps an x-value to a pixel value.
+* FUNCTION: x( xScale )
+*	Wraps a scale and returns a function.
 *
-* @param {Array} d - datum
-* @returns {Number} pixel value
+* @param {Function} xScale - x-scale
+* @returns {Function} function which maps an x-value to a pixel value
 */
-function x( d ) {
-	/* jshint validthis:true */
-	return this._xScale( d[ 0 ] );
+function x( xScale ) {
+	/**
+	* FUNCTION: x( d )
+	*	Maps an x-value to a pixel value.
+	*
+	* @param {Array} d - datum
+	* @returns {Number} pixel value
+	*/
+	return function x( d ) {
+		/* jshint validthis:true */
+		return xScale( d[ 0 ] );
+	}; // end FUNCTION x()
 } // end FUNCTION x()
 
 

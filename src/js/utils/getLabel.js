@@ -1,17 +1,26 @@
 'use strict';
 
 /**
-* FUNCTION: getLabel( d, i )
-*	Returns a label based on a provided index.
+* FUNCTION: getLabel( ctx )
+*	Wraps a function context and returns a function.
 *
-* @param {Array} d - datum
-* @param {Number} i - index
-* @returns {String} data label
+* @param {Object} ctx - context
+* @returns {Function} function which returns a label
 */
-function getLabel( d, i ) {
-	/* jshint validthis:true */
-	return this.labels[ i ];
-} // end FUNCTION getLabel()
+function getLabel( ctx ) {
+	/**
+	* FUNCTION: getLabel( d, i )
+	*	Returns a label based on a provided index.
+	*
+	* @param {Array} d - datum
+	* @param {Number} i - index
+	* @returns {String} data label
+	*/
+	return function getLabel( d, i ) {
+		/* jshint validthis:true */
+		return ctx.labels[ i ];
+	}; // end FUNCTION getLabel()
+}  // end FUNCTION getLabel()
 
 
 // EXPORTS //

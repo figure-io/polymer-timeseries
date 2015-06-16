@@ -1,24 +1,33 @@
 'use strict';
 
 /**
-* FUNCTION: vline( d, i )
-*	Creates a vertical line using an SVG path.
+* FUNCTION: vline( xScale, graphHeight )
+*	Wraps a scale and function to calculate the graph height and returns a function.
 *
-* @private
-* @param {Array} d - datum
-* @param {Number} i - datum index
-* @returns {String} SVG path string
+* @param {Function} x-scale
+* @param {Function} function to calculate the graph height
+* @returns {Function} function for creating a vertical line using an SVG path
 */
-function vline( d ) {
-	/* jshint validthis: true */
-	var x, h, p1, p2;
-	x = this._x( d );
-	h = this._graphHeight();
-	p1 = x + ',' + h;
-	p2 = x + ',0';
-	return 'M' + p1 + 'L' + p2;
+function vline( xScale, graphHeight ) {
+	/**
+	* FUNCTION: vline( d, i )
+	*	Creates a vertical line using an SVG path.
+	*
+	* @private
+	* @param {Array} d - datum
+	* @param {Number} i - datum index
+	* @returns {String} SVG path string
+	*/
+	return function vline( d ) {
+		/* jshint validthis: true */
+		var x, h, p1, p2;
+		x = xScale( d );
+		h = graphHeight();
+		p1 = x + ',' + h;
+		p2 = x + ',0';
+		return 'M' + p1 + 'L' + p2;
+	}; // end FUNCTION vline()
 } // end FUNCTION vline()
-
 
 // EXPORTS //
 
