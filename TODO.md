@@ -16,8 +16,10 @@ TODO
 	-	otherwise, use `chartTitle` (or `ctitle`)
 7. stream implementation needs a fair amount of work
 8. xMin/xMax
-	-	number or `Date`?
-9. 
+	-	number or `Date` or `String`? Are all allowed? If so, then need to update observer validators
+9. x/yDomain
+	-	refactor; use compute; no nested fcns
+10. 
 
 
 #### Pre-migration

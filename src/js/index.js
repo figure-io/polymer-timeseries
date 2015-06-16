@@ -115,9 +115,17 @@ element._autoResizeChanged = require( './observers/autoResize.js' );
 
 // UTILS //
 
+element.formatData = require( './utils/formatData.js' );
+
+element.formatAnnotations = require( './utils/formatAnnotations.js' );
+
 element._graphWidth = require( './utils/graphWidth.js' );
 
 element._graphHeight = require( './utils/graphHeight.js' );
+
+element._xDomain = require( './utils/xDomain.js' );
+
+element._yDomain = require( './utils/yDomain.js' );
 
 
 // STREAM //
