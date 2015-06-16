@@ -14,7 +14,10 @@ TODO
 5. cross-check all methods with matrix-diagram
 6. confirm that a `title` property name is allowed
 	-	otherwise, use `chartTitle` (or `ctitle`)
-7. 
+7. stream implementation needs a fair amount of work
+8. xMin/xMax
+	-	number or `Date`?
+9. 
 
 
 #### Pre-migration

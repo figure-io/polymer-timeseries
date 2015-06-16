@@ -2,7 +2,11 @@
 
 // MODULES //
 
-var EVENTS = require( './../events' );
+var EVENTS = require( './../events' ),
+	xValue = require( './../utils/xValue.js' ),
+	yValue = require( './../utils/yValue.js' ),
+	aValue = require( './../utils/aValue.js' ),
+	isDefined = require( './../utils/isDefined.js' );
 
 
 // PROPERTIES //
@@ -55,48 +59,44 @@ props.annotations = {
 * x-value accessor.
 *
 * @type {Function}
-* @default null
 */
 props.xValue = {
 	'observer': '_xValueChanged',
 	'type': Function,
-	'value': null
+	'value': xValue
 };
 
 /**
 * y-value accessor.
 *
 * @type {Function}
-* @default null
 */
 props.yValue = {
 	'observer': '_yValueChanged',
 	'type': Function,
-	'value': null
+	'value': yValue
 };
 
 /**
 * Annotation accessor.
 *
 * @type {Function}
-* @default null
 */
 props.aValue = {
 	'observer': '_aValueChanged',
 	'type': Function,
-	'value': null
+	'value': aValue
 };
 
 /**
 * Accessor function which controls where a line is defined. Used to specify how missing values are encoded. Default behavior is to ignore data points or y-values which are `null`. See [D3 documentation]{@link https://github.com/mbostock/d3/wiki/SVG-Shapes#line_defined}.
 *
 * @type {Function}
-* @default null
 */
 props.isDefined = {
 	'observer': '_isDefinedChanged',
 	'type': Function,
-	'value': null
+	'value': isDefined
 };
 
 /**
@@ -235,7 +235,7 @@ props.yLabel = {
 /**
 * x-limit minimum value. If `null`, the limit is computed from the data.
 *
-* @type {Null|Number}
+* @type {Null|Number|Date}
 * @default null
 */
 props.xMin = {
@@ -247,7 +247,7 @@ props.xMin = {
 /**
 * x-limit maximum value. If `null`, the limit is computed from the data.
 *
-* @type {Null|Number}
+* @type {Null|Number|Date}
 * @default null
 */
 props.xMax = {

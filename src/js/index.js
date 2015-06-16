@@ -24,6 +24,11 @@ element.attached = require( './lifecycle/attached.js' );
 element.detached = require( './lifecycle/detached.js' );
 
 
+// INIT //
+
+element._init = require( './init' );
+
+
 // LISTENERS //
 
 element._addListeners = require( './listeners/add.js' );
@@ -113,6 +118,11 @@ element._autoResizeChanged = require( './observers/autoResize.js' );
 element._graphWidth = require( './utils/graphWidth.js' );
 
 element._graphHeight = require( './utils/graphHeight.js' );
+
+
+// STREAM //
+
+element.stream = require( './stream' );
 
 
 // EXPORTS //
