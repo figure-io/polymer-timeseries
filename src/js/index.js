@@ -101,13 +101,13 @@ element._widthChanged = require( './observers/width.js' );
 
 element._heightChanged = require( './observers/height.js' );
 
-element._paddingLeftChanged = require( './observers/propertyLeft.js' );
+element._paddingLeftChanged = require( './observers/paddingLeft.js' );
 
-element._paddingRightChanged = require( './observers/propertyRight.js' );
+element._paddingRightChanged = require( './observers/paddingRight.js' );
 
-element._paddingTopChanged = require( './observers/propertyTop.js' );
+element._paddingTopChanged = require( './observers/paddingTop.js' );
 
-element._paddingBottomChanged = require( './observers/propertyBottom.js' );
+element._paddingBottomChanged = require( './observers/paddingBottom.js' );
 
 element._titleChanged = require( './observers/title.js' );
 
