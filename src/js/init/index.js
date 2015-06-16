@@ -2,16 +2,14 @@
 
 // MODULES //
 
-var uuid = require( 'node-uuid' );
+var uuid = require( 'node-uuid' ),
+	delayed = require( './../utils/delayed.js' );
 
 
 // VARIABLES //
 
-var X1,
-	X2;
-
-X2 = new Date();
-X1 = new Date( X2.getTime() - 3600000 );
+var X2 = new Date(),
+	X1 = new Date( X2.getTime() - 3600000 );
 
 
 // INIT //

@@ -48,6 +48,20 @@ element._createAnnotations = require( './create/annotations.js' );
 element._createLegend = require( './create/legend.js' );
 
 
+// RESET //
+
+element._resetPaths = require( './reset/paths.js' );
+
+element._resestAnnotations = require( './reset/annotations.js' );
+
+element._resetLegend = require( './reset/legend.js' );
+
+
+// CLEAR //
+
+element.clear = require( './clear' );
+
+
 // LISTENERS //
 
 element._addListeners = require( './listeners/add.js' );

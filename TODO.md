@@ -19,7 +19,8 @@ TODO
 	-	number or `Date` or `String`? Are all allowed? If so, then need to update observer validators
 9. x/yDomain
 	-	refactor; use compute; no nested fcns
-10. 
+10. clean-up `init` `X1` and `X2`, as well as `clear`
+11. 
 
 
 #### Pre-migration
