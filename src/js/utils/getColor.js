@@ -17,7 +17,6 @@ function getColor( ctx ) {
 	* @returns {String} color class/data attribute
 	*/
 	return function getColor( d, i ) {
-		/* jshint validthis:true */
 		return ctx._colors[ i % ctx._colors.length ];
 	}; // end FUNCTION getColor()
 } // end FUNCTION getColor()

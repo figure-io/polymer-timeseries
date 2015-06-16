@@ -16,7 +16,6 @@ function x( xScale ) {
 	* @returns {Number} pixel value
 	*/
 	return function x( d ) {
-		/* jshint validthis:true */
 		return xScale( d[ 0 ] );
 	}; // end FUNCTION x()
 } // end FUNCTION x()

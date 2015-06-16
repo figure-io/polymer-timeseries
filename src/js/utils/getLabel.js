@@ -17,7 +17,6 @@ function getLabel( ctx ) {
 	* @returns {String} data label
 	*/
 	return function getLabel( d, i ) {
-		/* jshint validthis:true */
 		return ctx.labels[ i ];
 	}; // end FUNCTION getLabel()
 }  // end FUNCTION getLabel()

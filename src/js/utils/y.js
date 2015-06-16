@@ -16,7 +16,6 @@ function y( yScale ) {
 	* @returns {Number} pixel value
 	*/
 	return function y( d ) {
-		/* jshint validthis:true */
 		return yScale( d[ 1 ] );
 	}; // end FUNCTION y()
 } // end FUNCTION y()

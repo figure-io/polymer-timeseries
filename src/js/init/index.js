@@ -3,14 +3,27 @@
 // MODULES //
 
 var uuid = require( 'node-uuid' ),
-	delayed = require( './../utils/delayed.js' ),
+	cache = require( './cache.js' );
+
+
+// LISTENERS //
+
+var onResize = require( './../listeners/resize.js' ),
+	toggleSeries = require( './../listeners/toggleSeries.js' ),
+	toggleVLine = require( './../listeners/toggleVLine.js' ),
+	onDragStart = require( './../listeners/dragStart.js' ),
+	onDragEnd = require( './../listeners/dragEnd.js' );
+
+
+// UTILS //
+
+var delayed = require( './../utils/delayed.js' ),
 	triangle = require( './../utils/triangle.js' ),
 	vline = require( './../utils/vline.js' ),
 	getColor = require( './../utils/getColor.js' ),
 	getLabel = require( './../utils/getLabel.js' ),
 	x = require( './../utils/x.js' ),
-	y = require( './../utils/y.js' ),
-	cache = require( './cache.js' );
+	y = require( './../utils/y.js' );
 
 
 // VARIABLES //
@@ -90,13 +103,13 @@ function init() {
 	this._stream = null;
 
 	// Interaction...
-	this._toggleSeries = this.toggleSeries.bind( this );
-	this._toggleVLine = this.toggleVLine.bind( this );
+	this._toggleSeries = toggleSeries( this );
+	this._toggleVLine = toggleVLine( this );
 
-	this._onDragStart = this.onDragStart.bind( this );
-	this._onDragEnd = this.onDragEnd.bind( this );
+	this._onDragStart = onDragStart( this );
+	this._onDragEnd = onDragEnd( this );
 
-	this._onResize = delayed( this.onResize.bind( this ), 400 );
+	this._onResize = delayed( onResize( this ), 400 );
 
 	// Create a new element cache...
 	this.$ = cache();

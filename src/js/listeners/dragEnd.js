@@ -1,29 +1,36 @@
 'use strict';
 
 /**
-* FUNCTION: onDragEnd( d, i )
-*	Event handler invoked on a 'dragend' event.
+* FUNCTION: onDragEnd( ctx )
+*	Wraps a function context and returns an event handler.
 *
-* @param {Array|Number} d - data
-* @param {Number} i - index
-* @returns {Boolean} false
+* @param {Object} ctx - context
+* @returns {Function} event handler
 */
-function onDragEnd( d, i ) {
-	/* jshint validthis:true */
+function onDragEnd( ctx ) {
+	/**
+	* FUNCTION: onDragEnd( d, i )
+	*	Event handler invoked on a 'dragend' event.
+	*
+	* @param {Array|Number} d - data
+	* @param {Number} i - index
+	* @returns {Boolean} false
+	*/
+	return function onDragEnd( d, i ) {
+		// Remove the dragged label:
+		ctx.labels.splice( i, 1 );
 
-	// Remove the dragged label:
-	this.labels.splice( i, 1 );
+		// Remove the dragged timeseries:
+		ctx.data.splice( i, 1 );
 
-	// Remove the dragged timeseries:
-	this.data.splice( i, 1 );
+		// TODO: reassign data and labels!
 
-	// TODO: reassign data and labels!
-
-	if ( !this.data.length && !this.labels.length ) {
-		this.clear();
-	}
-	this.fire( 'dragEnd', this._d3.event );
-	return false;
+		if ( !ctx.data.length && !ctx.labels.length ) {
+			ctx.clear();
+		}
+		ctx.fire( 'dragEnd', ctx._d3.event );
+		return false;
+	}; // end FUNCTION onDragEnd()
 } // end FUNCTION onDragEnd()
 
 

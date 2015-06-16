@@ -1,21 +1,29 @@
 'use strict';
 
 /**
-* FUNCTION: onResize()
-*	Resize listener.
+* FUNCTION: onResize( ctx )
+*	Wraps a function context and returns a resize listener.
+*
+* @param {Object} ctx - context
+* @returns {Function} resize listener
 */
-function onResize() {
-	/* jshint validthis:true */
-	this.fire( 'resized', {
-		'el': 'polymer-timeseries',
-		'msg': 'Received a resize event.',
-		'width': this.clientWidth,
-		'height': this.clientHeight
-	});
-	if ( !this.$.canvas ) {
-		return;
-	}
-	this.width = this.clientWidth;
+function onResize( ctx ) {
+	/**
+	* FUNCTION: onResize()
+	*	Resize listener.
+	*/
+	return function onResize() {
+		ctx.fire( 'resized', {
+			'el': 'polymer-timeseries',
+			'msg': 'Received a resize event.',
+			'width': ctx.clientWidth,
+			'height': ctx.clientHeight
+		});
+		if ( !ctx.$.canvas ) {
+			return;
+		}
+		ctx.width = ctx.clientWidth;
+	}; // end FUNCTION onResize()
 } // end FUNCTION onResize()
 
 

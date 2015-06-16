@@ -1,57 +1,65 @@
 'use strict';
 
 /**
-* FUNCTION: onDragStart( d, i )
-*	Event handler invoked at the start of dragging chart elements.
+* FUNCTION: onDragStart( ctx )
+*	Wraps a function context and returns an event handler.
 *
-* @param {Array|Number} d - element data
-* @param {Number} i - element index
-* @returns {Boolean} false
+* @param {Object} ctx - context
+* @returns {Function} event handler
 */
-function onDragStart( d, i ) {
-	/* jshint validthis:true */
-	var evt = this._d3.event,
-		path,
-		label,
-		data;
+function onDragStart( ctx ) {
+	/**
+	* FUNCTION: onDragStart( d, i )
+	*	Event handler invoked at the start of dragging chart elements.
+	*
+	* @param {Array|Number} d - element data
+	* @param {Number} i - element index
+	* @returns {Boolean} false
+	*/
+	return function onDragStart( d, i ) {
+		var evt = ctx._d3.event,
+			path,
+			label,
+			data;
 
-	// Get the label:
-	label = this.$.legendLabels[ i ][ 0 ].innerHTML;
+		// Get the label:
+		label = ctx.$.legendLabels[ i ][ 0 ].innerHTML;
 
-	// Get the path data...
-	if ( this.$.paths ) {
-		path = this.$.paths[ 0 ][ i ];
-		// Possibility that a corresponding path has not yet been drawn; e.g., more labels than datasets.
-		if ( path ) {
-			data = this._d3.select( path ).data();
+		// Get the path data...
+		if ( ctx.$.paths ) {
+			path = ctx.$.paths[ 0 ][ i ];
+			// Possibility that a corresponding path has not yet been drawn; e.g., more labels than datasets.
+			if ( path ) {
+				data = ctx._d3.select( path ).data();
+			} else {
+				data = [];
+			}
 		} else {
 			data = [];
 		}
-	} else {
-		data = [];
-	}
-	// Create a data object:
-	data = {
-		'uid': this.__uid__,
-		'id': i,
-		'type': 'timeseries',
-		'data': data[ 0 ],
-		'label': label,
-		'xMin': this.xMin,
-		'xMax': this.xMax,
-		'yMin': this.yMin,
-		'yMax': this.yMax,
-		'yLabel': this.yLabel
-	};
+		// Create a data object:
+		data = {
+			'uid': ctx.__uid__,
+			'id': i,
+			'type': 'timeseries',
+			'data': data[ 0 ],
+			'label': label,
+			'xMin': ctx.xMin,
+			'xMax': ctx.xMax,
+			'yMin': ctx.yMin,
+			'yMax': ctx.yMax,
+			'yLabel': ctx.yLabel
+		};
 
-	// Set the drag payload:
-	evt.dataTransfer.effectAllowed = 'move';
-	evt.dataTransfer.setData( 'application/x-polymer-chart-data', JSON.stringify( data ) );
+		// Set the drag payload:
+		evt.dataTransfer.effectAllowed = 'move';
+		evt.dataTransfer.setData( 'application/x-polymer-chart-data', JSON.stringify( data ) );
 
-	// TODO: define additional behavior
+		// TODO: define additional behavior
 
-	this.fire( 'dragStart', evt );
-	return false;
+		ctx.fire( 'dragStart', evt );
+		return false;
+	}; // end FUNCTION onDragStart()
 } // end FUNCTION onDragStart()
 
 

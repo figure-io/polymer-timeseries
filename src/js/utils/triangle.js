@@ -18,7 +18,6 @@ function triangle( xScale ) {
 	* @returns {String} SVG path string
 	*/
 	return function triangle( d ) {
-		/* jshint validthis: true */
 		var x, p1, p2, p3;
 		x = xScale( d );
 		p1 = (x-4) + ',-9';

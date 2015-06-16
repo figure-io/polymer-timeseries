@@ -19,7 +19,6 @@ function vline( xScale, graphHeight ) {
 	* @returns {String} SVG path string
 	*/
 	return function vline( d ) {
-		/* jshint validthis: true */
 		var x, h, p1, p2;
 		x = xScale( d );
 		h = graphHeight();
