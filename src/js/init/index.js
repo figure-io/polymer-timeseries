@@ -5,6 +5,15 @@
 var uuid = require( 'node-uuid' );
 
 
+// VARIABLES //
+
+var X1,
+	X2;
+
+X2 = new Date();
+X1 = new Date( X2.getTime() - 3600000 );
+
+
 // INIT //
 
 /**

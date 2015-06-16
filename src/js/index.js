@@ -29,6 +29,25 @@ element.detached = require( './lifecycle/detached.js' );
 element._init = require( './init' );
 
 
+// CHART CREATION //
+
+element._create = require( './create' );
+
+element._createBase = require( './create/base.js' );
+
+element._createBackground = require( './create/background.js' );
+
+element._createAxes = require( './create/axes.js' );
+
+element._createPaths = require( './create/paths.js' );
+
+element._createTitle = require( './create/title.js' );
+
+element._createAnnotations = require( './create/annotations.js' );
+
+element._createLegend = require( './create/legend.js' );
+
+
 // LISTENERS //
 
 element._addListeners = require( './listeners/add.js' );
