@@ -240,7 +240,7 @@ el.isDefined = function( d ) {
 <a name="prop-config"></a>
 #### el.config
 
-Configuration `object` containing parameters corresponding to known attributes, as defined below.
+Configuration `object` containing parameters corresponding to known properties, as defined below.
 
 ``` javascript
 el.config = {};
@@ -501,7 +501,7 @@ el.isDroppable = false;
 <a name="prop-autoupdate"></a>
 #### el.autoUpdate
 
-Specifies whether the element should auto update whenever an attribute changes. Default is `true`.
+Specifies whether the element should auto update whenever a property changes. Default is `true`.
 
 ``` javascript
 el.autoUpdate = false;
@@ -519,7 +519,7 @@ el.autoResize = false;
 <a name="prop-events"></a>
 #### el.events
 
-List of [event](#events) names. The `events` attribute is intended to be __read-only__. One possible use case for the `events` attribute is for programmatically determining possible events to which you can subscribe; e.g., when logging.
+List of [event](#events) names. The `events` property is intended to be __read-only__. One possible use case for the `events` property is for programmatically determining possible events to which you can subscribe; e.g., when logging.
 
 ``` javascript
 var evts = el.events;
@@ -611,7 +611,7 @@ The component emits events during both chart configuration and interaction. The 
 <a name="evt-err"></a>
 #### 'err'
 
-The element emits an `err` event whenever an error occurs; e.g., improper setting of attributes.
+The element emits an `err` event whenever an error occurs; e.g., improper setting of properties.
 
 ``` javascript
 el.addEventListener( 'err', function onError( err ) {
@@ -625,7 +625,7 @@ __NOTE__: the event name will change to `error` once issue [#138](https://github
 <a name="evt-change"></a>
 #### 'change'
 
-The element emits a `change` event whenever an attribute changes.
+The element emits a `change` event whenever a property changes.
 
 ``` javascript
 el.addEventListener( 'change', function onChange( evt ) {
@@ -636,7 +636,7 @@ el.addEventListener( 'change', function onChange( evt ) {
 <a name="evt-data"></a>
 #### 'data'
 
-The element emits a `data` event when the `data` attribute changes.
+The element emits a `data` event when the `data` property changes.
 
 ``` javascript
 el.addEventListener( 'data', function onEvent( evt ) {
@@ -647,7 +647,7 @@ el.addEventListener( 'data', function onEvent( evt ) {
 <a name="evt-annotations"></a>
 #### 'annotations'
 
-The element emits an `annotations` when the `annotations` attribute changes.
+The element emits an `annotations` when the `annotations` property changes.
 
 ``` javascript
 el.addEventListener( 'annotations', function onEvent( evt ) {
@@ -658,7 +658,7 @@ el.addEventListener( 'annotations', function onEvent( evt ) {
 <a name="evt-labels"></a>
 #### 'labels'
 
-The element emits a `labels` event when the `labels` attribute changes.
+The element emits a `labels` event when the `labels` property changes.
 
 ``` javascript
 el.addEventListener( 'labels', function onEvent( evt ) {
@@ -669,7 +669,7 @@ el.addEventListener( 'labels', function onEvent( evt ) {
 <a name="evt-colors"></a>
 #### 'colors'
 
-The element emits a `colors` event when the `colors` attribute changes.
+The element emits a `colors` event when the `colors` property changes.
 
 ``` javascript
 el.addEventListener( 'colors', function onEvent( evt ) {
@@ -680,7 +680,7 @@ el.addEventListener( 'colors', function onEvent( evt ) {
 <a name="evt-width"></a>
 #### 'width'
 
-The element emits a `width` event when the `width` attribute changes.
+The element emits a `width` event when the `width` property changes.
 
 ``` javascript
 el.addEventListener( 'width', function onEvent( evt ) {
@@ -691,7 +691,7 @@ el.addEventListener( 'width', function onEvent( evt ) {
 <a name="evt-height"></a>
 #### 'height'
 
-The element emits a `height` event when the `height` attribute changes.
+The element emits a `height` event when the `height` property changes.
 
 ``` javascript
 el.addEventListener( 'height', function onEvent( evt ) {
@@ -702,7 +702,7 @@ el.addEventListener( 'height', function onEvent( evt ) {
 <a name="evt-xmin"></a>
 #### 'xMin'
 
-The element emits an `xMin` event when the `xMin` attribute changes.
+The element emits an `xMin` event when the `xMin` property changes.
 
 ``` javascript
 el.addEventListener( 'xMin', function onEvent( evt ) {
@@ -713,7 +713,7 @@ el.addEventListener( 'xMin', function onEvent( evt ) {
 <a name="evt-xmax"></a>
 #### 'xMax'
 
-The element emits an `xMax` event when the `xMax` attribute changes.
+The element emits an `xMax` event when the `xMax` property changes.
 
 ``` javascript
 el.addEventListener( 'xMax', function onEvent( evt ) {
@@ -724,7 +724,7 @@ el.addEventListener( 'xMax', function onEvent( evt ) {
 <a name="evt-ymin"></a>
 #### 'yMin'
 
-The element emits a `yMin` event when the `yMin` attribute changes.
+The element emits a `yMin` event when the `yMin` property changes.
 
 ``` javascript
 el.addEventListener( 'yMin', function onEvent( evt ) {
@@ -735,7 +735,7 @@ el.addEventListener( 'yMin', function onEvent( evt ) {
 <a name="evt-ymax"></a>
 #### 'yMax'
 
-The element emits a `yMax` event when the `yMax` attribute changes.
+The element emits a `yMax` event when the `yMax` property changes.
 
 ``` javascript
 el.addEventListener( 'yMax', function onEvent( evt ) {
