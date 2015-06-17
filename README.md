@@ -117,7 +117,7 @@ The component has the following public properties and methods...
 
 
 
-### Attributes
+### Properties
 
 <a name="prop-data"></a>
 #### el.data
