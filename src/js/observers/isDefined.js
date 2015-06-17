@@ -10,6 +10,9 @@
 function isDefinedChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( typeof newVal !== 'function' ) {
 		err = new TypeError( 'isDefined::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );

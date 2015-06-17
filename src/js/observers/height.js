@@ -19,6 +19,9 @@ function heightChanged( newVal, oldVal ) {
 	var range,
 		height,
 		err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( !isPositive( newVal ) ) {
 		err = new TypeError( 'height::invalid assignment. Must be a positive number. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );

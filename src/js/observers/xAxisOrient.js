@@ -29,6 +29,9 @@ function xAxisOrientChanged( newVal, oldVal ) {
 		xAxis = this._xAxis,
 		err;
 
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( !isString( newVal ) || !contains( OPTS, newVal ) ) {
 		err = new TypeError( 'xAxisOrient::invalid assignment. Must be one of the following: `' + OPTS.join( ',' ) + '`. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );

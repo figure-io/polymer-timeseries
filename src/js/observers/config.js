@@ -19,6 +19,9 @@ function configChanged( newConfig, oldConfig ) {
 	var bool,
 		err;
 
+	if ( oldConfig === void 0 ) {
+		return;
+	}
 	if ( !isObject( newConfig ) ) {
 		err = new TypeError( 'config::invalid assignment. Must be an `object`. Value: `' + newConfig + '`.' );
 		this.fire( 'err', err );
@@ -66,7 +69,7 @@ function configChanged( newConfig, oldConfig ) {
 
 	// Only if auto update is enabled, redraw the chart...
 	if ( bool ) {
-		this._create();
+		// this._create();
 	}
 } // end FUNCTION configChanged()
 

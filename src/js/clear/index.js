@@ -20,9 +20,9 @@ function clear() {
 	// TODO: should meta data (e.g., title) be cleared as well?
 
 	// Remove data, annotations, labels:
-	this.labels.length = 0;
-	this.data.length = 0;
-	this.annotations.length = 0;
+	this.labels = []; // FIXME: reallocating memory
+	this.data = []; // FIXME: reallocating memory
+	this.annotations.length = []; // FIXME: reallocating memory
 
 	// Reset the axes domains:
 	this._xScale.domain( [ X1, X2 ] );

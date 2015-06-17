@@ -10,6 +10,9 @@
 function yValueChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( typeof newVal !== 'function' ) {
 		err = new TypeError( 'yValue::invalid assignment. Must be a function. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
@@ -22,3 +25,8 @@ function yValueChanged( newVal, oldVal ) {
 		'curr': newVal
 	});
 } // end FUNCTION yValueChanged()
+
+
+// EXPORTS //
+
+module.exports = yValueChanged;

@@ -9,7 +9,7 @@
 */
 function addListeners() {
 	/* jshint validthis:true */
-	this.removeListeners();
+	this._removeListeners();
 	if ( this.autoResize ) {
 		window.addEventListener( 'resize', this._onResize, false );
 	}

@@ -19,7 +19,9 @@ function paddingRightChanged( newVal, oldVal ) {
 	var width,
 		range,
 		err;
-
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( !isNonNegativeInteger( newVal ) ) {
 		err = new TypeError( 'paddingRight::invalid assignment. Must be a nonnegative integer. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );

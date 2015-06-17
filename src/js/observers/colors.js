@@ -31,6 +31,9 @@ function colorsChanged( newVal, oldVal ) {
 		el,
 		i, j;
 
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( isString( newVal ) ) {
 		if ( !contains( COLORS.colors, newVal ) ) {
 			err = new TypeError( 'colors::invalid assignment. Unrecognized color set. Value: `' + newVal + '`.' );

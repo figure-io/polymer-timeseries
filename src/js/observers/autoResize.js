@@ -18,6 +18,9 @@ var isBoolean = require( 'validate.io-boolean-primitive' );
 function autoResizeChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( !isBoolean( newVal ) ) {
 		err = new TypeError( 'autoResize::invalid assignment. Must be a boolean primitive.  Value: `' + newVal + '.' );
 		this.fire( 'err', err );

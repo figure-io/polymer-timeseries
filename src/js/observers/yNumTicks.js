@@ -17,6 +17,9 @@ var isNonNegativeInteger = require( 'validate.io-nonnegative-integer' );
 function yNumTicksChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( newVal !== null && !isNonNegativeInteger( newVal ) ) {
 		err = new TypeError( 'yNumTicks::invalid assignment. Must be a nonnegative integer or null. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );

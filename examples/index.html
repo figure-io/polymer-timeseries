@@ -8,6 +8,12 @@
 		<!-- Load webcomponents.js for polyfill support -->
 		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
+		<!-- Default to using the shadow DOM -->
+		<script>
+			window.Polymer = window.Polymer || {};
+			window.Polymer.dom = 'shadow';
+		</script>
+
 		<!-- Stylesheets -->
 		<link rel="stylesheet" href="./css/styles.css">
 

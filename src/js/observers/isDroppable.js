@@ -17,6 +17,9 @@ var isBoolean = require( 'validate.io-boolean-primitive' );
 function isDroppableChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( !isBoolean( newVal ) ) {
 		err = new TypeError( 'isDroppable::invalid assignment. Must be a boolean primitive.  Value: `' + newVal + '.' );
 		this.fire( 'err', err );

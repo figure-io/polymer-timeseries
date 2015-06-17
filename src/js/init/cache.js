@@ -1,14 +1,13 @@
 'use strict';
 
 /**
-* FUNCTION: cache()
-*	Returns a new element cache.
+* FUNCTION: cache( $ )
+*	Extends the element cache.
 *
+* @param {Object} element cache
 * @returns {Object} element cache
 */
-function cache() {
-	var $ = {};
-
+function cache( $ ) {
 	// Base elements...
 	$.root = null;
 	$.canvas = null;

@@ -2,7 +2,8 @@
 
 // MODULES //
 
-var isStringArray = require( 'validate.io-string-array' );
+var isArray = require( 'validate.io-array' ),
+	isStringArray = require( 'validate.io-string-array' );
 
 
 // OBSERVER //
@@ -17,7 +18,10 @@ var isStringArray = require( 'validate.io-string-array' );
 function labelsChanged( newVal, oldVal ) {
 	/* jshint validthis: true */
 	var err;
-	if ( !isStringArray( newVal ) ) {
+	if ( oldVal === void 0 ) {
+		return;
+	}
+	if ( !isStringArray( newVal ) && !( isArray( newVal ) && !newVal.length ) ) {
 		err = new TypeError( 'labels::invalid assignment. Labels must be an array of strings..' );
 		this.fire( 'err', err );
 		return;
@@ -25,7 +29,7 @@ function labelsChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.paths.attr( 'data-label', this._getLabel );
 
-		this.resetLegend();
+		this._resetLegend();
 	}
 	this.fire( 'labels', {
 		'type': 'changed'

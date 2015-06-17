@@ -6,7 +6,6 @@
 */
 function created() {
 	/* jshint validthis:true */
-	this._init();
 } // end FUNCTION created()
 
 

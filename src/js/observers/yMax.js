@@ -17,9 +17,11 @@ var isNumber = require( 'validate.io-number-primitive' );
 function yMaxChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var yScale = this._yScale,
-		domain = yScale.domain(),
+		domain,
 		err;
-
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( newVal !== null && !isNumber( newVal ) ) {
 		err = new TypeError( 'yMax::invalid assignment. Must be numeric or `null`. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
@@ -27,7 +29,8 @@ function yMaxChanged( newVal, oldVal ) {
 		return;
 	}
 	// [0] Update the domain:
-	domain = this.yDomain( domain[ 0 ], newVal );
+	domain = yScale.domain();
+	domain = this._yDomain( domain[ 0 ], newVal );
 
 	// [1] Update the yScale:
 	yScale.domain( domain );

@@ -8,7 +8,7 @@ TODO
 2. accept `x` as a vector and `y` as a `matrix`
 3. see how arrays are deep watched
 	-	deep observation no longer works as in 0.5. Will need to require users to rebind after they have mutated the respective property.
-		-	this means that any observers/listeners (e.g., dragEnd) which mutate an `array` property need to rebind
+		-	this means that any observers/listeners (e.g., dragEnd) which mutate an `array` property need to reassign
 4. schema validator
 	-	configChanged
 5. cross-check all methods with matrix-diagram
@@ -20,7 +20,8 @@ TODO
 9. x/yDomain
 	-	refactor; use compute; no nested fcns
 10. clean-up `init` `X1` and `X2`, as well as `clear`
-11. 
+11. default to [`shadow`](https://www.polymer-project.org/1.0/docs/devguide/settings.html) dom
+12. 
 
 
 #### Pre-migration

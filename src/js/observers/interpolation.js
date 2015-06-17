@@ -37,6 +37,9 @@ var OPTS = [
 function interpolationChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( !isString( newVal ) || !contains( OPTS, newVal ) ) {
 		err = new TypeError( 'intepolation::invalid assignment. Must be one of the following: `' + OPTS.join( ',' ) + '`. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );

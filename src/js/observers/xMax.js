@@ -10,9 +10,12 @@
 function xMaxChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var xScale = this._xScale,
-		domain = xScale.domain(),
+		domain,
 		err;
 
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( newVal !== null && !( newVal instanceof Date ) ) {
 		err = new TypeError( 'xMax::invalid assignment. Must be a `Date` object or `null`. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
@@ -20,7 +23,8 @@ function xMaxChanged( newVal, oldVal ) {
 		return;
 	}
 	// [0] Update the domain:
-	domain = this.xDomain( domain[ 0 ], newVal );
+	domain = xScale.domain();
+	domain = this._xDomain( domain[ 0 ], newVal );
 
 	// [1] Update the xScale:
 	xScale.domain( domain );

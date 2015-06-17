@@ -1,14 +1,13 @@
 'use strict';
 
 /**
-* FUNCTION: vline( xScale, graphHeight )
-*	Wraps a scale and function to calculate the graph height and returns a function.
+* FUNCTION: vline( ctx )
+*	Wraps a function context and returns a function.
 *
-* @param {Function} x-scale
-* @param {Function} function to calculate the graph height
+* @param {Object} ctx - context
 * @returns {Function} function for creating a vertical line using an SVG path
 */
-function vline( xScale, graphHeight ) {
+function vline( ctx ) {
 	/**
 	* FUNCTION: vline( d, i )
 	*	Creates a vertical line using an SVG path.
@@ -20,8 +19,8 @@ function vline( xScale, graphHeight ) {
 	*/
 	return function vline( d ) {
 		var x, h, p1, p2;
-		x = xScale( d );
-		h = graphHeight();
+		x = ctx._x( d );
+		h = ctx._graphHeight();
 		p1 = x + ',' + h;
 		p2 = x + ',0';
 		return 'M' + p1 + 'L' + p2;

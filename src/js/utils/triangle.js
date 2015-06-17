@@ -1,13 +1,13 @@
 'use strict';
 
 /**
-* FUNCTION: triangle( xScale )
-*	Wraps a scale and returns a function.
+* FUNCTION: triangle( ctx )
+*	Wraps a function context and returns a function.
 *
-* @param {Function} x-scale
+* @param {Object} ctx - context
 * @returns {Function} function for creating a triangle using an SVG path
 */
-function triangle( xScale ) {
+function triangle( ctx ) {
 	/**
 	* FUNCTION: triangle( d, i )
 	*	Creates a triangle using an SVG path.
@@ -19,7 +19,7 @@ function triangle( xScale ) {
 	*/
 	return function triangle( d ) {
 		var x, p1, p2, p3;
-		x = xScale( d );
+		x = ctx._x( d );
 		p1 = (x-4) + ',-9';
 		p2 = x + ',-2';
 		p3 = (x+4) + ',-9';

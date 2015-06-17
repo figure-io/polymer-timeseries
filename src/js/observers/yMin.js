@@ -17,9 +17,11 @@ var isNumber = require( 'validate.io-number-primitive' );
 function yMinChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var yScale = this._yScale,
-		domain = yScale.domain(),
+		domain,
 		err;
-
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( newVal !== null && !isNumber( newVal ) ) {
 		err = new TypeError( 'yMin::invalid assignment. Must be a numeric or `null`. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
@@ -27,7 +29,8 @@ function yMinChanged( newVal, oldVal ) {
 		return;
 	}
 	// [0] Update the domain:
-	domain = this.yDomain( newVal, domain[ 1 ] );
+	domain = yScale.domain();
+	domain = this._yDomain( newVal, domain[ 1 ] );
 
 	// [1] Update the yScale:
 	yScale.domain( domain );

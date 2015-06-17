@@ -17,6 +17,9 @@ var isString = require( 'validate.io-string-primitive' );
 function yLabelChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( !isString( newVal ) ) {
 		err = new TypeError( 'yLabel::invalid assignment. Must be a string primitive. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );

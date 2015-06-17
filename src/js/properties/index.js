@@ -23,7 +23,7 @@ props.data = {
 	'observer': '_dataChanged',
 	'type': Array,
 	'value': function data() {
-		return [[]];
+		return [];
 	}
 };
 
@@ -51,7 +51,7 @@ props.annotations = {
 	'observer': '_annotationsChanged',
 	'type': Array,
 	'value': function annotations() {
-		return [[]];
+		return [];
 	}
 };
 
@@ -63,7 +63,9 @@ props.annotations = {
 props.xValue = {
 	'observer': '_xValueChanged',
 	'type': Function,
-	'value': xValue
+	'value': function getFcn() {
+		return xValue;
+	}
 };
 
 /**
@@ -74,7 +76,9 @@ props.xValue = {
 props.yValue = {
 	'observer': '_yValueChanged',
 	'type': Function,
-	'value': yValue
+	'value': function getFcn() {
+		return yValue;
+	}
 };
 
 /**
@@ -85,7 +89,9 @@ props.yValue = {
 props.aValue = {
 	'observer': '_aValueChanged',
 	'type': Function,
-	'value': aValue
+	'value': function getFcn() {
+		return aValue;
+	}
 };
 
 /**
@@ -96,7 +102,9 @@ props.aValue = {
 props.isDefined = {
 	'observer': '_isDefinedChanged',
 	'type': Function,
-	'value': isDefined
+	'value': function getFcn() {
+		return isDefined;
+	}
 };
 
 /**

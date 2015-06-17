@@ -19,6 +19,8 @@ element.properties = require( './properties' );
 
 element.created = require( './lifecycle/created.js' );
 
+element.ready = require( './lifecycle/ready.js' );
+
 element.attached = require( './lifecycle/attached.js' );
 
 element.detached = require( './lifecycle/detached.js' );
@@ -52,7 +54,7 @@ element._createLegend = require( './create/legend.js' );
 
 element._resetPaths = require( './reset/paths.js' );
 
-element._resestAnnotations = require( './reset/annotations.js' );
+element._resetAnnotations = require( './reset/annotations.js' );
 
 element._resetLegend = require( './reset/legend.js' );
 
@@ -144,6 +146,8 @@ element._isDraggableChanged = require( './observers/isDraggable.js' );
 element._isDroppableChanged = require( './observers/isDroppable.js' );
 
 element._autoResizeChanged = require( './observers/autoResize.js' );
+
+element._autoUpdateChanged = require( './observers/autoUpdate.js' );
 
 
 // UTILS //

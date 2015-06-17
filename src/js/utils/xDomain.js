@@ -17,7 +17,7 @@ function xDomain( min, max ) {
 	if ( min !== null ) {
 		min = new Date( min ).getTime();
 		if ( min !== min ) {
-			err = new TypeError( 'xDomain()::invalid input argument. Minimum value must be a valid `Date` object, string, or number, or `null`. Value: `' + min + '`.' );
+			err = new TypeError( 'xDomain()::invalid input argument. Minimum value must be a valid `Date` object, string, number, or `null`. Value: `' + min + '`.' );
 			this.fire( 'err', err );
 			return;
 		}
@@ -31,7 +31,7 @@ function xDomain( min, max ) {
 	if ( max !== null ) {
 		max = new Date( max ).getTime();
 		if ( max !== max ) {
-			err = new TypeError( 'xDomain()::invalid input argument. Maximum value must be a valid `Date` object, string, or number, or `null`. Value: `' + max + '`.' );
+			err = new TypeError( 'xDomain()::invalid input argument. Maximum value must be a valid `Date` object, string, number, or `null`. Value: `' + max + '`.' );
 			this.fire( 'err', err );
 			return;
 		}

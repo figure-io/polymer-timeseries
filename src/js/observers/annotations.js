@@ -2,7 +2,8 @@
 
 // MODULES //
 
-var isArrayArray = require( 'validate.io-array-array' );
+var isArray = require( 'validate.io-array' ),
+	isArrayArray = require( 'validate.io-array-array' );
 
 
 // OBSERVER //
@@ -17,7 +18,10 @@ var isArrayArray = require( 'validate.io-array-array' );
 function annotationsChanged( newVal, oldVal ) {
 	/* jshint validthis: true */
 	var err;
-	if ( !isArrayArray( newVal ) ) {
+	if ( oldVal === void 0 ) {
+		return;
+	}
+	if ( !isArrayArray( newVal ) && !( isArray( newVal ) && !newVal.length ) ) {
 		err = new TypeError( 'annotations::invalid assignment. Must be an array of arrays.' );
 		this.fire( 'err', err );
 		return;

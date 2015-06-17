@@ -45,8 +45,6 @@
 			el,
 			i;
 
-		return;
-
 		// [0] Grab chart elements...
 		figs = document.querySelectorAll( '.figure' );
 
@@ -78,7 +76,7 @@
 	// SCRIPT //
 
 	// Get the template for a figure configuration:
-	window.addEventListener( 'polymer-ready', function onReady() {
+	window.addEventListener( 'WebComponentsReady', function onReady() {
 		getResource( './../examples/data/timeseries.json', onData );
 	});
 

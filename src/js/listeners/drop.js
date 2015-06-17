@@ -40,7 +40,9 @@ function onDrop( evt ) {
 	// Add the new label:
 	this.labels.push( payload.label );
 
-	// TODO: reassign data and labels
+	// FIXME: having to reallocate memory should not be the answer!!!!
+	this.data = this.data.slice();
+	this.labels = this.labels.slice();
 
 	// TODO: define additional behavior (#39)
 

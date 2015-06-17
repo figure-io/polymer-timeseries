@@ -23,7 +23,9 @@ function onDragEnd( ctx ) {
 		// Remove the dragged timeseries:
 		ctx.data.splice( i, 1 );
 
-		// TODO: reassign data and labels!
+		// FIXME: having to reallocate memory should not be the answer!!!
+		ctx.data = ctx.data.slice();
+		ctx.labels = ctx.labels.slice();
 
 		if ( !ctx.data.length && !ctx.labels.length ) {
 			ctx.clear();

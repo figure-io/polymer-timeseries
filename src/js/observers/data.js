@@ -19,7 +19,10 @@ function dataChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var domain,
 		err;
-	if ( !isArrayArray( newVal ) ) {
+	if ( oldVal === void 0 ) {
+		return;
+	}
+	if ( !isArrayArray( newVal ) && !( isArray( newVal ) && !newVal.length ) ) {
 		err = new TypeError( 'data::invalid assignment. Data must be an array of arrays.' );
 		this.fire( 'err', err );
 		return;
@@ -32,13 +35,13 @@ function dataChanged( newVal, oldVal ) {
 		return;
 	}
 	// [0] Update the xDomain:
-	domain = this.xDomain( this.xMin, this.xMax );
+	domain = this._xDomain( this.xMin, this.xMax );
 
 	// [1] Update the xScale:
 	this._xScale.domain( domain );
 
 	// [2] Update the yDomain:
-	domain = this.yDomain( this.yMin, this.yMax );
+	domain = this._yDomain( this.yMin, this.yMax );
 
 	// [3] Update the yScale:
 	this._yScale.domain( domain );

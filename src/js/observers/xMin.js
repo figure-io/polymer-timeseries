@@ -10,9 +10,11 @@
 function xMinChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var xScale = this._xScale,
-		domain = xScale.domain(),
+		domain,
 		err;
-
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( newVal !== null && !( newVal instanceof Date ) ) {
 		err = new TypeError( 'xMin::invalid assignment. Must be a `Date` object or `null`. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
@@ -20,7 +22,8 @@ function xMinChanged( newVal, oldVal ) {
 		return;
 	}
 	// [0] Update the domain:
-	domain = this.xDomain( newVal, domain[ 1 ] );
+	domain = xScale.domain();
+	domain = this._xDomain( newVal, domain[ 1 ] );
 
 	// [1] Update the xScale:
 	xScale.domain( domain );

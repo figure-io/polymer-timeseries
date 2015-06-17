@@ -17,6 +17,9 @@ var isString = require( 'validate.io-string-primitive' );
 function yTickFormatChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( !isString( newVal ) && newVal !== null ) {
 		err = new TypeError( 'yTickFormat::invalid assignment. Must be either a string or null. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );

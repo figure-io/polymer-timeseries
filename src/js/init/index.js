@@ -6,6 +6,10 @@ var uuid = require( 'node-uuid' ),
 	cache = require( './cache.js' );
 
 
+// FIXME: get rid of this dependency. Use polymer component.
+var d3 = require( 'd3' );
+
+
 // LISTENERS //
 
 var onResize = require( './../listeners/resize.js' ),
@@ -41,12 +45,14 @@ var COLORS = require( './../colors' ),
 */
 function init() {
 	/* jshint validthis:true */
-	var d3,
-		el;
 
-	// Create a new D3 element to access the library dependency:
-	el = document.createElement( 'polymer-d3' );
-	d3 = el.d3;
+	// FIXME: use polymer component
+	// var d3,
+	// 	el;
+
+	// // Create a new D3 element to access the library dependency:
+	// el = document.createElement( 'polymer-d3' );
+	// d3 = el.d3;
 	this._d3 = d3;
 
 	// Assign the chart a private uuid:
@@ -89,8 +95,8 @@ function init() {
 		.interpolate( this.interpolation )
 		.tension( this.tension );
 
-	this._triangle = triangle( this._x );
-	this._vline = vline( this._x, this._graphHeight );
+	this._triangle = triangle( this );
+	this._vline = vline( this );
 
 	// Colors...
 	this._colors = COLORS.category10.slice();
@@ -111,8 +117,8 @@ function init() {
 
 	this._onResize = delayed( onResize( this ), 400 );
 
-	// Create a new element cache...
-	this.$ = cache();
+	// Extend the element cache...
+	this.$ = cache( this.$ );
 
 	// Clip path...
 	this._clipPathID = uuid.v4();

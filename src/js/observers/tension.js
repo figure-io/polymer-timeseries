@@ -17,6 +17,9 @@ var isNumber = require( 'validate.io-number-primitive' );
 function tensionChanged( newVal, oldVal ) {
 	/* jshint validthis:true */
 	var err;
+	if ( oldVal === void 0 ) {
+		return;
+	}
 	if ( !isNumber( newVal ) ) {
 		err = new TypeError( 'tension::invalid assignment. Must be a number primitive. Value: `' + newVal + '`.' );
 		this.fire( 'err', err );
