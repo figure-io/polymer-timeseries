@@ -922,7 +922,7 @@ $ make view-cov
 Copyright &copy; 2014-2015. The [Figure.io](https://github.com/figure-io) Authors.
 
 
-[screenshot-image]: https://github.com/figure-io/polymer-timeseries/blob/master/docs/img/timeseries.png
+[screenshot-image]: https://cdn.rawgit.com/figure-io/polymer-timeseries/9b01be8fa360df463d3fc8c8afe3545ab8c57eac/docs/img/timeseries.png
 [screenshot-url]: https://github.com/figure-io/polymer-timeseries
 
 [npm-image]: http://img.shields.io/npm/v/.svg
