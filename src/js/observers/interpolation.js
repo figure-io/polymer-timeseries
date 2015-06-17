@@ -50,7 +50,7 @@ function interpolationChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.paths.attr( 'd', this._line );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'interpolation',
 		'prev': oldVal,
 		'curr': newVal

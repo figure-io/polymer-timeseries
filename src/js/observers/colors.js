@@ -76,9 +76,9 @@ function colorsChanged( newVal, oldVal ) {
 		}
 	}
 	this.fire( 'colors', {
-		'type': 'changed'
+		'type': 'change'
 	});
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'colors',
 		'prev': oldVal,
 		'curr': newVal

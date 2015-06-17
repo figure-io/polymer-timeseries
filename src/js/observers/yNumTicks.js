@@ -30,7 +30,7 @@ function yNumTicksChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.yAxis.call( this._yAxis );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'yNumTicks',
 		'prev': oldVal,
 		'curr': newVal

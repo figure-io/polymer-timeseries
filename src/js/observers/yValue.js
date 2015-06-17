@@ -19,7 +19,7 @@ function yValueChanged( newVal, oldVal ) {
 		this.yValue = oldVal;
 		return;
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'yValue',
 		'prev': oldVal,
 		'curr': newVal

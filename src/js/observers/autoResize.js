@@ -32,7 +32,7 @@ function autoResizeChanged( newVal, oldVal ) {
 	} else {
 		window.removeEventListener( 'resize', this._onResize );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'autoResize',
 		'prev': oldVal,
 		'curr': newVal

@@ -13,7 +13,7 @@ var EVENTS = [
 	'yMin',
 	'yMax',
 
-	'changed',
+	'change',
 	'err',
 
 	'resized',

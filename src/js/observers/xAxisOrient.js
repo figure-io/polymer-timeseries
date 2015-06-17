@@ -45,7 +45,7 @@ function xAxisOrientChanged( newVal, oldVal ) {
 
 	// TODO: this is subtle. As labels, etc may need to change.
 
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'xAxisOrient',
 		'prev': oldVal,
 		'curr': newVal

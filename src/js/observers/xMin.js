@@ -40,9 +40,9 @@ function xMinChanged( newVal, oldVal ) {
 		this.$.annotationLines.attr( 'd', this._vline );
 	}
 	this.fire( 'xMin', {
-		'type': 'changed'
+		'type': 'change'
 	});
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'xMin',
 		'prev': oldVal,
 		'curr': newVal

@@ -43,9 +43,9 @@ function yMaxChanged( newVal, oldVal ) {
 		this.$.paths.attr( 'd', this._line );
 	}
 	this.fire( 'yMax', {
-		'type': 'changed'
+		'type': 'change'
 	});
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'yMax',
 		'prev': oldVal,
 		'curr': newVal

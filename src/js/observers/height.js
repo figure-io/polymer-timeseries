@@ -64,9 +64,9 @@ function heightChanged( newVal, oldVal ) {
 		this.$.annotationLines.attr( 'd', this._vline );
 	}
 	this.fire( 'height', {
-		'type': 'changed'
+		'type': 'change'
 	});
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'height',
 		'prev': oldVal,
 		'curr': newVal

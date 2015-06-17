@@ -58,7 +58,7 @@ function configChanged( newConfig, oldConfig ) {
 	// 	return mark.data;
 	// });
 
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'config',
 		'prev': oldConfig,
 		'curr': newConfig

@@ -26,7 +26,7 @@ function isDroppableChanged( newVal, oldVal ) {
 		this.isDroppable = oldVal;
 		return;
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'isDroppable',
 		'prev': oldVal,
 		'curr': newVal

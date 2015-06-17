@@ -27,7 +27,7 @@ function isDraggableChanged( newVal, oldVal ) {
 		return;
 	}
 	this.$.legendEntries.attr( 'draggable', newVal );
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'isDraggable',
 		'prev': oldVal,
 		'curr': newVal

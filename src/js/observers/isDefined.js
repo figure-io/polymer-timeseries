@@ -23,7 +23,7 @@ function isDefinedChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.paths.attr( 'd', this._line );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'isDefined',
 		'prev': oldVal,
 		'curr': newVal

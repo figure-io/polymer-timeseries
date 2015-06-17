@@ -29,7 +29,7 @@ function yLabelChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.yLabel.text( newVal );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'yLabel',
 		'prev': oldVal,
 		'curr': newVal

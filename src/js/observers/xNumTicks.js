@@ -30,7 +30,7 @@ function xNumTicksChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.xAxis.call( this._xAxis );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'xNumTicks',
 		'prev': oldVal,
 		'curr': newVal

@@ -32,9 +32,9 @@ function labelsChanged( newVal, oldVal ) {
 		this._resetLegend();
 	}
 	this.fire( 'labels', {
-		'type': 'changed'
+		'type': 'change'
 	});
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'labels',
 		'prev': oldVal,
 		'curr': newVal

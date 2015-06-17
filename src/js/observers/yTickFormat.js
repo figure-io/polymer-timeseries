@@ -35,7 +35,7 @@ function yTickFormatChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.yAxis.call( this._yAxis );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'yTickFormat',
 		'prev': oldVal,
 		'curr': newVal

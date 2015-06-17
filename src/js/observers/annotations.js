@@ -32,9 +32,9 @@ function annotationsChanged( newVal, oldVal ) {
 		this._resetAnnotations();
 	}
 	this.fire( 'annotations', {
-		'type': 'changed'
+		'type': 'change'
 	});
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'annotations',
 		'prev': oldVal,
 		'curr': newVal

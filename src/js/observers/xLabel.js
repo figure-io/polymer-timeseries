@@ -29,7 +29,7 @@ function xLabelChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.xLabel.text( newVal );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'xLabel',
 		'prev': oldVal,
 		'curr': newVal

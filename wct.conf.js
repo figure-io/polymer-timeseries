@@ -30,11 +30,6 @@ config = {
 		dir
 	],
 
-	// Browsers on which to test:
-	'browsers': [
-		'firefox'
-	],
-
 	// Whether the local or remote browsers should be targeted:
 	'remote': false,
 
@@ -62,29 +57,22 @@ config = {
 	// Additional browser options for Selenium or Sauce:
 	'browserOptions': {},
 
-	// Sauce labs configuration:
-	'sauce': {
-		'username': undefined,
-		'accessKey': undefined,
-
-		// Tunnel id to reuse for tests:
-		'tunnelId': undefined,
-
-		// Advanced tunnel options (https://github.com/bermi/sauce-connect-launcher#advanced-usage):
-		'tunnelOptions': {}
-	},
-
 	// Test plugins:
 	'plugins': {
-		'web-component-tester-istanbul': {
-			'dir': './reports/coverage',
-			'reporters': [
-				'text-summary',
-				'lcov'
-			],
-			'include': [],
-			'exclude': []
-		}
+		'local': {
+			'browsers': [
+				'chrome'
+			]
+		},
+		// 'web-component-tester-istanbul': {
+		// 	'dir': './reports/coverage',
+		// 	'reporters': [
+		// 		'text-summary',
+		// 		'lcov'
+		// 	],
+		// 	'include': [],
+		// 	'exclude': []
+		// }
 	}
 }; // end CONFIG
 

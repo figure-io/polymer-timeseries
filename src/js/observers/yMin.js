@@ -43,9 +43,9 @@ function yMinChanged( newVal, oldVal ) {
 		this.$.paths.attr( 'd', this._line );
 	}
 	this.fire( 'yMin', {
-		'type': 'changed'
+		'type': 'change'
 	});
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'yMin',
 		'prev': oldVal,
 		'curr': newVal

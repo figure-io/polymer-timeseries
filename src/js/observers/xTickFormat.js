@@ -31,7 +31,7 @@ function xTickFormatChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.xAxis.call( this._xAxis );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'xTickFormat',
 		'prev': oldVal,
 		'curr': newVal

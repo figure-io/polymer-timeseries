@@ -61,9 +61,9 @@ function dataChanged( newVal, oldVal ) {
 		this._resetPaths();
 	}
 	this.fire( 'data', {
-		'type': 'changed'
+		'type': 'change'
 	});
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'data',
 		'prev': oldVal,
 		'curr': newVal

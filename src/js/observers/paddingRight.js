@@ -54,7 +54,7 @@ function paddingRightChanged( newVal, oldVal ) {
 		this.$.annotationMarkers.attr( 'd', this._triangle );
 		this.$.annotationLines.attr( 'd', this._vline );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'paddingRight',
 		'prev': oldVal,
 		'curr': newVal

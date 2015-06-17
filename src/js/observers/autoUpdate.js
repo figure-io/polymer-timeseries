@@ -26,7 +26,7 @@ function autoUpdateChanged( newVal, oldVal ) {
 		this.autoUpdate = oldVal;
 		return;
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'autoUpdate',
 		'prev': oldVal,
 		'curr': newVal

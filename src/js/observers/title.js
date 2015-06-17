@@ -29,7 +29,7 @@ function titleChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.title.text( newVal );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'title',
 		'prev': oldVal,
 		'curr': newVal

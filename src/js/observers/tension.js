@@ -30,7 +30,7 @@ function tensionChanged( newVal, oldVal ) {
 	if ( this.autoUpdate ) {
 		this.$.paths.attr( 'd', this._line );
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'tension',
 		'prev': oldVal,
 		'curr': newVal

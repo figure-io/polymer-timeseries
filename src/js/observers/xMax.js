@@ -41,9 +41,9 @@ function xMaxChanged( newVal, oldVal ) {
 		this.$.annotationLines.attr( 'd', this._vline );
 	}
 	this.fire( 'xMax', {
-		'type': 'changed'
+		'type': 'change'
 	});
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'xMax',
 		'prev': oldVal,
 		'curr': newVal

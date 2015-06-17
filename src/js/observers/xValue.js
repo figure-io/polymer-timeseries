@@ -19,7 +19,7 @@ function xValueChanged( newVal, oldVal ) {
 		this.xValue = oldVal;
 		return;
 	}
-	this.fire( 'changed', {
+	this.fire( 'change', {
 		'attr': 'xValue',
 		'prev': oldVal,
 		'curr': newVal
