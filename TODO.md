@@ -21,7 +21,10 @@ TODO
 	-	refactor; use compute; no nested fcns
 10. clean-up `init` `X1` and `X2`, as well as `clear`
 11. default to [`shadow`](https://www.polymer-project.org/1.0/docs/devguide/settings.html) dom
-12. 
+12. README notes
+13. `toJSON` method
+	-	serialize to specification
+14. 
 
 
 #### Pre-migration
@@ -165,18 +168,19 @@ TODO
 52. include notes about inheritance
 	- 	descendant will need to call `chart` and `addListeners` in `attached` and call `removeListeners` in `detached`
 	-	etc
+	-	inheritance is __no__ longer possible with Polymer 1.0; have to mixin
 53. See `toggleSeries`; need to move `clicked` event to separate handler
 	- 	method should be a general method
 	-	dido for `toggleVLine`
-54. README TOC / Wiki
+54. Wiki (?)
 55. 
-56. Update year from 2014 to 2015 (2014-2015).
+56. 
 57. move try/catch in stream write method to separate fcn.
 58. probably do not want `if ( !this.$.canvas ) {}`, as this prevents events from firing due to early return. Rather, you want, say, `if ( this.$.canvas && this.autoUpdate ) {}`.
 59. currently, only width and height changes actually check that a canvas exists before updating chart elements; should the same not happen for other attribute changes??? Is checking for a canvas needed????
 60. BUG: `dataChanged` does not emit a changed event when set to an empty array due to early return.
 61. include screenshot in README
-62. update to polymer 0.5.4
+62. update to polymer ^1.0.0
 	- 	requires updating web-component-tester-istanbul plugin and using new configuration setup
 
 
