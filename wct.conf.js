@@ -61,7 +61,7 @@ config = {
 	'plugins': {
 		'local': {
 			'browsers': [
-				'chrome'
+				'firefox'
 			]
 		},
 		// 'web-component-tester-istanbul': {

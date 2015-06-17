@@ -4,7 +4,83 @@ Timeseries
 
 > A [Polymer](https://www.polymer-project.org/) web component for displaying timeseries graphs.
 
+[![Timeseries][screenshot-image]][screenshot-url]
 
+---
+1. [Installation](#install)
+1. [Usage](#usage)
+	-	[Properties](#properties)
+		*	[data](#prop-data)
+		*	[labels](#prop-labels)
+		*	[annotations](#prop-annotations)
+		*	[xValue](#prop-xvalue)
+		* 	[yValue](#prop-yvalue)
+		*	[aValue](#prop-avalue)
+		* 	[isDefined](#prop-isdefined)
+		*	[config](#prop-config)
+		*	[colors](#prop-colors)
+		*	[width](#prop-width)
+		*	[height](#prop-height)
+		*	[paddingLeft](#prop-paddingleft)
+		*	[paddingRight](#prop-paddingright)
+		*	[paddingTop](#prop-paddingtop)
+		*	[paddingBottom](#prop-paddingbottom)
+		*	[title](#prop-title)
+		*	[xLabel](#prop-xlabel)
+		*	[yLabel](#prop-ylabel)
+		*	[xMin](#prop-xmin)
+		*	[xMax](#prop-xmax)
+		*	[yMin](#prop-ymin)
+		*	[yMax](#prop-ymax)
+		*	[xTickFormat](#prop-xtickformat)
+		*	[yTickFormat](#prop-ytickformat)
+		*	[xNumTicks](#prop-xnumticks)
+		*	[yNumTicks](#prop-ynumticks)
+		*	[xAxisOrient](#prop-xaxisorient)
+		*	[yAxisOrient](#prop-yaxisorient)
+		*	[interpolation](#prop-interpolation)
+		*	[tension](#prop-tension)
+		*	[isDraggable](#prop-isdraggable)
+		*	[isDroppable](#prop-isdroppable)
+		*	[autoUpdate](#prop-autoupdate)
+		*	[autoResize](#prop-autoresize)
+		*	[events](#prop-events)
+	-	[Methods](#methods)
+		*	[clear()](#method-clear)
+		*	[formatData()](#method-formatdata)
+		*	[formatAnnotations()](#method-formatannotations)
+		*	[stream()](#method-stream)
+	-	[Events](#events)
+		*	[err](#evt-err)
+		*	[change](#evt-change)
+		*	[data](#evt-data)
+		*	[annotations](#evt-annotations)
+		*	[labels](#evt-labels)
+		*	[colors](#evt-colors)
+		*	[width](#evt-width)
+		*	[height](#evt-height)
+		*	[xMin](#evt-xmin)
+		*	[xMax](#evt-xmax)
+		*	[yMin](#evt-ymin)
+		*	[yMax](#evt-ymax)
+		*	[resized](#evt-resized)
+		*	[clicked](#evt-clicked)
+		*	[annotation](#evt-annotation)
+		*	[dragStart](#evt-dragstart)
+		*	[dragEnd](#evt-dragend)
+		*	[dragEnter](#evt-dragenter)
+		*	[dragLeave](#evt-dragleave)
+		*	[dropped](#evt-dropped)
+1. 	[Examples](#examples)
+1. 	[Development](#development)
+1. 	[Build](#build)
+1. 	[Tests](#tests)
+	-	[Unit](#unit)
+	-	[Coverage](#test-coverage)
+1. 	[License](#license)
+
+
+---
 ## Install
 
 ``` bash
@@ -14,13 +90,15 @@ $ bower install figure-io/polymer-timeseries
 
 ## Usage
 
-To use the component,
-
 ``` html
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="path/to/webcomponentsjs/webcomponents.min.js"></script>
+		<script src="path/to/webcomponentsjs/webcomponents-lite.js"></script>
+		<script>
+			window.Polymer = window.Polymer || {};
+			window.Polymer.dom = 'shadow';
+		</script>
 		<link rel="import" href="path/to/polymer-timeseries.html">
 	</head>
 	<body>
@@ -35,12 +113,13 @@ and
 var el = document.querySelector( '#chart' );
 ```
 
-The component has the following public attributes and methods...
+The component has the following public properties and methods...
 
 
 
 ### Attributes
 
+<a name="prop-data"></a>
 #### el.data
 
 Chart data. The expected format is an `array` of `arrays` of `arrays`, where each first level `array` is a timeseries and each second level `array` is a data point.
@@ -62,18 +141,8 @@ el.data = [
 ];
 ```
 
-#### el.annotations
 
-Chart annotations. The expected format is an `array` of `arrays`, where each first level `array` is an annotation.
-
-``` javascript
-el.annotations = [
-	[1417563950959,'alert 1'],
-	[1417563956959,'alert 2']
-];
-```
-
-
+<a name="prop-labels"></a>
 #### el.labels
 
 Data labels corresponding to each timeseries.
@@ -88,6 +157,99 @@ el.labels = [
 These labels are used when creating the chart legend.
 
 
+<a name="prop-annotations"></a>
+#### el.annotations
+
+Chart annotations. The expected format is an `array` of `arrays`, where each first level `array` is an annotation.
+
+``` javascript
+el.annotations = [
+	[1417563950959,'alert 1'],
+	[1417563956959,'alert 2']
+];
+```
+
+<a name="prop-xvalue"></a>
+#### el.xValue
+
+Defines the x-value accessor. The default accessor assumes an `array` of `arrays`.
+
+``` javascript
+// Default:
+el.xValue = function( d ) {
+	return d[ 0 ];
+};
+
+// Example of object based accessor:
+el.xValue = function( d, i ) {
+	return d.x;
+};
+```
+
+<a name="prop-yvalue"></a>
+#### el.yValue
+
+Defines the y-value accessor. The default accessor assumes an `array` of `arrays`.
+
+``` javascript
+// Default:
+el.yValue = function( d ) {
+	return d[ 1 ];
+};
+
+// Example of object based accessor:
+el.yValue = function( d, i ) {
+	return d.y;
+};
+```
+
+<a name="prop-avalue"></a>
+#### el.aValue
+
+Defines the annotation accessor. The default accessor assumes an `array` of `arrays`.
+
+``` javascript
+// Default:
+el.aValue = function( d ) {
+	return d[ 1 ];
+};
+
+// Example of object based accessor:
+el.aValue = function( d, i ) {
+	return d.annotation;
+};
+```
+
+<a name="prop-isdefined"></a>
+#### el.isDefined
+
+Defines an accessor function which controls where a line is [defined](https://github.com/mbostock/d3/wiki/SVG-Shapes#line_defined). This accessor is used to specify how missing values are encoded. The default behavior is to ignore data points or y-values which are `null`.
+
+``` javascript
+// Default:
+el.isDefined = function( d ) {
+	return ( d !== null && d[ 1 ] !== null );
+};
+
+// Example checking for NaNs:
+el.isDefined = function( d ) {
+	return ( typeof d === 'number' && d === d );
+};
+```
+
+<a name="prop-config"></a>
+#### el.config
+
+Configuration `object` containing parameters corresponding to known attributes, as defined below.
+
+``` javascript
+el.config = {};
+```
+
+TODO: implement and define. Vega reference. Specification.
+
+
+<a name="prop-colors"></a>
 #### el.colors
 
 Specifies the chart [colors](https://github.com/mbostock/d3/wiki/Ordinal-Scales#category10). Colors can either be the name of a predefined set of classes (`category10`, `category20`, `category20b`, or `category20c`) or an independently defined `array` of classes. Default is `category10`.
@@ -108,17 +270,7 @@ el.colors = [
 TODO: note the convention of class/color attribute for SVG elements and `<class>-span` for HTML elements (symbols) in order to set the background color.
 
 
-#### el.config
-
-Configuration `object` containing parameters corresponding to known attributes, as defined below.
-
-``` javascript
-el.config = {};
-```
-
-TODO: implement and define. Vega reference. Specification.
-
-
+<a name="prop-width"></a>
 #### el.width
 
 Chart canvas width. If not explicitly set, defaults to the width of the parent node.
@@ -128,6 +280,7 @@ el.width = 600; // px
 ```
 
 
+<a name="prop-height"></a>
 #### el.height
 
 Chart canvas height. If not explicitly set, defaults to the height of the parent node.
@@ -137,39 +290,44 @@ el.height = 400; // px
 ```
 
 
+<a name="prop-paddingleft"></a>
 #### el.paddingLeft
 
-Chart canvas left padding; i.e., space between the left canvas edge and the left graph edge. Typically needed to create room for a left oriented y-axis. Default is 90 pixels.
+Chart canvas left padding; i.e., space between the left canvas edge and the left graph edge. Typically needed to create room for a left oriented y-axis. Default is `90` pixels.
 
 ``` javascript
 el.paddingLeft = 120; // px
 ```
 
+<a name="prop-paddingright"></a>
 #### el.paddingRight
 
-Chart canvas right padding; i.e., space between the right canvas edge and the right graph edge. Typically needed to create room for a right oriented y-axis. Default is 20 pixels.
+Chart canvas right padding; i.e., space between the right canvas edge and the right graph edge. Typically needed to create room for a right oriented y-axis. Default is `20` pixels.
 
 ``` javascript
 el.paddingRight = 90; // px
 ```
 
+<a name="prop-paddingtop"></a>
 #### el.paddingTop
 
-Chart canvas top padding; i.e., space between the top canvas edge and the top graph edge. Typically needed to create room for a chart title or top positioned legend. Default is 80 pixels.
+Chart canvas top padding; i.e., space between the top canvas edge and the top graph edge. Typically needed to create room for a chart title or top positioned legend. Default is `80` pixels.
 
 ``` javascript
 el.paddingTop = 200; // px
 ```
 
+<a name="prop-paddingbottom"></a>
 #### el.paddingBottom
 
-Chart canvas bottom padding; i.e., space between the bottom canvas edge and the bottom graph edge. Typically needed to create room for a bottom oriented x-axis or bottom positioned legend. Default is 80 pixels.
+Chart canvas bottom padding; i.e., space between the bottom canvas edge and the bottom graph edge. Typically needed to create room for a bottom oriented x-axis or bottom positioned legend. Default is `80` pixels.
 
 ``` javascript
 el.paddingBottom = 100; // px
 ```
 
-#### el.chartTitle
+<a name="prop-title"></a>
+#### el.title
 
 Chart title. Default is an empty `string`.
 
@@ -177,6 +335,7 @@ Chart title. Default is an empty `string`.
 el.chartTitle = 'Awesome chart.';
 ```
 
+<a name="prop-xlabel"></a>
 #### el.xLabel
 
 x-axis label.
@@ -185,6 +344,7 @@ x-axis label.
 el.xLabel = 'seconds since epoch';
 ```
 
+<a name="prop-ylabel"></a>
 #### el.yLabel
 
 y-axis label.
@@ -193,6 +353,7 @@ y-axis label.
 el.yLabel = '% utilization';
 ```
 
+<a name="prop-xmin"></a>
 #### el.xMin
 
 Defines the minimum value of the x-axis domain. Default is `null`.
@@ -204,6 +365,7 @@ el.xMin = new Date() - 186000;
 If set to `null`, the `xMin` is dynamically calculated from the data.
 
 
+<a name="prop-xmax"></a>
 #### el.xMax
 
 Defines the maximum value of the x-axis domain. Default is `null`.
@@ -215,6 +377,7 @@ el.xMax = new Date();
 If set to `null`, the `xMax` is dynamically calculated from the data.
 
 
+<a name="prop-ymin"></a>
 #### el.yMin
 
 Defines the minimum value of the y-axis domain. Default is `null`.
@@ -226,6 +389,7 @@ el.yMin = 0;
 If set to `null`, the `yMin` is dynamically calculated from the data.
 
 
+<a name="prop-ymax"></a>
 #### el.yMax
 
 Defines the maximum value of the y-axis domain. Default is `null`.
@@ -237,6 +401,7 @@ el.yMax = 1;
 If set to `null`, the `yMax` is dynamically calculated from the data.
 
 
+<a name="prop-xtickformat"></a>
 #### el.xTickFormat
 
 Defines the x-axis [tick format](https://github.com/mbostock/d3/wiki/SVG-Axes#tickFormat).
@@ -245,6 +410,7 @@ Defines the x-axis [tick format](https://github.com/mbostock/d3/wiki/SVG-Axes#ti
 el.xTickFormat = '%H:%M';
 ```
 
+<a name="prop-ytickformat"></a>
 #### el.yTickFormat
 
 Defines the y-axis [tick format](https://github.com/mbostock/d3/wiki/Formatting).
@@ -253,6 +419,7 @@ Defines the y-axis [tick format](https://github.com/mbostock/d3/wiki/Formatting)
 el.yTickFormat = '%%';
 ```
 
+<a name="prop-xnumticks"></a>
 #### el.xNumTicks
 
 Defines the (suggested) number of x-axis [tick](https://github.com/mbostock/d3/wiki/SVG-Axes#ticks) marks.
@@ -264,6 +431,7 @@ el.xNumTicks = 5;
  TODO: describe what happens when set to `null`.
 
 
+<a name="prop-ynumticks"></a>
 #### el.yNumTicks
 
 Defines the (suggested) number of y-axis [tick](https://github.com/mbostock/d3/wiki/SVG-Axes#ticks) marks.
@@ -275,6 +443,7 @@ el.yNumTicks = 5;
 TODO: describe what happens when set to `null`.
 
 
+<a name="prop-xaxisorient"></a>
 #### el.xAxisOrient
 
 Defines the x-axis [orientation](https://github.com/mbostock/d3/wiki/SVG-Axes#orient). Default is `bottom`.
@@ -283,6 +452,7 @@ Defines the x-axis [orientation](https://github.com/mbostock/d3/wiki/SVG-Axes#or
 el.xAxisOrient = 'top';
 ```
 
+<a name="prop-yaxisorient"></a>
 #### el.yAxisOrient
 
 Defines the y-axis [orientation](https://github.com/mbostock/d3/wiki/SVG-Axes#orient). Default is `left`.
@@ -292,71 +462,7 @@ el.yAxisOrient = 'right';
 ```
 
 
-#### el.xValue
-
-Defines the x-value accessor. The default accessor assumes an `array` of `arrays`.
-
-``` javascript
-// Default:
-el.xValue = function( d ) {
-	return d[ 0 ];
-};
-
-// Example of object based accessor:
-el.xValue = function( d, i ) {
-	return d.x;
-};
-```
-
-#### el.yValue
-
-Defines the y-value accessor. The default accessor assumes an `array` of `arrays`.
-
-``` javascript
-// Default:
-el.yValue = function( d ) {
-	return d[ 1 ];
-};
-
-// Example of object based accessor:
-el.yValue = function( d, i ) {
-	return d.y;
-};
-```
-
-#### el.aValue
-
-Defines the annotation accessor. The default accessor assumes an `array` of `arrays`.
-
-``` javascript
-// Default:
-el.aValue = function( d ) {
-	return d[ 1 ];
-};
-
-// Example of object based accessor:
-el.aValue = function( d, i ) {
-	return d.annotation;
-};
-```
-
-
-#### el.isDefined
-
-Defines an accessor function which controls where a line is [defined](https://github.com/mbostock/d3/wiki/SVG-Shapes#line_defined). This accessor is used to specify how missing values are encoded. The default behavior is to ignore data points or y-values which are `null`.
-
-``` javascript
-// Default:
-el.isDefined = function( d ) {
-	return ( d !== null && d[ 1 ] !== null );
-};
-
-// Example checking for NaNs:
-el.isDefined = function( d ) {
-	return ( typeof d === 'number' && d === d );
-};
-```
-
+<a name="prop-interpolation"></a>
 #### el.interpolation
 
 Specifies the type of [interpolation](https://github.com/mbostock/d3/wiki/SVG-Shapes#line_interpolate) applied to path elements. Default is `linear`.
@@ -365,7 +471,7 @@ Specifies the type of [interpolation](https://github.com/mbostock/d3/wiki/SVG-Sh
 el.interpolation = 'basis';
 ```
 
-
+<a name="prop-tension"></a>
 #### el.tension
 
 Specifies the spline interpolation [tension](https://github.com/mbostock/d3/wiki/SVG-Shapes#line_tension). Default is `0.7`.
@@ -374,7 +480,7 @@ Specifies the spline interpolation [tension](https://github.com/mbostock/d3/wiki
 el.tension = 0.5;
 ```
 
-
+<a name="prop-isdraggable"></a>
 #### el.isDraggable
 
 Specifies whether chart components (e.g., legend entries) should be [draggable](http://www.html5rocks.com/en/tutorials/dnd/basics/). Default is `true`.
@@ -383,7 +489,7 @@ Specifies whether chart components (e.g., legend entries) should be [draggable](
 el.isDraggable = false;
 ```
 
-
+<a name="prop-isdroppable"></a>
 #### el.isDroppable
 
 Specifies whether data can be [dropped](http://www.html5rocks.com/en/tutorials/dnd/basics/) into the chart. Default is `true`.
@@ -392,7 +498,7 @@ Specifies whether data can be [dropped](http://www.html5rocks.com/en/tutorials/d
 el.isDroppable = false;
 ```
 
-
+<a name="prop-autoupdate"></a>
 #### el.autoUpdate
 
 Specifies whether the element should auto update whenever an attribute changes. Default is `true`.
@@ -401,7 +507,7 @@ Specifies whether the element should auto update whenever an attribute changes. 
 el.autoUpdate = false;
 ```
 
-
+<a name="prop-autoresize"></a>
 #### el.autoResize
 
 Specifies whether the element should auto resize when the window resizes. Default is `true`.
@@ -410,9 +516,21 @@ Specifies whether the element should auto resize when the window resizes. Defaul
 el.autoResize = false;
 ```
 
+<a name="prop-events"></a>
+#### el.events
+
+List of [event](#events) names. The `events` attribute is intended to be __read-only__. One possible use case for the `events` attribute is for programmatically determining possible events to which you can subscribe; e.g., when logging.
+
+``` javascript
+var evts = el.events;
+```
+
+
+
 
 ### Methods
 
+<a name="method-clear"></a>
 #### el.clear()
 
 Clears the chart and resets axes.
@@ -421,6 +539,7 @@ Clears the chart and resets axes.
 el.clear();
 ```
 
+<a name="method-formatdata"></a>
 #### el.formatData( data )
 
 Converts data to standard representation. Needed for non-deterministic accessors. Use this method to convert raw data in non-standard format to standard format (see `el.data`).
@@ -451,6 +570,7 @@ el.yValue = function( d ) {
 el.data = el.formatData( data );
 ```
 
+<a name="method-formatannotations"></a>
 #### el.formatAnnotations( annotations )
 
 Converts an `array` of annotations to standard representation. Needed for non-deterministic accessors. Use this method to convert raw annotation data in non-standard format to standard format (see `el.annotations`).
@@ -471,83 +591,7 @@ el.aValue = function( d ) {
 el.annotations = el.formatAnnotations( annotations );
 ```
 
-#### el.x( d )
-
-Maps a datum's x-value to a pixel value.
-
-``` javascript
-var xPos = el.x( [1417563950959, 0.25] );
-```
-
-Note: assumes standard representation.
-
-
-#### el.y( d )
-
-Maps a datum's y-value to a pixel value.
-
-``` javascript
-var yPos = el.y( [1417563950959, 0.25] );
-```
-
-Note: assumes standard representation.
-
-
-#### el.xDomain( min, max )
-
-Calculates the x-axis domain. If `min` or `max` is `null`, calculates the respective value from the data.
-
-``` javascript
-var domain;
-
-// Calculates the min x-limit from the data:
-domain = el.xDomain( null, 1 );
-
-// Calculates the max x-limit from the data:
-domain = el.xDomain( 0, null );
-
-// Calculates both the min and max from the data:
-domain = el.xDomain( null, null );
-```
-
-#### el.yDomain( min, max )
-
-Calculates the y-axis domain. If `min` or `max` is `null`, calculates the respective value from the data.
-
-``` javascript
-var domain;
-
-// Calculates the min y-limit from the data:
-domain = el.yDomain( null, 1 );
-
-// Calculates the max y-limit from the data:
-domain = el.yDomain( 0, null );
-
-// Calculates both the min and max from the data:
-domain = el.yDomain( null, null );
-```
-
-
-#### el.toggleSeries( d, i )
-
-Toggles a displayed timeseries based on a provided index `i`. Used when a legend entry is clicked.
-
-``` javascript
-// Toggle the second timeseries:
-el.toggleSeries( null, 1 );
-```
-
-
-#### el.toggleVLine( d, i )
-
-Toggles a vertical line marking an annotation based on a provided index `i`. Used when an annotation marker is clicked.
-
-``` javascript
-// Toggle a vertical line for the third annotation:
-el.toggleVLine( null, 2 );
-```
-
-
+<a name="method-stream"></a>
 #### el.stream( [options] )
 
 Returns a writable chart stream.
@@ -559,11 +603,12 @@ var stream = el.stream();
 TODO: define. Options. Behavior.
 
 
+
 ### Events
 
 The component emits events during both chart configuration and interaction. The following events are emitted... 
 
-
+<a name="evt-err"></a>
 #### 'err'
 
 The element emits an `err` event whenever an error occurs; e.g., improper setting of attributes.
@@ -577,16 +622,18 @@ el.addEventListener( 'err', function onError( err ) {
 __NOTE__: the event name will change to `error` once issue [#138](https://github.com/webcomponents/webcomponentsjs/issues/138) is resolved. The preferred name is `error`.
 
 
-#### 'changed'
+<a name="evt-change"></a>
+#### 'change'
 
-The element emits a `changed` event whenever an attribute changes.
+The element emits a `change` event whenever an attribute changes.
 
 ``` javascript
-el.addEventListener( 'changed', function onChange( evt ) {
+el.addEventListener( 'change', function onChange( evt ) {
 	console.log( evt.attr, evt.prev, evt.curr, evt.data );	
 });
 ```
 
+<a name="evt-data"></a>
 #### 'data'
 
 The element emits a `data` event when the `data` attribute changes.
@@ -597,6 +644,7 @@ el.addEventListener( 'data', function onEvent( evt ) {
 });
 ```
 
+<a name="evt-annotations"></a>
 #### 'annotations'
 
 The element emits an `annotations` when the `annotations` attribute changes.
@@ -607,6 +655,7 @@ el.addEventListener( 'annotations', function onEvent( evt ) {
 });
 ```
 
+<a name="evt-labels"></a>
 #### 'labels'
 
 The element emits a `labels` event when the `labels` attribute changes.
@@ -617,6 +666,7 @@ el.addEventListener( 'labels', function onEvent( evt ) {
 });
 ```
 
+<a name="evt-colors"></a>
 #### 'colors'
 
 The element emits a `colors` event when the `colors` attribute changes.
@@ -627,7 +677,7 @@ el.addEventListener( 'colors', function onEvent( evt ) {
 });
 ```
 
-
+<a name="evt-width"></a>
 #### 'width'
 
 The element emits a `width` event when the `width` attribute changes.
@@ -638,6 +688,7 @@ el.addEventListener( 'width', function onEvent( evt ) {
 });
 ```
 
+<a name="evt-height"></a>
 #### 'height'
 
 The element emits a `height` event when the `height` attribute changes.
@@ -648,6 +699,7 @@ el.addEventListener( 'height', function onEvent( evt ) {
 });
 ```
 
+<a name="evt-xmin"></a>
 #### 'xMin'
 
 The element emits an `xMin` event when the `xMin` attribute changes.
@@ -658,6 +710,7 @@ el.addEventListener( 'xMin', function onEvent( evt ) {
 });
 ```
 
+<a name="evt-xmax"></a>
 #### 'xMax'
 
 The element emits an `xMax` event when the `xMax` attribute changes.
@@ -668,6 +721,7 @@ el.addEventListener( 'xMax', function onEvent( evt ) {
 });
 ```
 
+<a name="evt-ymin"></a>
 #### 'yMin'
 
 The element emits a `yMin` event when the `yMin` attribute changes.
@@ -678,6 +732,7 @@ el.addEventListener( 'yMin', function onEvent( evt ) {
 });
 ```
 
+<a name="evt-ymax"></a>
 #### 'yMax'
 
 The element emits a `yMax` event when the `yMax` attribute changes.
@@ -688,7 +743,7 @@ el.addEventListener( 'yMax', function onEvent( evt ) {
 });
 ```
 
-
+<a name="evt-resized"></a>
 #### 'resized'
 
 The element emits a `resized` event when the element's resize listener is triggered.
@@ -699,6 +754,7 @@ el.addEventListener( 'resized', function onResize( evt ) {
 });
 ```
 
+<a name="evt-clicked"></a>
 #### 'clicked'
 
 The element emits a `clicked` event when a chart element having a click handler is clicked.
@@ -709,7 +765,7 @@ el.addEventListener( 'clicked', function onClick( evt ) {
 });
 ```
 
-
+<a name="evt-annotation"></a>
 #### 'annotation'
 
 The element emits an `annotation` event when an annotation element is clicked and toggled to an active state.
@@ -720,9 +776,10 @@ el.addEventListener( 'annotation', function onClick( evt ) {
 });
 ```
 
-Note: one use case for this event is linking the chart with an external element whose responsibility is displaying and filtering annotations. While annotation text could be displayed over top the graph, this will invariably be suboptimal within the context of an SVG. A more flexible solution would be to display the annotation text in a separate UI element which is activated when a corresponding SVG element is activated.
+__Note__: one use case for this event is linking the chart with an external element whose responsibility is displaying and filtering annotations. While annotation text could be displayed over top the graph, this will invariably be suboptimal within the context of an SVG. A more flexible solution would be to display the annotation text in a separate UI element which is activated when a corresponding SVG element is activated.
 
 
+<a name="evt-dragstart"></a>
 #### 'dragStart'
 
 The element emits a `dragStart` event when a legend entry is dragged.
@@ -733,6 +790,7 @@ el.addEventListener( 'dragStart', function onDragStart( evt ) {
 });
 ```
 
+<a name="evt-dragend"></a>
 #### 'dragEnd'
 
 The element emits a `dragEnd` event when a legend entry stops being dragged.
@@ -743,6 +801,7 @@ el.addEventListener( 'dragEnd', function onDragEnd( evt ) {
 });
 ```
 
+<a name="evt-dragenter"></a>
 #### 'dragEnter'
 
 The element emits a `dragEnter` event when a draggable element enters the chart area.
@@ -753,6 +812,7 @@ el.addEventListener( 'dragEnter', function onDragEnter( evt ) {
 });
 ```
 
+<a name="evt-dragleave"></a>
 #### 'dragLeave'
 
 The element emits a `dragLeave` event when a draggable element leaves the chart area.
@@ -763,6 +823,7 @@ el.addEventListener( 'dragLeave', function onDragLeave( evt ) {
 });
 ```
 
+<a name="evt-dropped"></a>
 #### 'dropped'
 
 The element emits a `dropped` event when a draggable element is dropped into the chart area.
@@ -858,8 +919,11 @@ $ make view-cov
 
 ## Copyright
 
-Copyright &copy; 2014. Athan Reines.
+Copyright &copy; 2014-2015. The [Figure.io](https://github.com/figure-io) Authors.
 
+
+[screenshot-image]: https://github.com/figure-io/polymer-timeseries/blob/master/examples/img/timeseries.png
+[screenshot-url]: https://github.com/figure-io/polymer-timeseries
 
 [npm-image]: http://img.shields.io/npm/v/.svg
 [npm-url]: https://npmjs.org/package/

@@ -18,6 +18,9 @@ var EVENTS = [
 
 	'resized',
 	'clicked',
+
+	'annotation',
+
 	'dragStart',
 	'dragEnd',
 	'dragEnter',
