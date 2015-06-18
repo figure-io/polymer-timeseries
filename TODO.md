@@ -24,7 +24,8 @@ TODO
 12. README notes
 13. `toJSON` method
 	-	serialize to specification
-14. 
+14. `matrix` support
+15. 
 
 
 #### Pre-migration

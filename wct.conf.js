@@ -64,15 +64,15 @@ config = {
 				'firefox'
 			]
 		},
-		// 'web-component-tester-istanbul': {
-		// 	'dir': './reports/coverage',
-		// 	'reporters': [
-		// 		'text-summary',
-		// 		'lcov'
-		// 	],
-		// 	'include': [],
-		// 	'exclude': []
-		// }
+		'web-component-tester-istanbul': {
+			'dir': './reports/coverage',
+			'reporters': [
+				'text-summary',
+				'lcov'
+			],
+			'include': [],
+			'exclude': []
+		}
 	}
 }; // end CONFIG
 
